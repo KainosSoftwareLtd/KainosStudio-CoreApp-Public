@@ -1,0 +1,109 @@
+{% macro element(elementData) %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+
+{% if elementData %}
+  {% set displayText = elementData.displayText | trans() %}
+  {% set errorMessage = '' %}
+  {% set missingParts = [] %}
+
+  {% if elementData.invalid %}
+
+    {% if elementData.invalidDay %}
+      {% set missingParts = missingParts.concat(['core:date-input.day.missing-part' | trans()]) %}
+    {% endif %}
+
+    {% if elementData.invalidMonth %}
+      {% set missingParts = missingParts.concat(['core:date-input.month.missing-part' | trans()]) %}
+    {% endif %}
+
+    {% if elementData.invalidYear %}
+      {% set missingParts = missingParts.concat(['core:date-input.year.missing-part' | trans()]) %}
+    {% endif %}
+
+    {% if missingParts|length == 0 %}
+      {% set errorMessage = elementData.validation.error | trans({ for: displayText}) %}
+    {% elif missingParts|length == 3 %}
+      {% set errorMessage = 'core:date-input.real-date-error' | trans({ for: displayText}) %}
+    {% else %}
+      {% set missingPartsAsString = missingParts | join('core:date-input.missing-part-concat-text' | trans()) %}
+      {% set errorMessage =  'core:date-input.missing-part-error' | trans({ for: displayText, missingParts: missingPartsAsString}) %}
+    {% endif %}
+
+  {% endif %}
+
+  {% if not elementData.invalid %}
+    {{ govukDateInput({
+      id: elementData.name,
+      namePrefix: elementData.name,
+      fieldset: {
+        legend: {
+          text: displayText,
+          isPageHeading: elementData.isPageHeading,
+          classes: elementData.labelClasses
+        }
+      },
+      hint: {
+        text: elementData.hint | trans()
+      },
+      items: [
+        {
+          name: "day",
+          label: 'core:date-input.day.label' | trans(),
+          classes: "govuk-input--width-2",
+          value: elementData.context.data[elementData.name + '-day']
+        },
+        {
+          name: "month",
+          label: 'core:date-input.month.label' | trans(),
+          classes: "govuk-input--width-2",
+          value: elementData.context.data[elementData.name + '-month']
+        },
+        {
+          name: "year",
+          label: 'core:date-input.year.label' | trans(),
+          classes: "govuk-input--width-4",
+          value: elementData.context.data[elementData.name + '-year']
+        }
+      ]
+    }) }}
+  {% else %}
+    {{ govukDateInput({
+      id: elementData.name,
+      namePrefix: elementData.name,
+      fieldset: {
+        legend: {
+          text: displayText,
+          isPageHeading: elementData.isPageHeading,
+          classes: elementData.labelClasses
+        }
+      },
+      hint: {
+        text: elementData.hint | trans()
+      },
+      errorMessage: {
+        text: errorMessage
+      },
+      items: [
+        {
+          name: "day",
+          label: 'core:date-input.day.label' | trans(),
+          classes: "govuk-input--width-2" ~ (" govuk-input--error" if elementData.invalidDay or elementData.missingDay),
+          value: elementData.context.data[elementData.name + '-day']
+        },
+        {
+          name: "month",
+          label: 'core:date-input.month.label' | trans(),
+          classes: "govuk-input--width-2" ~ (" govuk-input--error" if elementData.invalidMonth or elementData.missingMonth),
+          value: elementData.context.data[elementData.name + '-month']
+        },
+        {
+          name: "year",
+          label: 'core:date-input.year.label' | trans(),
+          classes: "govuk-input--width-4" ~ (" govuk-input--error" if elementData.invalidYear or elementData.missingYear),
+          value: elementData.context.data[elementData.name + '-year']
+        }
+      ]
+    }) }}
+  {% endif %}
+{% endif %}
+{% endmacro %}

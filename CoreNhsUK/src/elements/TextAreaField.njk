@@ -1,0 +1,79 @@
+{% macro element(elementData) %}
+{% from "components/textarea/macro.njk" import textarea %}
+{% from "components/character-count/macro.njk" import characterCount %}
+
+{% set displayText = elementData.displayText | trans() %}
+
+{% if elementData.maxLength %}
+  {% if elementData.valid %}
+    {{ characterCount({
+      label: {
+        text: displayText,
+        isPageHeading: elementData.isPageHeading,
+        classes: elementData.labelClasses
+      },
+      id: elementData.name,
+      name: elementData.name,
+      maxlength: elementData.maxLength,
+      hint: {
+        text: elementData.hint | trans()
+      },
+      value: elementData.value
+    }) }}
+  {% else %}
+    {{ characterCount({
+      label: {
+        text: displayText,
+        isPageHeading: elementData.isPageHeading,
+        classes: elementData.labelClasses
+      },
+      id: elementData.name,
+      name: elementData.name,
+      maxlength: elementData.maxLength,
+      hint: {
+        text: elementData.hint | trans()
+      },
+      errorMessage: {
+        text: elementData.validation.error | trans({ for: displayText })
+      },
+      value: elementData.value
+    }) }}
+  {% endif %}
+{% else %}
+  {% if elementData.valid %}
+    {{ textarea({
+      label: {
+        text: displayText,
+        isPageHeading: elementData.isPageHeading,
+        classes: elementData.labelClasses
+      },
+      id: elementData.name,
+      name: elementData.name,
+      hint: {
+        text: elementData.hint | trans()
+      },
+      value: elementData.value
+    }) }}
+  {% else %}
+    {{ textarea({
+      label: {
+        text: displayText,
+        isPageHeading: elementData.isPageHeading,
+        classes: elementData.labelClasses
+      },
+      id: elementData.name,
+      name: elementData.name,
+      hint: {
+        text: elementData.hint | trans()
+      },
+      errorMessage: {
+        text: elementData.validation.error | trans({ for: displayText })
+      },
+      value: elementData.value
+    }) }}
+  {% endif %}
+{% endif %}
+
+{% endmacro %}
+
+

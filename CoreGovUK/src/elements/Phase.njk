@@ -1,0 +1,11 @@
+{% macro element(elementData) %}
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+
+{{ govukPhaseBanner({
+  tag: {
+    text: elementData.name | trans()
+  },
+  html: elementData.displayText | trans()
+}) }}
+
+{% endmacro %}

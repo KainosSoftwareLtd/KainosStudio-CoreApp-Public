@@ -1,0 +1,43 @@
+{
+  "$id": "https://schema.kainos.com/fileupload.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FileUpload",
+  "description": "Representation of file upload component.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Unique type identifier.",
+      "type": "string",
+      "const": "FileUpload"
+    },
+    "name": {
+      "description": "The ID of the input. The name of the input, which is submitted with the form data.",
+      "type": "string"
+    },
+    "displayText": {
+      "description": "Text to use within the label",
+      "type": "string"
+    },
+    "isPageHeading": {
+      "description": "Whether the legend also acts as the heading for the page.",
+      "type": "boolean"
+    },
+    "labelClasses": {
+      "description": "Classes to add to the label.",
+      "type": "string"
+    },
+    "maxFileSize":{
+      "description": "Maximum allowable file size in MB",
+      "type": "number"
+    },
+    "allowedFileTypes": {
+      "description": "Allowed file types in input",
+      "type": "array",
+      "items": {
+        "description": "MIME type https://developer.mozilla.org/en-US/docs/Web/HTTP/MIME_types/Common_types",
+        "type": "string"
+      }
+    }
+  },
+  "required": ["type", "name", "displayText"]
+}

@@ -1,0 +1,8 @@
+{% macro element(elementData) %}
+
+<div class="nhsuk-grid-column-{{ elementData.columnWidth}}">
+  {% from "elements/RenderElements.njk" import renderContentElements %}
+  {{ renderContentElements(elementData.elements) }}
+</div>
+
+{% endmacro %}

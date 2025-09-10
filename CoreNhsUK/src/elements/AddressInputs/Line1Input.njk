@@ -1,0 +1,22 @@
+{% macro line1Input(elementData) %}
+{% from "components/input/macro.njk" import input %}
+  {% set errorMessage = '' %}
+  {% set classes = 'nhsuk-input' %}
+
+  {% if elementData.invalid and elementData.invalidLine1 %}
+    {% set errorMessage = { text: 'core:address.line1-input.invalid-error' | trans() } %}
+    {% set classes = classes + 'nhsuk-input--error' %}
+  {% endif %}
+
+  {{ input({
+    label: {
+      text: 'core:address.line1-input.label' | trans()
+    },
+    id: elementData.name + "-line1",
+    name: elementData.name + "-line1",
+    autocomplete: "address-line1",
+    classes: classes,
+    value: elementData.context.data[elementData.name + '-line1'],
+    errorMessage: errorMessage
+  }) }}
+{% endmacro %}

@@ -1,0 +1,762 @@
+{
+  "name": "Report Wild Bird Service",
+  "firstPage": "startPage",
+  "productName": "example.com",
+  "homePageUrl": "https://example.com",
+  "cookieSecret": "0123456789-abc",
+  "pages": [
+    {
+      "id": "startPage",
+      "nextPage": "firstPage",
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "Heading",
+                      "displayText": "Report wild birds",
+                      "level": "1"
+                    },
+                    {
+                      "type": "Paragraph",
+                      "displayText": "Use this service to report wild birds"
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Start Now"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "Paragraph",
+                      "displayText": "Report wild birds by phone."
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+     {
+      "id": "firstPage",
+      "nextPage": "secondPage",
+      "preRequisiteData": null,
+      "validation": null,
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Form",
+                  "classes": "",
+                  "elements": [
+                    {
+                      "type": "ErrorList",
+                      "title": "There is a problem"
+                    },
+                    {
+                      "type": "Heading",
+                      "displayText": "Tell us where you found the birds"
+                    },
+                    {
+                      "type": "RadioField",
+                      "name": "f_radio_1",
+                      "displayText": "Choose one:",
+                      "isPageHeading": false,
+                      "validation": {
+                        "regex": "^(England|Scotland|Wales)$",
+                        "error": "Choose one: must be provided"
+                      },
+                      "hint": "If you're not sure, give a best guess.",
+                      "options": [
+                        {
+                          "value": "England",
+                          "text": "England",
+                          "valueText": "England"
+                        },
+                        {
+                          "value": "Scotland",
+                          "text": "Scotland",
+                          "valueText": "Scotland"
+                        },
+                        {
+                          "value": "Wales",
+                          "text": "Wales",
+                          "valueText": "Wales"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Continue"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "secondPage",
+      "nextPage": "thirdPage",
+      "elements": [
+        {
+          "type": "BackButton"
+        },
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "ErrorList",
+                      "title": "There is a problem"
+                    },
+                    {
+                      "type": "RadioField",
+                      "name": "location_choice",
+                      "displayText": "Select one option to tell us where the birds are",
+                      "hint": "If you're not sure, give a best guess.",
+                      "validation": {
+                        "regex": "^(address|latlong|grid_reference|what3words|description)$",
+                        "error": "Choose one: must be provided"
+                      },
+                      "options": [
+                        {
+                          "value": "address",
+                          "text": "Address and postcode",
+                          "valueText": "Address and postcode",
+                          "conditional": {
+                            "html": "<div class='govuk-form-group'><label class='govuk-label' for='address'>Enter the address where the birds are located:</label><input class='govuk-input' id='address' name='address' type='text' autocomplete='address-line1'></div><div class='govuk-form-group'><label class='govuk-label' for='postcode'>Enter the postcode:</label><input class='govuk-input' id='postcode' name='postcode' type='text' autocomplete='postal-code'></div>"
+                          }
+                        },
+                        {
+                          "value": "latlong",
+                          "text": "Enter the latitude and longitude coordinates",
+                          "valueText": "Latitude and longitude coordinates",
+                          "conditional": {
+                            "html": "<div class='govuk-form-group'><label class='govuk-label' for='latitude'>Enter latitude map coordinate:</label><input class='govuk-input' id='latitude' name='latitude' type='text' placeholder='For Great Britain, this will be a number between 49.850 and 60.859'></div><div class='govuk-form-group'><label class='govuk-label' for='longitude'>Enter longitude map coordinate:</label><input class='govuk-input' id='longitude' name='longitude' type='text' placeholder='For Great Britain, this will be a number between (minus) -13.687 and 1.767'></div><a class='govuk-link' href='https://www.google.co.uk/maps' target='_blank'>Google Maps</a>"
+                          }
+                        },
+                        {
+                          "value": "grid_reference",
+                          "text": "Ordnance Survey grid reference",
+                          "valueText": "Ordnance Survey grid reference",
+                          "conditional": {
+                            "html": "<div class='govuk-form-group'><label class='govuk-label' for='grid_ref'>Enter Ordnance Survey grid reference:</label><input class='govuk-input' id='grid_ref' name='grid_ref' type='text' placeholder='For example: NS592239, SH92641253 or SP5009665082 (6, 8, or 10 figures or a 12 figure easting and northing)'></div>"
+                          }
+                        },
+                        {
+                          "value": "what3words",
+                          "text": "what3words",
+                          "valueText": "what3words",
+                          "conditional": {
+                            "html": "<div class='govuk-form-group'><label class='govuk-label' for='what3words'>Enter what3words:</label><input class='govuk-input' id='what3words' name='what3words' type='text' placeholder='For example: spare.coach.loops (without ///)'></div><a class='govuk-link' href='https://what3words.com/' target='_blank'>what3words</a>"
+                          }
+                        },
+                        {
+                          "value": "description",
+                          "text": "Describe the location",
+                          "valueText": "Describe the location",
+                          "conditional": {
+                          "html": "<div class='govuk-form-group govuk-character-count' data-module='govuk-character-count' data-maxlength='500'><label class='govuk-label govuk-label--s' for='location_desc' style='font-size: 19px; font-weight: normal;'>Enter a description:</label><textarea class='govuk-textarea govuk-js-character-count' id='location_desc' name='location_desc' rows='5' aria-describedby='location_desc-info' maxlength='500'></textarea><div id='location_desc-info' class='govuk-hint govuk-character-count__message' aria-live='polite'>You have 500 characters remaining</div></div><script src='https://cdn.jsdelivr.net/npm/govuk-frontend/govuk/all.min.js'></script><script>document.addEventListener('DOMContentLoaded',function(){window.GOVUKFrontend.initAll()});</script>"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "TextAreaField",
+                      "name": "additional_info",
+                      "displayText": "Tell us any other information about the location, such as landmarks or buildings (optional)",
+                      "maxLength": 500
+                    },
+                    {
+                      "type": "RadioField",
+                      "name": "bird_reachable",
+                      "displayText": "Can the bird be reached easily if we need to collect it?",
+                      "hint": "For example, it might be difficult to reach if it's in water or on a cliff",
+                      "validation": {
+                        "regex": "^(yes|no|not_sure)$",
+                        "error": "You must select if the bird can be easily reached"
+                      },
+                      "options": [
+                        {
+                          "value": "yes",
+                          "text": "Yes",
+                          "valueText": "Yes"
+                        },
+                        {
+                          "value": "no",
+                          "text": "No",
+                          "valueText":"No"
+                        },
+                        {
+                          "value": "not_sure",
+                          "text": "I'm not sure",
+                          "valueText":"I'm not sure"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Continue"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "thirdPage",
+      "nextPage": "fourthPage",
+      "elements": [
+        {
+          "type": "BackButton"
+        },
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "ErrorList",
+                      "title": "There is a problem"
+                    },
+                    {
+                      "type": "Heading",
+                      "displayText": "Tell us approximately how many wild birds you found"
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "birds_of_prey",
+                      "displayText": "Birds of prey",
+                      "hint": "Such as owls, hawks or buzzards",
+                      "validation": {
+                        "regex": "^[0-9]+$",
+                        "error": "Enter a valid number for birds of prey"
+                      }
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "corvids",
+                      "displayText": "Corvids",
+                      "hint": "Such as crows, ravens, rooks, magpies, jackdaws and jays",
+                      "validation": {
+                        "regex": "^[0-9]+$",
+                        "error": "Enter a valid number for corvids"
+                      }
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "ducks",
+                      "displayText": "Ducks",
+                      "validation": {
+                        "regex": "^[0-9]+$",
+                        "error": "Enter a valid number for ducks"
+                      }
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "gamebirds",
+                      "displayText": "Gamebirds",
+                      "hint": "Such as pheasants, partridges and grouse",
+                      "validation": {
+                        "regex": "^[0-9]+$",
+                        "error": "Enter a valid number for gamebirds"
+                      }
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "geese",
+                      "displayText": "Geese",
+                      "validation": {
+                        "regex": "^[0-9]+$",
+                        "error": "Enter a valid number for geese"
+                      }
+                    },
+                    {
+                      "type": "RadioField",
+                      "name": "gulls_seabirds_waders",
+                      "displayText": "Gulls, seabirds and waders",
+                      "options": [
+                        {
+                          "value": "can_provide_numbers",
+                          "text": "I can provide numbers of each of gulls, seabirds and waders",
+                          "conditional": {
+                            "html": "<div class='govuk-form-group'><label class='govuk-label' for='gulls'>Gulls</label><input class='govuk-input' id='gulls' name='gulls' type='text' autocomplete='off' pattern='^[0-9]*$'></div><div class='govuk-form-group'><label class='govuk-label' for='seabirds'>Seabirds</label><input class='govuk-input' id='seabirds' name='seabirds' type='text' autocomplete='off' pattern='^[0-9]*$'></div><div class='govuk-form-group'><label class='govuk-label' for='waders'>Waders</label><input class='govuk-input' id='waders' name='waders' type='text' autocomplete='off' pattern='^[0-9]*$'></div>"
+                          }
+                        },
+                        {
+                          "value": "not_sure_type",
+                          "text": "I'm not sure what type of gull, seabird or wader I have found",
+                          "conditional": {
+                            "html": "<div class='govuk-form-group'><label class='govuk-label' for='unknown_gulls_seabirds_waders'>Unknown gulls, seabirds and waders</label><input class='govuk-input' id='unknown_gulls_seabirds_waders' name='unknown_gulls_seabirds_waders' type='text' autocomplete='off' pattern='^[0-9]*$'></div>"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "herons_egrets",
+                      "displayText": "Herons and egrets",
+                      "hint": "Includes cranes, bitterns, spoonbills and storks",
+                      "validation": {
+                        "regex": "^[0-9]+$",
+                        "error": "Enter a valid number for herons and egrets"
+                      }
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "pigeons_doves",
+                      "displayText": "Pigeons and doves",
+                      "validation": {
+                        "regex": "^[0-9]+$",
+                        "error": "Enter a valid number for pigeons and doves"
+                      }
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "rails_crakes",
+                      "displayText": "Rails and crakes",
+                      "hint": "Such as moorhens and coots",
+                      "validation": {
+                        "regex": "^[0-9]+$",
+                        "error": "Enter a valid number for rails and crakes"
+                      }
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "songbirds_garden_birds",
+                      "displayText": "Songbirds and garden birds",
+                      "hint": "Such as sparrows, tits, blackbirds, finches, starlings and robins",
+                      "validation": {
+                        "regex": "^[0-9]+$",
+                        "error": "Enter a valid number for songbirds and garden birds"
+                      }
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "swans",
+                      "displayText": "Swans",
+                      "validation": {
+                        "regex": "^[0-9]+$",
+                        "error": "Enter a valid number for swans"
+                      }
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "other_wild_birds",
+                      "displayText": "Other wild birds",
+                      "hint": "Or if you're not sure what type",
+                      "validation": {
+                        "regex": "^[0-9]+$",
+                        "error": "Enter a valid number for other wild birds"
+                      }
+                    },
+                    {
+                      "type": "RadioField",
+                      "name": "describe_wild_birds",
+                      "displayText": "Describe the wild birds",
+                      "validation": {
+                        "regex": "^(good_condition|carcass_decomposed|mix_conditions)$",
+                        "error": "You must select an option to describe the condition of the wild birds"
+                      },
+                      "options": [
+                        {
+                          "value": "good_condition",
+                          "text": "Carcass in good condition or mostly intact",
+                          "valueText": "Carcass in good condition or mostly intact"
+                        },
+                        {
+                          "value": "carcass_decomposed",
+                          "text": "Carcass decomposed",
+                          "valueText": "Carcass decomposed"
+                        },
+                        {
+                          "value": "mix_conditions",
+                          "text": "Mix of carcass conditions",
+                          "valueText": "Mix of carcass conditions"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Continue"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fourthPage",
+      "nextPage": "fifthPage",
+      "elements": [
+        {
+          "type": "BackButton"
+        },
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "ErrorList",
+                      "title": "There is a problem"
+                    },
+                    {
+                      "type": "Heading",
+                      "displayText": "Your details"
+                    },
+                    {
+                      "type": "Paragraph",
+                      "displayText": "We’ll only use the details you provide to contact you about the report you submit."
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "name",
+                      "displayText": "Your name",
+                      "validation": {
+                        "regex": "^.+$",
+                        "error": "Your name must be provided"
+                      },
+                      "hint": "We need to know we’re speaking to the right person if we contact you."
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "telephone_number",
+                      "displayText": "Telephone number",
+                      "validation": {
+                        "regex": "^\\+|[0-9]+$",
+                        "error": "Telephone number must be a telephone number, like 01632 960 001, 07700 900 982 or +44 808 157 0192"
+                      }
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "email_address",
+                      "displayText": "Email address (optional)",
+                      "validation": {
+                        "regex": "^(|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})$",
+                        "error": "Email address (optional) must be an email address in the correct format, like name@example.com"
+                      }
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Continue"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fifthPage",
+      "nextPage": "finalPage",
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "Heading",
+                      "displayText": "Check your answers",
+                      "level": "1"
+                    },
+                    {
+                      "type": "SubHeading",
+                      "displayText": "Tell us where you found the birds",
+                      "level": "2"
+                    },
+                    {
+                      "type": "Summary",
+                      "fieldNames": [
+                        "f_radio_1"
+                      ]
+                    },
+                    {
+                      "type": "SubHeading",
+                      "displayText": "Select one option to tell us where the birds are",
+                      "level": "2"
+                    },
+                    {
+                      "type": "Summary",
+                      "fieldNames": [
+                        "location_choice",
+                        "postcode",
+                        "latitude",
+                        "longitude",
+                        "grid_ref",
+                        "what3words",
+                        "location_desc",
+                        "additional_info",
+                        "bird_reachable"
+                      ]
+                    },
+                    {
+                      "type": "SubHeading",
+                      "displayText": "Tell us approximately how many wild birds you found",
+                      "level": "2"
+                    },
+                    {
+                      "type": "Summary",
+                      "fieldNames": [
+                        "birds_of_prey",
+                        "corvids",
+                        "ducks",
+                        "gamebirds",
+                        "geese",
+                        "gulls_seabirds_waders",
+                        "herons_egrets",
+                        "pigeons_doves",
+                        "rails_crakes",
+                        "songbirds_garden_birds",
+                        "swans",
+                        "other_wild_birds",
+                        "describe_wild_birds"
+                      ]
+                    },
+                    {
+                        "type": "SubmitButton",
+                        "displayText": "Submit",
+                        "action": {
+                          "value": "submitForm",
+                          "operation": "submitForm",
+                          "validation": true
+                        }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "finalPage",
+      "nextPage": null,
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "Panel",
+                      "title": "Submission complete",
+                      "text": "Your reference number<br><b>ABCD1234</b>"
+                    },
+                    {
+                      "type": "Paragraph",
+                      "displayText": "Thank you for your report"
+                    },
+                    {
+                      "type": "Heading",
+                      "displayText": "What happens next"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "apiMappings": {
+    "submitForm": {
+      "request": {
+        "_SESSION-ID_": "_SESSION-ID_",
+        "f_radio_1": "f_radio_1",
+        "location_choice": "location_choice",
+        "postcode": "postcode",
+        "latitude": "latitude",
+        "longitude": "longitude",
+        "grid_ref": "grid_ref",
+        "what3words": "what3words",
+        "location_desc": "location_desc",
+        "additional_info": "additional_info",
+        "bird_reachable": "bird_reachable",
+        "birds_of_prey": "birds_of_prey",
+        "corvids": "corvids",
+        "ducks": "ducks",
+        "gamebirds": "gamebirds",
+        "geese": "geese",
+        "gulls_seabirds_waders": "gulls_seabirds_waders",
+        "herons_egrets": "herons_egrets",
+        "pigeons_doves": "pigeons_doves",
+        "rails_crakes": "rails_crakes",
+        "songbirds_garden_birds": "songbirds_garden_birds",
+        "swans": "swans",
+        "other_wild_birds": "other_wild_birds",
+        "describe_wild_birds": "describe_wild_birds",
+        "name": "name",
+        "telephone_number": "telephone_number",
+        "email_address": "email_address"
+      },
+      "response": {
+        "title": "message",
+        "fieldNames": "data[*].fieldName",
+        "fieldErrorMessages": "data[*].errorMessage",
+        "numErrors": "length(data)"
+      }
+    }
+  },
+  "apiServiceDefinition": {
+    "openapi": "3.0.1",
+    "info": {
+      "title": "form-submission-API",
+      "version": "2024-06-13T12:12:41Z"
+    },
+    "servers": [
+      {
+        "url": "https://example-endpoint.com/{basePath}",
+        "variables": {
+          "basePath": {
+            "default": "dev"
+          }
+        }
+      }
+    ],
+    "paths": {
+      "/submit-form/service": {
+        "description": "File upload and download operations",
+        "servers": [
+          {
+            "url": "https://example-endpoint.com/dev",
+            "description": "Override base path for all operations with the /files path"
+          }
+        ],
+        "post": {
+          "tags": [
+            "demo"
+          ],
+          "summary": "Final submission of form data",
+          "operationId": "submitForm",
+          "requestBody": {
+            "description": "Final form submission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Form"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                },
+                "application/xml": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "validation error in data submitted",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                  }
+                },
+                "application/xml": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                },
+                "application/xml": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

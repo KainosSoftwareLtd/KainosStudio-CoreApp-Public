@@ -1,0 +1,10 @@
+{% macro element(elementData) %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{{ govukBackLink({
+  text: elementData.displayText | default('core:back-button.link-text') | trans(),
+  classes: elementData.classes,
+  href: elementData.href
+}) }}
+
+{% endmacro %}

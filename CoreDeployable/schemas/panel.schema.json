@@ -1,0 +1,23 @@
+{
+  "$id": "https://schema.kainos.com/panel.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Panel",
+  "description": "Representation of panel component.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Unique type identifier.",
+      "type": "string",
+      "const": "Panel"
+    },
+    "title": {
+      "description": "Text to use within the panel.",
+      "type": "string"
+    },
+    "text": {
+      "description": "HTML to use within the panel content.",
+      "type": "string"
+    }
+  },
+  "required": ["type", "title", "text"]
+}

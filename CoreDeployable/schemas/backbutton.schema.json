@@ -1,0 +1,27 @@
+{
+  "$id": "https://schema.kainos.com/backbutton.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BackButton",
+  "description": "Button to navigate to previous page",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Unique type identifier.",
+      "type": "string",
+      "const": "BackButton"
+    },
+    "displayText": {
+      "description": "Text for the back button. Default: 'Back'.",
+      "type": "string"
+    },
+    "classes": {
+      "description": "Classes to add to the button component.",
+      "type": "string"
+    },
+    "href": {
+      "description": "Optional href value. If not provided, it will be automatically generated to the previous page.",
+      "type": "string"
+    }
+  },
+  "required": ["type"]
+}

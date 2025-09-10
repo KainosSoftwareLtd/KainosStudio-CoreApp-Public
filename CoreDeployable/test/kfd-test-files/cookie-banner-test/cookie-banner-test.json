@@ -1,0 +1,91 @@
+{
+    "name": "Your Service Name",
+    "firstPage": "firstPage",
+    "productName": "Demo",
+    "homePageUrl": "",
+    "cookieBanner": null,
+    "cookieSecret": "0123456789-abc",
+    "footer": {
+    "links": [
+      {
+        "text": "example external link",
+        "href": "https://google.com",
+        "attributes": {
+          "target": "_blank"
+        }
+      }
+    ]
+  },
+    "pages": [
+      {
+        "id": "firstPage",
+        "nextPage": "secondPage",
+        "elements": [
+          {
+              "type": "Form",
+              "elements": [
+                  {
+                      "type": "ErrorList",
+                      "title": "There is a problem"
+                    },
+                    {
+                      "type": "DatePickerField",
+                      "name": "f-dateInput",
+                      "displayText": "Event Date",
+                      "hint": "Please provide the date of the event.",
+                      "validation": {
+                          "regex": "^([0-9]|0[1-9]|[12][0-9]|3[01]) ([0-9]|0[1-9]|1[0-2]) (19|20)\\d{2}$",
+                          "error": "Wrong format",
+                          "isMandatory": true,
+                          "mandatoryError": "Cannot be left empty"
+                      }
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Save and Continue"
+                  }
+              ]
+            }
+          ]
+        },
+      {
+        "id": "cookie",
+      "nextPage": null,
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Heading",
+                  "displayText": "Cookies"
+                },
+                {
+                  "type": "Paragraph",
+                  "displayText": "Cookies are small files saved on your phone, table or computer when you visit a website."
+                },
+                {
+                  "type": "Subheading",
+                  "displayText": "Essential cookies"
+                },
+                {
+                  "type": "Paragraph",
+                  "displayText": "Essential cookies keep your information secure while you use this service. We do not need to ask your permission to use them."
+                },
+                {
+                  "type": "CookiesTable",
+                  "displayText": "",
+                  "cookies": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+    ]
+}
+  

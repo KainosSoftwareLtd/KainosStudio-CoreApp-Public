@@ -1,0 +1,92 @@
+{
+  "$id": "https://schema.kainos.com/service.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Service",
+  "description": "A service describing the entire form.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "The name of your service, included in the header.",
+      "type": "string"
+    },
+    "designSystem": {
+      "description": "Defining renderer. Values: gds, gcds, ouds, wds, nhsds and fcads. Default: gds",
+      "type": "string",
+      "oneOf": [
+        { "type": "string", "const": "gds" },
+        { "type": "string", "const": "gcds" },
+        { "type": "string", "const": "ouds" },
+        { "type": "string", "const": "wds" },
+        { "type": "string", "const": "nhsds" },
+        { "type": "string", "const": "fcads" }
+      ]
+    },
+    "productName": {
+      "description": "Product name, used when the product name follows on directly from the design system logo. For example, GOV.UK Pay or GOV.UK Design System.",
+      "type": "string"
+    },
+    "homePageUrl": {
+      "description": "The URL of the homepage. Default: '#'",
+      "type": "string"
+    },
+    "firstPage": {
+      "description": "URL for the service name anchor.",
+      "type": "string",
+      "pattern": "^[a-zA-Z- ]*$"
+    },
+    "cookieSecret": {
+      "description": "Value used to encrypt (AES) data in cookie.",
+      "type": "string"
+    },
+    "cookieBanner": {
+      "description": "Definition of cookie banner. If not set banner is not rendered.",
+      "type": ["object", "null"]
+    },
+    "footer": {
+      "description": "Footer used at the bottom of every page of your service",
+      "type": ["object", "null"],
+      "properties": {
+        "links": {
+          "description": "List of links that will be added to footer meta section.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "description": "Link text",
+                "type": "string"
+              },
+              "href": {
+                "description": "Link url",
+                "type": "string"
+              },
+              "attributes": {
+                "description": "HTML attributes added to the link",
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "pages": {
+      "description": "The list of pages in the form.",
+      "type": "array",
+      "items": {
+        "$ref": "https://schema.kainos.com/page.schema.json"
+      },
+      "minItems": 1
+    },
+    "apiMappings": {
+      "description": "The list field mappings",
+      "type": "object"
+    },
+    "apiServiceDefinition": {
+      "$ref": "http://openapis.org/v3/schema.json#"
+    },
+    "authentication": {
+      "$ref": "https://schema.kainos.com/authentication.schema.json"
+    }
+  },
+  "required": ["name", "productName", "firstPage", "cookieSecret", "pages"]
+}

@@ -1,0 +1,54 @@
+{
+  "$id": "https://schema.kainos.com/authentication.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Authentication",
+  "description": "Representation of authentication component.",
+  "type": "object",
+  "properties": {
+    "entryPoint": {
+      "description": "Identity provider entrypoint (is required to be spec-compliant when the request is signed)",
+      "type": "string"
+    },
+    "issuer": {
+      "description": "Issuer string to supply to identity provider",
+      "type": "string"
+    },
+    "callbackUrl": {
+      "description": "Full callbackUrl ",
+      "type": "string"
+    },
+    "idpCert": {
+      "description": "The IDP's public signing certificate used to validate the signatures of the incoming SAML Responses",
+      "type": "string"
+    },
+    "audience": {
+      "description": "Expected saml response Audience",
+      "type": "string"
+    },
+    "signatureAlgorithm": {
+      "description": "Optionally set the signature algorithm for signing requests, valid values are 'sha1' (default), 'sha256', or 'sha512'",
+      "type": "string"
+    },
+    "digestAlgorithm": {
+      "description": "Optionally set the digest algorithm used to provide a digest for the signed data object, valid values are 'sha1' (default), 'sha256', or 'sha512'",
+      "type": "string"
+    },
+    "xmlSignatureTransforms": {
+      "description": "Optionally set an array of signature transforms to be used in HTTP-POST signatures. By default this is [ 'http://www.w3.org/2000/09/xmldsig#enveloped-signature ', 'http://www.w3.org/2001/10/xml-exc-c14n# ' ]",
+      "type": "object"
+    },
+    "wantAssertionsSigned": {
+      "description": "To specify that the IdP should always sign the assertions.",
+      "type": "boolean"
+    },
+    "wantAuthnResponseSigned": {
+      "description": "To specify that the IdP should always sign the auth response.",
+      "type": "boolean"
+    },
+    "identifierFormat": {
+      "description": "optional name identifier format to request from identity provider (default: urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress)",
+      "type": "string"
+    }
+  },
+  "required": ["entryPoint", "issuer", "callbackUrl", "idpCert", "audience"]
+}

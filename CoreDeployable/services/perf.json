@@ -1,0 +1,1244 @@
+{
+    "name": "root.header.service-name",
+    "designSystem": "gds",
+    "firstPage": "Start page",
+    "productName": "root.header.product-name",
+    "homePageUrl": "",
+    "cookieSecret": "6023a1f3-2b35-4d45-b353-dd3fcd2fde0b",
+    "cookieBanner": null,
+    "footer": {},
+    "pages": [
+        {
+            "id": "Start page",
+            "nextPage": "Enter Text Information",
+            "elements": [
+                {
+                    "type": "Phase",
+                    "name": "page-1.phase-1.tag",
+                    "displayText": "page-1.phase-1.display-text"
+                },
+                {
+                    "type": "Row2",
+                    "elements": [
+                        {
+                            "type": "Column",
+                            "elements": [
+                                {
+                                    "type": "Heading",
+                                    "displayText": "page-1.heading-1.display-text",
+                                    "size": "h1"
+                                },
+                                {
+                                    "type": "BulletedListField",
+                                    "displayText": "page-1.bullet-list-1.display-text",
+                                    "items": [
+                                        {
+                                            "text": "page-1.bullet-list-1.item-1"
+                                        },
+                                        {
+                                            "text": "page-1.bullet-list-1.item-2"
+                                        },
+                                        {
+                                            "text": "page-1.bullet-list-1.item-3"
+                                        },
+                                        {
+                                            "text": "page-1.bullet-list-1.item-4"
+                                        },
+                                        {
+                                            "text": "page-1.bullet-list-1.item-5"
+                                        },
+                                        {
+                                            "text": "page-1.bullet-list-1.item-6"
+                                        },
+                                        {
+                                            "text": "page-1.bullet-list-1.item-7"
+                                        },
+                                        {
+                                            "text": "page-1.bullet-list-1.item-8"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "Form",
+                                    "elements": [
+                                        {
+                                            "type": "SubmitButton",
+                                            "displayText": "page-1.save-continue-button-1.display-text"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "Heading",
+                                    "displayText": "page-1.heading-2.display-text",
+                                    "size": "h2"
+                                },
+                                {
+                                    "type": "Paragraph",
+                                    "displayText": "page-1.paragraph-1.display-text"
+                                },
+                                {
+                                    "type": "Paragraph",
+                                    "displayText": "page-1.paragraph-2.display-text"
+                                },
+                                {
+                                    "type": "Paragraph",
+                                    "displayText": "page-1.paragraph-3.display-text"
+                                }
+                            ],
+                            "columnWidth": "two-thirds"
+                        },
+                        {
+                            "type": "Column",
+                            "elements": [
+                                {
+                                    "type": "Heading",
+                                    "displayText": "page-1.heading-3.display-text",
+                                    "size": "h2"
+                                },
+                                {
+                                    "type": "Paragraph",
+                                    "displayText": "page-1.paragraph-4.display-text"
+                                }
+                            ],
+                            "columnWidth": "one-third"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "Enter Text Information",
+            "nextPage": "Enter a Number",
+            "elements": [
+                {
+                    "type": "Phase",
+                    "name": "page-2.phase-1.tag",
+                    "displayText": "page-2.phase-1.display-text"
+                },
+                {
+                    "type": "BackButton",
+                    "displayText": "page-2.back-button-1.display-text"
+                },
+                {
+                    "type": "Row2",
+                    "elements": [
+                        {
+                            "type": "Column",
+                            "elements": [
+                                {
+                                    "type": "ErrorList",
+                                    "title": "page-2.error-list-1.title"
+                                },
+                                {
+                                    "type": "Form",
+                                    "elements": [
+                                        {
+                                            "type": "TextField",
+                                            "name": "f-text",
+                                            "displayText": "page-2.text-field-1.display-text",
+                                            "labelClasses": "govuk-label--l",
+                                            "isPageHeading": true,
+                                            "hint": "page-2.text-field-1.hint",
+                                            "validation": {
+                                                "regex": "^[\\w\\s]{1,100}$",
+                                                "error": "page-2.text-field-1.error",
+                                                "isMandatory": true
+                                            }
+                                        },
+                                        {
+                                            "type": "SubmitButton",
+                                            "displayText": "page-2.save-continue-button-1.display-text"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "columnWidth": "two-thirds"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "Enter a Number",
+            "nextPage": "Select an Option",
+            "elements": [
+                {
+                    "type": "Phase",
+                    "name": "page-3.phase-1.tag",
+                    "displayText": "page-3.phase-1.display-text"
+                },
+                {
+                    "type": "BackButton",
+                    "displayText": "page-3.back-button-1.display-text"
+                },
+                {
+                    "type": "Row2",
+                    "elements": [
+                        {
+                            "type": "Column",
+                            "elements": [
+                                {
+                                    "type": "ErrorList",
+                                    "title": "page-3.error-list-1.title"
+                                },
+                                {
+                                    "type": "Form",
+                                    "elements": [
+                                        {
+                                            "type": "TextField",
+                                            "name": "f-text-2",
+                                            "displayText": "page-3.text-field-1.display-text",
+                                            "labelClasses": "govuk-label--l",
+                                            "isPageHeading": true,
+                                            "hint": "page-3.text-field-1.hint",
+                                            "validation": {
+                                                "regex": "^\\d{1,10}$",
+                                                "error": "page-3.text-field-1.error",
+                                                "isMandatory": true
+                                            }
+                                        },
+                                        {
+                                            "type": "SubmitButton",
+                                            "displayText": "page-3.save-continue-button-1.display-text"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "columnWidth": "two-thirds"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "Select an Option",
+            "nextPage": "Enter a Date",
+            "elements": [
+                {
+                    "type": "Form",
+                    "elements": [
+                        {
+                            "type": "BackButton",
+                            "displayText": "page-4.back-button-1.display-text"
+                        },
+                        {
+                            "type": "RadioField",
+                            "name": "f-radio",
+                            "displayText": "page-4.radio-field-1.display-text",
+                            "labelClasses": "govuk-fieldset__legend--l",
+                            "isPageHeading": true,
+                            "hint": "page-4.radio-field-1.hint",
+                            "validation": {
+                                "isMandatory": true
+                            },
+                            "options": [
+                                {
+                                    "value": "Polish",
+                                    "text": "page-4.radio-field-1.option-1",
+                                    "valueText": "page-4.radio-field-1.option-1"
+                                },
+                                {
+                                    "value": "English",
+                                    "text": "page-4.radio-field-1.option-2",
+                                    "valueText": "page-4.radio-field-1.option-2"
+                                },
+                                {
+                                    "value": "Spanish",
+                                    "text": "page-4.radio-field-1.option-3",
+                                    "valueText": "page-4.radio-field-1.option-3"
+                                },
+                                {
+                                    "value": "Norwegian",
+                                    "text": "page-4.radio-field-1.option-4",
+                                    "valueText": "page-4.radio-field-1.option-4"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "SubmitButton",
+                            "displayText": "page-4.save-continue-button-1.display-text"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "Enter a Date",
+            "nextPage": "Enter an Address",
+            "elements": [
+                {
+                    "type": "Phase",
+                    "name": "page-5.phase-1.tag",
+                    "displayText": "page-5.phase-1.display-text"
+                },
+                {
+                    "type": "BackButton",
+                    "displayText": "page-5.back-button-1.display-text"
+                },
+                {
+                    "type": "Row2",
+                    "elements": [
+                        {
+                            "type": "Column",
+                            "elements": [
+                                {
+                                    "type": "ErrorList",
+                                    "title": "page-5.error-list-1.title"
+                                },
+                                {
+                                    "type": "Form",
+                                    "elements": [
+                                        {
+                                            "type": "DatePickerField",
+                                            "name": "f-dateInput",
+                                            "displayText": "page-5.date-input-1.display-text",
+                                            "labelClasses": "govuk-fieldset__legend--l",
+                                            "isPageHeading": true,
+                                            "hint": "page-5.date-input-1.hint",
+                                            "validation": {
+                                                "isMandatory": true
+                                            }
+                                        },
+                                        {
+                                            "type": "SubmitButton",
+                                            "displayText": "page-5.save-continue-button-1.display-text"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "columnWidth": "two-thirds"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "Enter an Address",
+            "nextPage": "Enter a Postcode",
+            "elements": [
+                {
+                    "type": "Phase",
+                    "name": "page-6.phase-1.tag",
+                    "displayText": "page-6.phase-1.display-text"
+                },
+                {
+                    "type": "BackButton",
+                    "displayText": "page-6.back-button-1.display-text"
+                },
+                {
+                    "type": "Row2",
+                    "elements": [
+                        {
+                            "type": "Column",
+                            "elements": [
+                                {
+                                    "type": "ErrorList",
+                                    "title": "page-6.error-list-1.title"
+                                },
+                                {
+                                    "type": "Form",
+                                    "elements": [
+                                        {
+                                            "type": "AddressField",
+                                            "name": "f-addressInput",
+                                            "displayText": "page-6.address-field-1.display-text",
+                                            "labelClasses": "govuk-fieldset__legend--l",
+                                            "isPageHeading": true
+                                        },
+                                        {
+                                            "type": "SubmitButton",
+                                            "displayText": "page-6.save-continue-button-1.display-text"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "columnWidth": "two-thirds"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "Enter a Postcode",
+            "nextPage": "Enter a Phone Number",
+            "elements": [
+                {
+                    "type": "Phase",
+                    "name": "page-7.phase-1.tag",
+                    "displayText": "page-7.phase-1.display-text"
+                },
+                {
+                    "type": "BackButton",
+                    "displayText": "page-7.back-button-1.display-text"
+                },
+                {
+                    "type": "Row2",
+                    "elements": [
+                        {
+                            "type": "Column",
+                            "elements": [
+                                {
+                                    "type": "ErrorList",
+                                    "title": "page-7.error-list-1.title"
+                                },
+                                {
+                                    "type": "Form",
+                                    "elements": [
+                                        {
+                                            "type": "PostcodeField",
+                                            "name": "f-addressInput-2",
+                                            "displayText": "page-7.postcode-field-1.display-text",
+                                            "labelClasses": "govuk-label--l",
+                                            "isPageHeading": true,
+                                            "validation": {
+                                                "isMandatory": true
+                                            }
+                                        },
+                                        {
+                                            "type": "SubmitButton",
+                                            "displayText": "page-7.save-continue-button-1.display-text"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "columnWidth": "two-thirds"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "Enter a Phone Number",
+            "nextPage": "Enter an Email Address",
+            "elements": [
+                {
+                    "type": "Phase",
+                    "name": "page-8.phase-1.tag",
+                    "displayText": "page-8.phase-1.display-text"
+                },
+                {
+                    "type": "BackButton",
+                    "displayText": "page-8.back-button-1.display-text"
+                },
+                {
+                    "type": "Row2",
+                    "elements": [
+                        {
+                            "type": "Column",
+                            "elements": [
+                                {
+                                    "type": "ErrorList",
+                                    "title": "page-8.error-list-1.title"
+                                },
+                                {
+                                    "type": "Form",
+                                    "elements": [
+                                        {
+                                            "type": "PhoneNumberField",
+                                            "name": "f-phoneNumberInput",
+                                            "displayText": "page-8.phone-number-field-1.display-text",
+                                            "labelClasses": "govuk-label--l",
+                                            "isPageHeading": true,
+                                            "validation": {
+                                                "isMandatory": true
+                                            }
+                                        },
+                                        {
+                                            "type": "SubmitButton",
+                                            "displayText": "page-8.save-continue-button-1.display-text"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "columnWidth": "two-thirds"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "Enter an Email Address",
+            "nextPage": "Check your answers before sending your application",
+            "elements": [
+                {
+                    "type": "Phase",
+                    "name": "page-9.phase-1.tag",
+                    "displayText": "page-9.phase-1.display-text"
+                },
+                {
+                    "type": "BackButton",
+                    "displayText": "page-9.back-button-1.display-text"
+                },
+                {
+                    "type": "Row2",
+                    "elements": [
+                        {
+                            "type": "Column",
+                            "elements": [
+                                {
+                                    "type": "ErrorList",
+                                    "title": "page-9.error-list-1.title"
+                                },
+                                {
+                                    "type": "Form",
+                                    "elements": [
+                                        {
+                                            "type": "EmailField",
+                                            "name": "f-emailInput-2",
+                                            "displayText": "page-9.email-field-1.display-text",
+                                            "labelClasses": "govuk-label--l",
+                                            "isPageHeading": true,
+                                            "validation": {
+                                                "isMandatory": true
+                                            }
+                                        },
+                                        {
+                                            "type": "SubmitButton",
+                                            "displayText": "page-9.save-continue-button-1.display-text"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "columnWidth": "two-thirds"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "Check your answers before sending your application",
+            "nextPage": "Submitted",
+            "elements": [
+                {
+                    "type": "Phase",
+                    "name": "page-10.phase-1.tag",
+                    "displayText": "page-10.phase-1.display-text"
+                },
+                {
+                    "type": "BackButton",
+                    "displayText": "page-10.back-button-1.display-text"
+                },
+                {
+                    "type": "Row2",
+                    "elements": [
+                        {
+                            "type": "Column",
+                            "elements": [
+                                {
+                                    "type": "ErrorList",
+                                    "title": "page-10.error-list-1.title"
+                                },
+                                {
+                                    "type": "Heading",
+                                    "displayText": "page-10.heading-1.display-text",
+                                    "size": "h1"
+                                },
+                                {
+                                    "type": "Form",
+                                    "elements": [
+                                        {
+                                            "type": "Summary",
+                                            "title": "page-10.summary-1.title",
+                                            "fieldNames": [
+                                                "f-text",
+                                                "f-text-2",
+                                                "f-radio",
+                                                "f-dateInput",
+                                                "f-addressInput",
+                                                "f-addressInput-2",
+                                                "f-phoneNumberInput",
+                                                "f-emailInput-2"
+                                            ]
+                                        },
+                                        {
+                                            "type": "SubmitButton",
+                                            "displayText": "page-10.submit-button-1.display-text",
+                                            "action": {
+                                                "value": "submit",
+                                                "operation": "submitForm",
+                                                "validation": true
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "columnWidth": "two-thirds"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "Submitted",
+            "nextPage": null,
+            "elements": [
+                {
+                    "type": "Row2",
+                    "elements": [
+                        {
+                            "type": "Column",
+                            "elements": [
+                                {
+                                    "type": "Panel",
+                                    "title": "page-11.panel-1.title",
+                                    "text": "page-11.panel-1.display-text"
+                                },
+                                {
+                                    "type": "Heading",
+                                    "displayText": "page-11.heading-1.display-text",
+                                    "size": "h3"
+                                },
+                                {
+                                    "type": "Paragraph",
+                                    "displayText": "page-11.paragraph-1.display-text"
+                                }
+                            ],
+                            "columnWidth": "two-thirds"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "cookie",
+            "nextPage": null,
+            "elements": [
+                {
+                    "type": "Row2",
+                    "elements": [
+                        {
+                            "type": "Column",
+                            "elements": [
+                                {
+                                    "type": "Heading",
+                                    "displayText": "page-12.heading-1.display-text",
+                                    "size": "h1"
+                                },
+                                {
+                                    "type": "Paragraph",
+                                    "displayText": "page-12.paragraph-1.display-text"
+                                },
+                                {
+                                    "type": "Paragraph",
+                                    "displayText": "page-12.paragraph-2.display-text"
+                                },
+                                {
+                                    "type": "Heading",
+                                    "displayText": "page-12.heading-2.display-text",
+                                    "size": "h2"
+                                },
+                                {
+                                    "type": "Paragraph",
+                                    "displayText": "page-12.paragraph-3.display-text"
+                                },
+                                {
+                                    "type": "CookiesTable",
+                                    "displayText": ""
+                                }
+                            ],
+                            "columnWidth": "two-thirds"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "not-found",
+            "nextPage": null,
+            "elements": [
+                {
+                    "type": "Row2",
+                    "elements": [
+                        {
+                            "type": "Column",
+                            "elements": [
+                                {
+                                    "type": "Heading",
+                                    "displayText": "page-13.heading-1.display-text",
+                                    "size": "h1"
+                                },
+                                {
+                                    "type": "Paragraph",
+                                    "displayText": "page-13.paragraph-1.display-text"
+                                }
+                            ],
+                            "columnWidth": "two-thirds"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "apiMappings": {
+        "submitForm": {
+            "request": {
+                "_SESSION-ID_": "_SESSION-ID_",
+                "f-text": "f-text",
+                "f-text-2": "f-text-2",
+                "f-radio": "f-radio",
+                "f-dateInput": "f-dateInput",
+                "f-addressInput-2": "f-addressInput-2",
+                "f-phoneNumberInput": "f-phoneNumberInput",
+                "f-emailInput-2": "f-emailInput-2",
+                "f-addressInput-line1": "f-addressInput-line1",
+                "f-addressInput-line2": "f-addressInput-line2",
+                "f-addressInput-town": "f-addressInput-town",
+                "f-addressInput-county": "f-addressInput-county",
+                "f-addressInput-postcode": "f-addressInput-postcode"
+            },
+            "response": {
+                "title": "message",
+                "fieldNames": "data[*].fieldName",
+                "fieldErrorMessages": "data[*].errorMessage",
+                "numErrors": "length(data)",
+                "referenceNumber": "referenceNumber"
+            }
+        }
+    },
+    "apiServiceDefinition": {
+        "openapi": "3.0.1",
+        "info": {
+            "title": "api",
+            "version": "1.0.0"
+        },
+        "paths": {
+            "/dev/submit-form/service": {
+                "servers": [
+                    {
+                        "url": "https://s4ucihjr0e.execute-api.eu-west-2.amazonaws.com"
+                    }
+                ],
+                "post": {
+                    "operationId": "submitForm",
+                    "responses": {
+                        "200": {
+                            "description": "successful operation"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "i18n": {
+        "default": "en-GB",
+        "languages": {
+            "en-GB": "English (UK)",
+            "cy-GB": "Cymraeg"
+        },
+        "resources": {
+            "en-GB": {
+                "translation": {
+                    "root": {
+                        "header": {
+                            "product-name": "Demo",
+                            "service-name": "Test All Possible Components"
+                        }
+                    },
+                    "page-1": {
+                        "phase-1": {
+                            "tag": "Alpha",
+                            "display-text": "This is a new service"
+                        },
+                        "heading-1": {
+                            "display-text": "Test All Possible Components"
+                        },
+                        "bullet-list-1": {
+                            "display-text": "Use this service to:",
+                            "item-1": "Submit text information",
+                            "item-2": "Submit numerical data",
+                            "item-3": "Select options from a list",
+                            "item-4": "Provide a date",
+                            "item-5": "Enter an address",
+                            "item-6": "Enter a postcode",
+                            "item-7": "Provide a phone number",
+                            "item-8": "Enter an email address"
+                        },
+                        "save-continue-button-1": {
+                            "display-text": "\n            Start now\n          "
+                        },
+                        "heading-2": {
+                            "display-text": "Before you start"
+                        },
+                        "paragraph-1": {
+                            "display-text": "\n          You can also <a href='#' class='govuk-link'>register by post</a>.\n        "
+                        },
+                        "paragraph-2": {
+                            "display-text": "\n          The online service is also available in <a href='?lang=cy-GB' class='govuk-link'>Welsh (Cymraeg)</a>.\n        "
+                        },
+                        "paragraph-3": {
+                            "display-text": "\n          You cannot register for this service if you're in the UK illegally.\n        "
+                        },
+                        "heading-3": {
+                            "display-text": "Subsection"
+                        },
+                        "paragraph-4": {
+                            "display-text": "<a href='#' class='govuk-link'>Related link</a><br><a href='#' class='govuk-link'>Related link</a><br><a href='#' class='govuk-link govuk-!-font-weight-bold'>More in Subsection</a>"
+                        }
+                    },
+                    "page-2": {
+                        "phase-1": {
+                            "tag": "Alpha",
+                            "display-text": "This is a new service"
+                        },
+                        "back-button-1": {
+                            "display-text": "Back"
+                        },
+                        "error-list-1": {
+                            "title": "There is a problem"
+                        },
+                        "text-field-1": {
+                            "display-text": "Please enter some text information.",
+                            "hint": "This could be any text up to 100 characters.",
+                            "error": "Please enter valid text information up to 100 characters."
+                        },
+                        "save-continue-button-1": {
+                            "display-text": "Save and continue"
+                        }
+                    },
+                    "page-3": {
+                        "phase-1": {
+                            "tag": "Alpha",
+                            "display-text": "This is a new service"
+                        },
+                        "back-button-1": {
+                            "display-text": "Back"
+                        },
+                        "error-list-1": {
+                            "title": "There is a problem"
+                        },
+                        "text-field-1": {
+                            "display-text": "Please enter a number.",
+                            "hint": "This should be a numerical value.",
+                            "error": "Please enter a valid number."
+                        },
+                        "save-continue-button-1": {
+                            "display-text": "Save and continue"
+                        }
+                    },
+                    "page-4": {
+                        "back-button-1": {
+                            "display-text": "Back"
+                        },
+                        "radio-field-1": {
+                            "display-text": "Choose one:",
+                            "hint": "Select one option",
+                            "option-1": "Polish",
+                            "option-2": "English",
+                            "option-3": "Spanish",
+                            "option-4": "Norwegian"
+                        },
+                        "save-continue-button-1": {
+                            "display-text": "Save and continue"
+                        }
+                    },
+                    "page-5": {
+                        "phase-1": {
+                            "tag": "Alpha",
+                            "display-text": "This is a new service"
+                        },
+                        "back-button-1": {
+                            "display-text": "Back"
+                        },
+                        "error-list-1": {
+                            "title": "There is a problem"
+                        },
+                        "date-input-1": {
+                            "display-text": "Please enter a date.",
+                            "hint": "Use the format DD/MM/YYYY."
+                        },
+                        "save-continue-button-1": {
+                            "display-text": "Save and continue"
+                        }
+                    },
+                    "page-6": {
+                        "phase-1": {
+                            "tag": "Alpha",
+                            "display-text": "This is a new service"
+                        },
+                        "back-button-1": {
+                            "display-text": "Back"
+                        },
+                        "error-list-1": {
+                            "title": "There is a problem"
+                        },
+                        "address-field-1": {
+                            "display-text": "What is your address?"
+                        },
+                        "save-continue-button-1": {
+                            "display-text": "Save and continue"
+                        }
+                    },
+                    "page-7": {
+                        "phase-1": {
+                            "tag": "Alpha",
+                            "display-text": "This is a new service"
+                        },
+                        "back-button-1": {
+                            "display-text": "Back"
+                        },
+                        "error-list-1": {
+                            "title": "There is a problem"
+                        },
+                        "postcode-field-1": {
+                            "display-text": "What is your postcode?"
+                        },
+                        "save-continue-button-1": {
+                            "display-text": "Save and continue"
+                        }
+                    },
+                    "page-8": {
+                        "phase-1": {
+                            "tag": "Alpha",
+                            "display-text": "This is a new service"
+                        },
+                        "back-button-1": {
+                            "display-text": "Back"
+                        },
+                        "error-list-1": {
+                            "title": "There is a problem"
+                        },
+                        "phone-number-field-1": {
+                            "display-text": "What is your phone number?"
+                        },
+                        "save-continue-button-1": {
+                            "display-text": "Save and continue"
+                        }
+                    },
+                    "page-9": {
+                        "phase-1": {
+                            "tag": "Alpha",
+                            "display-text": "This is a new service"
+                        },
+                        "back-button-1": {
+                            "display-text": "Back"
+                        },
+                        "error-list-1": {
+                            "title": "There is a problem"
+                        },
+                        "email-field-1": {
+                            "display-text": "What is your email address?"
+                        },
+                        "save-continue-button-1": {
+                            "display-text": "Save and continue"
+                        }
+                    },
+                    "page-10": {
+                        "phase-1": {
+                            "tag": "Alpha",
+                            "display-text": "This is a new service"
+                        },
+                        "back-button-1": {
+                            "display-text": "Back"
+                        },
+                        "error-list-1": {
+                            "title": "There is a problem"
+                        },
+                        "heading-1": {
+                            "display-text": "Check your answers before sending your application"
+                        },
+                        "summary-1": {
+                            "title": "Application details"
+                        },
+                        "submit-button-1": {
+                            "display-text": "Submit"
+                        }
+                    },
+                    "page-11": {
+                        "panel-1": {
+                            "title": "Enquiry submitted",
+                            "display-text": "<span>Your reference number<br></span><b>reference_number_placeholder</b>"
+                        },
+                        "heading-1": {
+                            "display-text": "What happens next"
+                        },
+                        "paragraph-1": {
+                            "display-text": "Your enquiry has been submitted. What happens next depends on the service you selected. The team will be in touch if your enquiry is successful, and in 6 to 8 weeks if it is not."
+                        }
+                    },
+                    "page-12": {
+                        "heading-1": {
+                            "display-text": "Cookies"
+                        },
+                        "paragraph-1": {
+                            "display-text": "Cookies are small files saved on your phone, tablet, or computer when you visit a website."
+                        },
+                        "paragraph-2": {
+                            "display-text": "We use cookies to make this site work and collect information about how you use our service."
+                        },
+                        "heading-2": {
+                            "display-text": "Essential cookies"
+                        },
+                        "paragraph-3": {
+                            "display-text": "Essential cookies keep your information secure while you use this service. We do not need to ask permission to use them."
+                        }
+                    },
+                    "page-13": {
+                        "heading-1": {
+                            "display-text": "Page not found"
+                        },
+                        "paragraph-1": {
+                            "display-text": "\n            If you typed the web address, check it is correct.<br><br>\n            If you pasted the web address, check you copied the entire address.<br><br>\n            If the web address is correct or you selected a link or button, \n            <a href='#' class='govuk-link'>contact the [Placeholder] helpline</a> \n            if you need to speak to someone.\n          "
+                        }
+                    }
+                }
+            },
+            "cy-GB": {
+                "translation": {
+                    "root": {
+                        "header": {
+                            "product-name": "Demo",
+                            "service-name": "Prawf Pob Cydran Posib"
+                        }
+                    },
+                    "page-1": {
+                        "phase-1": {
+                            "tag": "Alffa",
+                            "display-text": "Mae hwn yn wasanaeth newydd"
+                        },
+                        "heading-1": {
+                            "display-text": "Prawf Pob Cydran Posib"
+                        },
+                        "bullet-list-1": {
+                            "display-text": "Defnyddiwch y gwasanaeth hwn i:",
+                            "item-1": "Cyflwyno gwybodaeth destun",
+                            "item-2": "Cyflwyno data rhifol",
+                            "item-3": "Dewis opsi o'r rhestr",
+                            "item-4": "Dar ddyddiad",
+                            "item-5": "Nodwch gyfeiriad",
+                            "item-6": "Nodwch god post",
+                            "item-7": "Dar rhif ffôn",
+                            "item-8": "Nodwch gyfeiriad ebost"
+                        },
+                        "save-continue-button-1": {
+                            "display-text": "Dechrau nawr"
+                        },
+                        "heading-2": {
+                            "display-text": "Cyn i chi ddechrau"
+                        },
+                        "paragraph-1": {
+                            "display-text": "Gallwch hefyd <a href=\"#\" class=\"govuk-link\">gofrestru drwy’r post</a>."
+                        },
+                        "paragraph-2": {
+                            "display-text": "Mae’r gwasanaeth ar-lein hefyd ar gael yn <a href=\"?lang=en-GB\" class=\"govuk-link\">Saesneg (English)</a>."
+                        },
+                        "paragraph-3": {
+                            "display-text": "Ni allwch gofrestru ar gyfer y gwasanaeth hwn os ydych chi’n y DU yn anghyfreithlon."
+                        },
+                        "heading-3": {
+                            "display-text": "Is-adran"
+                        },
+                        "paragraph-4": {
+                            "display-text": "<a href=\"#\" class=\"govuk-link\">Dolen gysylltiedig</a><br><a href=\"#\" class=\"govuk-link\">Dolen gysylltiedig</a><br><a href=\"#\" class=\"govuk-link govuk-!-font-weight-bold\">Mwy yn yr Is-adran</a>"
+                        }
+                    },
+                    "page-2": {
+                        "phase-1": {
+                            "tag": "Alffa",
+                            "display-text": "Gwasanaeth newydd yw hwn"
+                        },
+                        "back-button-1": {
+                            "display-text": "Yn ôl"
+                        },
+                        "error-list-1": {
+                            "title": "Mae problem"
+                        },
+                        "text-field-1": {
+                            "display-text": "Os gwelwch yn dda, rhowch rywfaint o wybodaeth destun.",
+                            "hint": "Gallai hyn fod yn unrhyw destun hyd at 100 nod.",
+                            "error": "Dewch i mewn gwybodaeth destun dilys hyd at 100 cymeriad."
+                        },
+                        "save-continue-button-1": {
+                            "display-text": "Cadw a pharhau"
+                        }
+                    },
+                    "page-3": {
+                        "phase-1": {
+                            "tag": "Alffa",
+                            "display-text": "Gwasanaeth newydd yw hwn"
+                        },
+                        "back-button-1": {
+                            "display-text": "Yn ôl"
+                        },
+                        "error-list-1": {
+                            "title": "Mae problem"
+                        },
+                        "text-field-1": {
+                            "display-text": "Pleaswch nodwch rif.",
+                            "hint": "Dylai hwn fod yn werth rhifol.",
+                            "error": "Os gwelwch yn dda, rhowch rif dilys."
+                        },
+                        "save-continue-button-1": {
+                            "display-text": "Cadw a pharhau"
+                        }
+                    },
+                    "page-4": {
+                        "back-button-1": {
+                            "display-text": "Yn ôl"
+                        },
+                        "radio-field-1": {
+                            "display-text": "Dewiswch un:",
+                            "hint": "Dewiswch un opsiwn",
+                            "option-1": "Lloegr",
+                            "option-2": "Yr Alban",
+                            "option-3": "Cymru",
+                            "option-4": "Gogledd Iwerddon"
+                        },
+                        "save-continue-button-1": {
+                            "display-text": "Cadw a pharhau"
+                        }
+                    },
+                    "page-5": {
+                        "phase-1": {
+                            "tag": "Alffa",
+                            "display-text": "Gwasanaeth newydd yw hwn"
+                        },
+                        "back-button-1": {
+                            "display-text": "Yn ôl"
+                        },
+                        "error-list-1": {
+                            "title": "Mae problem"
+                        },
+                        "date-input-1": {
+                            "display-text": "Os gwelwch yn dda, rhowch ddyddiad.",
+                            "hint": "Defnyddiwch y fformat DD/MM/YYYY."
+                        },
+                        "save-continue-button-1": {
+                            "display-text": "Cadw a pharhau"
+                        }
+                    },
+                    "page-6": {
+                        "phase-1": {
+                            "tag": "Alffa",
+                            "display-text": "Gwasanaeth newydd yw hwn"
+                        },
+                        "back-button-1": {
+                            "display-text": "Yn ôl"
+                        },
+                        "error-list-1": {
+                            "title": "Mae problem"
+                        },
+                        "address-field-1": {
+                            "display-text": "Beth yw dy gyfeiriad?"
+                        },
+                        "save-continue-button-1": {
+                            "display-text": "Cadw a pharhau"
+                        }
+                    },
+                    "page-7": {
+                        "phase-1": {
+                            "tag": "Alffa",
+                            "display-text": "Gwasanaeth newydd yw hwn"
+                        },
+                        "back-button-1": {
+                            "display-text": "Yn ôl"
+                        },
+                        "error-list-1": {
+                            "title": "Mae problem"
+                        },
+                        "postcode-field-1": {
+                            "display-text": "Beth yw eich cod post?"
+                        },
+                        "save-continue-button-1": {
+                            "display-text": "Cadw a pharhau"
+                        }
+                    },
+                    "page-8": {
+                        "phase-1": {
+                            "tag": "Alffa",
+                            "display-text": "Gwasanaeth newydd yw hwn"
+                        },
+                        "back-button-1": {
+                            "display-text": "Yn ôl"
+                        },
+                        "error-list-1": {
+                            "title": "Mae problem"
+                        },
+                        "phone-number-field-1": {
+                            "display-text": "Beth yw eich rhif ffôn?"
+                        },
+                        "save-continue-button-1": {
+                            "display-text": "Cadw a pharhau"
+                        }
+                    },
+                    "page-9": {
+                        "phase-1": {
+                            "tag": "Alffa",
+                            "display-text": "Gwasanaeth newydd yw hwn"
+                        },
+                        "back-button-1": {
+                            "display-text": "Yn ôl"
+                        },
+                        "error-list-1": {
+                            "title": "Mae problem"
+                        },
+                        "email-field-1": {
+                            "display-text": "Beth yw dy gyfeiriad e-bost?"
+                        },
+                        "save-continue-button-1": {
+                            "display-text": "Cadw a pharhau"
+                        }
+                    },
+                    "page-10": {
+                        "phase-1": {
+                            "tag": "Alffa",
+                            "display-text": "Gwasanaeth newydd yw hwn"
+                        },
+                        "back-button-1": {
+                            "display-text": "Yn ôl"
+                        },
+                        "error-list-1": {
+                            "title": "Mae problem"
+                        },
+                        "heading-1": {
+                            "display-text": "Gwiriwch eich atebion cyn anfon eich cais"
+                        },
+                        "summary-1": {
+                            "title": "Manylion y cais"
+                        },
+                        "submit-button-1": {
+                            "display-text": "Cyflwyno"
+                        }
+                    },
+                    "page-11": {
+                        "panel-1": {
+                            "title": "Ymholiad wedi’i gyflwyno",
+                            "display-text": "<span>Eich cyfeirnod<br></span><b>reference_number_placeholder</b>"
+                        },
+                        "heading-1": {
+                            "display-text": "Beth sy’n digwydd nesaf"
+                        },
+                        "paragraph-1": {
+                            "display-text": "Mae eich ymholiad wedi’i gyflwyno. Beth sy’n digwydd nesaf yn dibynnu ar y gwasanaeth a ddewiswyd gennych. Bydd y tîm yn cysylltu os yw eich ymholiad yn llwyddiannus, ac mewn 6 i 8 wythnos os nad yw."
+                        }
+                    },
+                    "page-12": {
+                        "heading-1": {
+                            "display-text": "Cwcis"
+                        },
+                        "paragraph-1": {
+                            "display-text": "Mae cwcis yn ffeiliau bach sy’n cael eu cadw ar eich ffôn, llechen, neu gyfrifiadur pan fyddwch chi’n ymweld â gwefan."
+                        },
+                        "paragraph-2": {
+                            "display-text": "Rydyn ni’n defnyddio cwcis i wneud i’r safle hwn weithio ac i gasglu gwybodaeth am sut rydych chi’n defnyddio ein gwasanaeth."
+                        },
+                        "heading-2": {
+                            "display-text": "Cwcis hanfodol"
+                        },
+                        "paragraph-3": {
+                            "display-text": "Mae cwcis hanfodol yn cadw eich gwybodaeth yn ddiogel tra byddwch chi’n defnyddio’r gwasanaeth hwn. Nid oes angen i ni ofyn am ganiatâd i’w defnyddio."
+                        }
+                    },
+                    "page-13": {
+                        "heading-1": {
+                            "display-text": "Tudalen heb ei darganfod"
+                        },
+                        "paragraph-1": {
+                            "display-text": "Os gwnaethoch deipio’r cyfeiriad gwe, gwiriwch ei fod yn gywir.<br><br>\n            Os gwnaethoch gludo’r cyfeiriad gwe, gwiriwch eich bod wedi copïo’r cyfeiriad cyfan.<br><br>\n            Os yw’r cyfeiriad gwe yn gywir neu os gwnaethoch ddewis dolen neu fotwm, \n            <a href=\"#\" class=\"govuk-link\">cysylltwch â llinell gymorth [Daliwr lle]</a> \n            os oes angen i chi siarad â rhywun"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "googleAnalyticsMeasurementId": null
+}

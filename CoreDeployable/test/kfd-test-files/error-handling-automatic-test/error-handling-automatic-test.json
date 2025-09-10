@@ -1,0 +1,128 @@
+{
+  "name": "Example for API validation",
+  "firstPage": "firstPage",
+  "productName": "example.com",
+  "homePageUrl": "https://example.com",
+  "cookieSecret": "0123456789-abc",
+  "pages": [
+    {
+      "id": "firstPage",
+      "nextPage": "",
+      "preRequisiteData": null,
+      "validation": null,
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Form",
+                  "classes": "",
+                  "elements": [
+                    {
+                      "type": "ErrorList",
+                      "title": "There is a problem"
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_1",
+                      "displayText": "Name",
+                      "autocomplete": null,
+                      "validation": {
+                        "regex": "^[a-zA-Z ]*$",
+                        "error": "Only text allowed"
+                      },
+                      "classes": null,
+                      "hint": "",
+                      "errorField": "f_text_4",
+                      "errorMessage": "Only text allowed in this field."
+                    },
+            
+                    {
+                      "type": "TextField",
+                      "name": "f_text_5",
+                      "displayText": "Phone number",
+                      "autocomplete": null,
+                      "validation": {
+                        "regex": "^[0-9]*$",
+                        "error": "Only numbers allowed"
+                      },
+                      "classes": null,
+                      "hint": "",
+                      "errorField": "f_text_5",
+                      "errorMessage": "Only numbers allowed in this field."
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Error",
+                      "classes": "govuk-button--secondary",
+                      "action": {
+                        "value": "errorButton",
+                        "operation": "errorExample",
+                        "validation": false
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "apiMappings": {
+    "errorExample": {
+      "request": {
+        "_SESSION-ID_": "_SESSION-ID_",
+        "f_text_5": "f_text_5"
+      },
+      "response": {
+        "title": "message",
+        "fieldNames": "data[*].fieldName",
+        "fieldErrorMessages": "data[*].errorMessage",
+        "numErrors": "length(data)"
+      }
+    }
+  },
+  "apiServiceDefinition": {
+    "openapi": "3.0.1",
+    "info": {
+      "title": "form-submission-API",
+      "version": "2024-06-13T12:12:41Z"
+    },
+    "servers": [
+      {
+        "url": "https://example-endpoint.com/{basePath}",
+        "variables": {
+          "basePath": {
+            "default": "dev"
+          }
+        }
+      }
+    ],
+    "paths": {
+      "/save-form/service": {
+        "delete": {
+          "tags": ["demo"],
+          "summary": "Partial submission of form data",
+          "operationId": "errorExample",
+          "requestBody": {
+            "description": "Save form progress",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Form"
+                }
+              }
+            },
+            "required": true
+          }
+        }
+      }
+    }
+  }
+}

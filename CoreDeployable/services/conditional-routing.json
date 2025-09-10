@@ -1,0 +1,1139 @@
+{
+  "name": "root.header.service-name",
+  "designSystem": "gds",
+  "firstPage": "start",
+  "productName": "root.header.product-name",
+  "homePageUrl": "",
+  "cookieSecret": "0123456789-abc",
+  "cookieBanner": null,
+  "footer": null,
+  "pages": [
+    {
+      "id": "start",
+      "nextPage": "application type",
+      "elements": [
+        {
+          "type": "Phase",
+          "name": "page-1.phase-1.tag",
+          "displayText": "page-1.phase-1.display-text"
+        },
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "elements": [
+                {
+                  "type": "Heading",
+                  "displayText": "page-1.heading-1.display-text",
+                  "size": "h1"
+                },
+                {
+                  "type": "BulletedListField",
+                  "displayText": "page-1.bullet-list-1.display-text",
+                  "items": [
+                    {
+                      "text": "page-1.bullet-list-1.item-1"
+                    },
+                    {
+                      "text": "page-1.bullet-list-1.item-2"
+                    }
+                  ]
+                },
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "page-1.save-continue-button-1.display-text"
+                    }
+                  ]
+                },
+                {
+                  "type": "Heading",
+                  "displayText": "page-1.heading-2.display-text",
+                  "size": "h2"
+                },
+                {
+                  "type": "Paragraph",
+                  "displayText": "page-1.paragraph-1.display-text"
+                },
+                {
+                  "type": "Paragraph",
+                  "displayText": "page-1.paragraph-2.display-text"
+                },
+                {
+                  "type": "Paragraph",
+                  "displayText": "page-1.paragraph-3.display-text"
+                }
+              ],
+              "columnWidth": "two-thirds"
+            },
+            {
+              "type": "Column",
+              "elements": [
+                {
+                  "type": "Heading",
+                  "displayText": "page-1.heading-3.display-text",
+                  "size": "h2"
+                },
+                {
+                  "type": "Paragraph",
+                  "displayText": "page-1.paragraph-4.display-text"
+                }
+              ],
+              "columnWidth": "one-third"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "application type",
+      "nextPage": {
+        "rules": [
+          {
+            "match": {
+              "f-radio-2": "Apply to become examiner"
+            },
+            "page": "A"
+          },
+          {
+            "match": {
+              "f-radio-2": "I am currently an approved examiner"
+            },
+            "page": "A1"
+          },
+          {
+            "match": {
+              "f-radio-2": "Make a change to a current examiner"
+            },
+            "page": "A"
+          },
+          {
+            "match": {
+              "f-radio-2": "Change of examiner designated manager"
+            },
+            "page": "A"
+          },
+          {
+            "match": {
+              "f-radio-2": "Apply to become an examiner following a short term cessation"
+            },
+            "page": "A"
+          },
+          {
+            "match": {
+              "f-radio-2": "Apply to set up a new examiner station"
+            },
+            "page": "C"
+          }
+        ]
+      },
+      "elements": [
+        {
+          "type": "Form",
+          "elements": [
+            {
+              "type": "RadioField",
+              "name": "f-radio-2",
+              "displayText": "page-2.radio-field-1.display-text",
+              "labelClasses": "govuk-fieldset__legend--l",
+              "isPageHeading": true,
+              "hint": "page-2.radio-field-1.hint",
+              "validation": {
+                "isMandatory": true
+              },
+              "options": [
+                {
+                  "value": "Apply to become an examiner",
+                  "text": "page-2.radio-field-1.option-1",
+                  "valueText": "page-2.radio-field-1.option-1"
+                },
+                {
+                  "value": "I am currently an approved examiner",
+                  "text": "page-2.radio-field-1.option-2",
+                  "valueText": "page-2.radio-field-1.option-2"
+                },
+                {
+                  "value": "Make a change to a current examiner",
+                  "text": "page-2.radio-field-1.option-3",
+                  "valueText": "page-2.radio-field-1.option-3"
+                },
+                {
+                  "value": "Change of examiner designated manager",
+                  "text": "page-2.radio-field-1.option-4",
+                  "valueText": "page-2.radio-field-1.option-4"
+                },
+                {
+                  "value": "Apply to become an examiner following a short term cessation",
+                  "text": "page-2.radio-field-1.option-5",
+                  "valueText": "page-2.radio-field-1.option-5"
+                },
+                {
+                  "value": "Apply to set up a new examiner station",
+                  "text": "page-2.radio-field-1.option-6",
+                  "valueText": "page-2.radio-field-1.option-6"
+                }
+              ]
+            },
+            {
+              "type": "SubmitButton",
+              "displayText": "page-2.save-continue-button-1.display-text"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A",
+      "nextPage": {
+        "rules": [
+          {
+            "match": {
+              "f-radio-2": "Apply to become an authorised examiner"
+            },
+            "page": "B"
+          },
+          {
+            "match": {
+              "f-radio-2": "Make a change to a current examiner"
+            },
+            "page": "B"
+          },
+          {
+            "match": {
+              "f-radio-2": "Change of examiner designated manager"
+            },
+            "page": "B"
+          },
+          {
+            "match": {
+              "f-radio-2": "Apply to become an examiner following a short term cessation"
+            },
+            "page": "B"
+          }
+        ]
+      },
+      "elements": [
+        {
+          "type": "BackButton",
+          "displayText": "page-3.back-button-1.display-text"
+        },
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "elements": [
+                {
+                  "type": "Heading",
+                  "displayText": "page-3.heading-1.display-text",
+                  "size": "h1"
+                },
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "TextField",
+                      "name": "f-text",
+                      "displayText": "page-3.text-field-1.display-text",
+                      "labelClasses": "govuk-label--l",
+                      "isPageHeading": true,
+                      "hint": "page-3.text-field-1.hint",
+                      "validation": {
+                        "isMandatory": true
+                      }
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "page-3.save-continue-button-1.display-text"
+                    }
+                  ]
+                }
+              ],
+              "columnWidth": "two-thirds"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A1",
+      "nextPage": {
+        "rules": [
+          {
+            "match": {
+              "f-radio-2": "I am currently an approved examiner"
+            },
+            "page": "A2"
+          }
+        ]
+      },
+      "elements": [
+        {
+          "type": "BackButton",
+          "displayText": "page-4.back-button-1.display-text"
+        },
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "elements": [
+                {
+                  "type": "Heading",
+                  "displayText": "page-4.heading-1.display-text",
+                  "size": "h1"
+                },
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "TextField",
+                      "name": "f-text-2",
+                      "displayText": "page-4.text-field-1.display-text",
+                      "labelClasses": "govuk-label--l",
+                      "isPageHeading": true,
+                      "hint": "page-4.text-field-1.hint",
+                      "validation": {
+                        "isMandatory": true
+                      }
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "page-4.save-continue-button-1.display-text"
+                    }
+                  ]
+                }
+              ],
+              "columnWidth": "two-thirds"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A2",
+      "nextPage": {
+        "rules": [
+          {
+            "match": {
+              "f-radio-2": "I am currently an approved examiner"
+            },
+            "page": "A3"
+          }
+        ]
+      },
+      "elements": [
+        {
+          "type": "BackButton",
+          "displayText": "page-5.back-button-1.display-text"
+        },
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "elements": [
+                {
+                  "type": "Heading",
+                  "displayText": "page-5.heading-1.display-text",
+                  "size": "h1"
+                },
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "page-5.save-continue-button-1.display-text"
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f-text-3",
+                      "displayText": "page-5.text-field-1.display-text",
+                      "labelClasses": "govuk-label--l",
+                      "isPageHeading": true,
+                      "hint": "page-5.text-field-1.hint",
+                      "validation": {
+                        "isMandatory": true
+                      }
+                    }
+                  ]
+                }
+              ],
+              "columnWidth": "two-thirds"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A3",
+      "nextPage": {
+        "rules": [
+          {
+            "match": {
+              "f-radio-2": "I am currently an approved examiner"
+            },
+            "page": "A5"
+          }
+        ]
+      },
+      "elements": [
+        {
+          "type": "BackButton",
+          "displayText": "page-6.back-button-1.display-text"
+        },
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "elements": [
+                {
+                  "type": "Heading",
+                  "displayText": "page-6.heading-1.display-text",
+                  "size": "h1"
+                },
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "page-6.save-continue-button-1.display-text"
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f-text-4",
+                      "displayText": "page-6.text-field-1.display-text",
+                      "labelClasses": "govuk-label--l",
+                      "isPageHeading": true,
+                      "hint": "page-6.text-field-1.hint",
+                      "validation": {
+                        "isMandatory": true
+                      }
+                    }
+                  ]
+                }
+              ],
+              "columnWidth": "two-thirds"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A5",
+      "nextPage": {
+        "rules": [
+          {
+            "match": {
+              "f-radio-2": "I am currently an approved examiner"
+            },
+            "page": "confirm"
+          }
+        ]
+      },
+      "elements": [
+        {
+          "type": "BackButton",
+          "displayText": "page-7.back-button-1.display-text"
+        },
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "elements": [
+                {
+                  "type": "Heading",
+                  "displayText": "page-7.heading-1.display-text",
+                  "size": "h1"
+                },
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "page-7.save-continue-button-1.display-text"
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f-text-5",
+                      "displayText": "page-7.text-field-1.display-text",
+                      "labelClasses": "govuk-label--l",
+                      "isPageHeading": true,
+                      "hint": "page-7.text-field-1.hint",
+                      "validation": {
+                        "isMandatory": true
+                      }
+                    }
+                  ]
+                }
+              ],
+              "columnWidth": "two-thirds"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "nextPage": {
+        "rules": [
+          {
+            "match": {
+              "f-radio-2": "Apply to become an examiner"
+            },
+            "page": "D1"
+          },
+          {
+            "match": {
+              "f-radio-2": "Make a change to a current examiner"
+            },
+            "page": "D1"
+          },
+          {
+            "match": {
+              "f-radio-2": "Change of examiner designated manager"
+            },
+            "page": "D1"
+          },
+          {
+            "match": {
+              "f-radio-2": "Apply to become an examiner following a short term cessation"
+            },
+            "page": "D1"
+          }
+        ]
+      },
+      "elements": [
+        {
+          "type": "BackButton",
+          "displayText": "page-8.back-button-1.display-text"
+        },
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "elements": [
+                {
+                  "type": "Heading",
+                  "displayText": "page-8.heading-1.display-text",
+                  "size": "h1"
+                },
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "page-8.save-continue-button-1.display-text"
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f-text-6",
+                      "displayText": "page-8.text-field-1.display-text",
+                      "labelClasses": "govuk-label--l",
+                      "isPageHeading": true,
+                      "hint": "page-8.text-field-1.hint",
+                      "validation": {
+                        "isMandatory": true
+                      }
+                    }
+                  ]
+                }
+              ],
+              "columnWidth": "two-thirds"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "nextPage": {
+        "rules": [
+          {
+            "match": {
+              "f-radio-2": "Apply to set up a new station"
+            },
+            "page": "D2"
+          }
+        ]
+      },
+      "elements": [
+        {
+          "type": "BackButton",
+          "displayText": "page-9.back-button-1.display-text"
+        },
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "elements": [
+                {
+                  "type": "Heading",
+                  "displayText": "page-9.heading-1.display-text",
+                  "size": "h1"
+                },
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "page-9.save-continue-button-1.display-text"
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f-text-7",
+                      "displayText": "page-9.text-field-1.display-text",
+                      "labelClasses": "govuk-label--l",
+                      "isPageHeading": true,
+                      "hint": "page-9.text-field-1.hint",
+                      "validation": {
+                        "isMandatory": true
+                      }
+                    }
+                  ]
+                }
+              ],
+              "columnWidth": "two-thirds"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D1",
+      "nextPage": {
+        "rules": [
+          {
+            "match": {
+              "f-radio-2": "Apply to become an authorised examiner"
+            },
+            "page": "confirm"
+          },
+          {
+            "match": {
+              "f-radio-2": "Make a change to a current examiner"
+            },
+            "page": "D2"
+          },
+          {
+            "match": {
+              "f-radio-2": "Change of examiner designated manager"
+            },
+            "page": "confirm"
+          },
+          {
+            "match": {
+              "f-radio-2": "Apply to become an examiner following a short term cessation"
+            },
+            "page": "confirm"
+          }
+        ]
+      },
+      "elements": [
+        {
+          "type": "BackButton",
+          "displayText": "page-10.back-button-1.display-text"
+        },
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "elements": [
+                {
+                  "type": "Heading",
+                  "displayText": "page-10.heading-1.display-text",
+                  "size": "h1"
+                },
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "page-10.save-continue-button-1.display-text"
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f-text-8",
+                      "displayText": "page-10.text-field-1.display-text",
+                      "labelClasses": "govuk-label--l",
+                      "isPageHeading": true,
+                      "hint": "page-10.text-field-1.hint",
+                      "validation": {
+                        "isMandatory": true
+                      }
+                    }
+                  ]
+                }
+              ],
+              "columnWidth": "two-thirds"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D2",
+      "nextPage": {
+        "rules": [
+          {
+            "match": {
+              "f-radio-2": "Make a change to a current examiner"
+            },
+            "page": "confirm"
+          },
+          {
+            "match": {
+              "f-radio-2": "Apply to set up a new station"
+            },
+            "page": "D3"
+          }
+        ]
+      },
+      "elements": [
+        {
+          "type": "BackButton",
+          "displayText": "page-11.back-button-1.display-text"
+        },
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "elements": [
+                {
+                  "type": "Heading",
+                  "displayText": "page-11.heading-1.display-text",
+                  "size": "h1"
+                },
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "page-11.save-continue-button-1.display-text"
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f-text-9",
+                      "displayText": "page-11.text-field-1.display-text",
+                      "labelClasses": "govuk-label--l",
+                      "isPageHeading": true,
+                      "hint": "page-11.text-field-1.hint",
+                      "validation": {
+                        "isMandatory": true
+                      }
+                    }
+                  ]
+                }
+              ],
+              "columnWidth": "two-thirds"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D3",
+      "nextPage": {
+        "rules": [
+          {
+            "match": {
+              "f-radio-2": "Apply to set up a new station"
+            },
+            "page": "confirm"
+          }
+        ]
+      },
+      "elements": [
+        {
+          "type": "BackButton",
+          "displayText": "page-12.back-button-1.display-text"
+        },
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "elements": [
+                {
+                  "type": "Heading",
+                  "displayText": "page-12.heading-1.display-text",
+                  "size": "h1"
+                },
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "page-12.save-continue-button-1.display-text"
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f-text-10",
+                      "displayText": "page-12.text-field-1.display-text",
+                      "labelClasses": "govuk-label--l",
+                      "isPageHeading": true,
+                      "hint": "page-12.text-field-1.hint",
+                      "validation": {
+                        "isMandatory": true
+                      }
+                    }
+                  ]
+                }
+              ],
+              "columnWidth": "two-thirds"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "confirm",
+      "nextPage": null,
+      "elements": [
+        {
+          "type": "BackButton",
+          "displayText": "page-13.back-button-1.display-text"
+        },
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "elements": [
+                {
+                  "type": "Heading",
+                  "displayText": "page-13.heading-1.display-text",
+                  "size": "h1"
+                },
+                {
+                  "type": "Summary",
+                  "title": "page-13.summary-1.title",
+                  "fieldNames": {
+                    "rules": [
+                      {
+                        "match": {
+                          "f-radio-2": "Apply to become an authorised examiner"
+                        },
+                        "fieldNames": [
+                          "f-radio-2",
+                          "f-text",
+                          "f-text-6",
+                          "f-text-8"
+                        ]
+                      },
+                      {
+                        "match": {
+                          "f-radio-2": "I am currently an approved examiner"
+                        },
+                        "fieldNames": [
+                          "f-radio-2",
+                          "f-text-2",
+                          "f-text-3",
+                          "f-text-4",
+                          "f-text-5"
+                        ]
+                      },
+                      {
+                        "match": {
+                          "f-radio-2": "Make a change to a current examiner"
+                        },
+                        "fieldNames": [
+                          "f-radio-2",
+                          "f-text",
+                          "f-text-6",
+                          "f-text-8",
+                          "f-text-9"
+                        ]
+                      },
+                      {
+                        "match": {
+                          "f-radio-2": "Change of examiner designated manager"
+                        },
+                        "fieldNames": [
+                          "f-radio-2",
+                          "f-text",
+                          "f-text-6",
+                          "f-text-8"
+                        ]
+                      },
+                      {
+                        "match": {
+                          "f-radio-2": "Apply to become an examiner following a short term cessation"
+                        },
+                        "fieldNames": [
+                          "f-radio-2",
+                          "f-text",
+                          "f-text-6",
+                          "f-text-8"
+                        ]
+                      },
+                      {
+                        "match": {
+                          "f-radio-2": "Apply to set up a new station"
+                        },
+                        "fieldNames": [
+                          "f-radio-2",
+                          "f-text-7",
+                          "f-text-9",
+                          "f-text-10"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "columnWidth": "two-thirds"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "apiMappings": {},
+  "apiServiceDefinition": {
+    "openapi": "3.0.1",
+    "info": {
+      "title": "api",
+      "version": "1.0.0"
+    },
+    "paths": {}
+  },
+  "i18n": {
+    "default": "en-GB",
+    "languages": {
+      "en-GB": "English (UK)"
+    },
+    "resources": {
+      "en-GB": {
+        "translation": {
+          "root": {
+            "header": {
+              "product-name": "Demo",
+              "service-name": "Your Service Name"
+            }
+          },
+          "page-1": {
+            "phase-1": {
+              "tag": "Alpha",
+              "display-text": "This is a new service"
+            },
+            "heading-1": {
+              "display-text": "Heading for your service"
+            },
+            "bullet-list-1": {
+              "display-text": "Use this service to:",
+              "item-1": "do something",
+              "item-2": "Registering takes around 15 minutes"
+            },
+            "save-continue-button-1": {
+              "display-text": "\n            Start now\n          "
+            },
+            "heading-2": {
+              "display-text": "Before you start"
+            },
+            "paragraph-1": {
+              "display-text": "\n          You can also \u003Ca href='#' class='govuk-link'\u003Eregister by post\u003C/a\u003E.\n        "
+            },
+            "paragraph-2": {
+              "display-text": "\n          The online service is also available in \u003Ca href='?lang=cy-GB' class='govuk-link'\u003EWelsh (Cymraeg)\u003C/a\u003E.\n        "
+            },
+            "paragraph-3": {
+              "display-text": "\n          You cannot register for this service if you're in the UK illegally.\n        "
+            },
+            "heading-3": {
+              "display-text": "Subsection"
+            },
+            "paragraph-4": {
+              "display-text": "\u003Ca href='#' class='govuk-link'\u003ERelated link\u003C/a\u003E\u003Cbr\u003E\u003Ca href='#' class='govuk-link'\u003ERelated link\u003C/a\u003E\u003Cbr\u003E\u003Ca href='#' class='govuk-link govuk-!-font-weight-bold'\u003EMore in Subsection\u003C/a\u003E"
+            }
+          },
+          "page-2": {
+            "radio-field-1": {
+              "display-text": "Choose one:",
+              "hint": "Select one option",
+              "option-1": "Apply to become an authorised examiner",
+              "option-2": "I am currently an approved examiner",
+              "option-3": "Make a change to a current examiner",
+              "option-4": "Change of examiner designated manager",
+              "option-5": "Apply to become an examiner following a short term cessation",
+              "option-6": "Apply to set up a new station"
+            },
+            "save-continue-button-1": {
+              "display-text": "Save and continue"
+            }
+          },
+          "page-3": {
+            "back-button-1": {
+              "display-text": "Back"
+            },
+            "heading-1": {
+              "display-text": "A"
+            },
+            "text-field-1": {
+              "display-text": "A?",
+              "hint": "The name you’ll use on promotional material"
+            },
+            "save-continue-button-1": {
+              "display-text": "Save and continue"
+            }
+          },
+          "page-4": {
+            "back-button-1": {
+              "display-text": "Back"
+            },
+            "heading-1": {
+              "display-text": "A1"
+            },
+            "text-field-1": {
+              "display-text": "A1?",
+              "hint": "The name you’ll use on promotional material"
+            },
+            "save-continue-button-1": {
+              "display-text": "Save and continue"
+            }
+          },
+          "page-5": {
+            "back-button-1": {
+              "display-text": "Back"
+            },
+            "heading-1": {
+              "display-text": "A2"
+            },
+            "save-continue-button-1": {
+              "display-text": "Save and continue"
+            },
+            "text-field-1": {
+              "display-text": "A2?",
+              "hint": "The name you’ll use on promotional material"
+            }
+          },
+          "page-6": {
+            "back-button-1": {
+              "display-text": "Back"
+            },
+            "heading-1": {
+              "display-text": "A3"
+            },
+            "save-continue-button-1": {
+              "display-text": "Save and continue"
+            },
+            "text-field-1": {
+              "display-text": "A3?",
+              "hint": "The name you’ll use on promotional material"
+            }
+          },
+          "page-7": {
+            "back-button-1": {
+              "display-text": "Back"
+            },
+            "heading-1": {
+              "display-text": "A5"
+            },
+            "save-continue-button-1": {
+              "display-text": "Save and continue"
+            },
+            "text-field-1": {
+              "display-text": "A5?",
+              "hint": "The name you’ll use on promotional material"
+            }
+          },
+          "page-8": {
+            "back-button-1": {
+              "display-text": "Back"
+            },
+            "heading-1": {
+              "display-text": "B"
+            },
+            "save-continue-button-1": {
+              "display-text": "Save and continue"
+            },
+            "text-field-1": {
+              "display-text": "B?",
+              "hint": "The name you’ll use on promotional material"
+            }
+          },
+          "page-9": {
+            "back-button-1": {
+              "display-text": "Back"
+            },
+            "heading-1": {
+              "display-text": "C"
+            },
+            "save-continue-button-1": {
+              "display-text": "Save and continue"
+            },
+            "text-field-1": {
+              "display-text": "C?",
+              "hint": "The name you’ll use on promotional material"
+            }
+          },
+          "page-10": {
+            "back-button-1": {
+              "display-text": "Back"
+            },
+            "heading-1": {
+              "display-text": "D1"
+            },
+            "save-continue-button-1": {
+              "display-text": "Save and continue"
+            },
+            "text-field-1": {
+              "display-text": "D1?",
+              "hint": "The name you’ll use on promotional material"
+            }
+          },
+          "page-11": {
+            "back-button-1": {
+              "display-text": "Back"
+            },
+            "heading-1": {
+              "display-text": "D2"
+            },
+            "save-continue-button-1": {
+              "display-text": "Save and continue"
+            },
+            "text-field-1": {
+              "display-text": "D2?",
+              "hint": "The name you’ll use on promotional material"
+            }
+          },
+          "page-12": {
+            "back-button-1": {
+              "display-text": "Back"
+            },
+            "heading-1": {
+              "display-text": "D3"
+            },
+            "save-continue-button-1": {
+              "display-text": "Save and continue"
+            },
+            "text-field-1": {
+              "display-text": "D3?",
+              "hint": "The name you’ll use on promotional material"
+            }
+          },
+          "page-13": {
+            "back-button-1": {
+              "display-text": "Back"
+            },
+            "heading-1": {
+              "display-text": "confirm"
+            },
+            "summary-1": {
+              "title": "Summary title"
+            }
+          }
+        }
+      }
+    }
+  }
+}

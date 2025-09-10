@@ -1,0 +1,18 @@
+{% macro header(service) %}
+
+<header class="govuk-header" data-module="govuk-header">
+  <div class="govuk-header__container govuk-width-container">
+    <div class="govuk-header__logo">
+      <a href="{{ service.homePageUrl | trans() if service.homePageUrl and service.homePageUrl != '' else '#' }}" class="govuk-header__link govuk-header__link--homepage">
+        <img src="/assets/wds/wds_logo.svg" title="Welsh Government" width="140" height="34" />
+      </a>
+    </div>
+    <div class="govuk-header__content">
+      <a href="{{ service.firstPage }}" class="govuk-header__link govuk-header__service-name">
+        {{ service.name | trans() }}
+      </a>
+    </div>
+  </div>
+</header>
+  
+{% endmacro %}

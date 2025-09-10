@@ -1,0 +1,62 @@
+{
+  "name": "cookie",
+  "firstPage": "firstPage",
+  "productName": "cookie",
+  "homePageUrl": "",
+  "cookieSecret": "0123456789-abc",
+  "footer": {
+    "links": [
+      {
+        "text": "example external link",
+        "href": "https://google.com",
+        "attributes": {
+          "target": "_blank"
+        }
+      },
+      {
+        "text": "Cookies",
+        "href": "cookie"
+      }
+    ]
+  },
+  "pages": [
+    {
+      "id": "cookie",
+      "nextPage": null,
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Heading",
+                  "displayText": "Cookies"
+                },
+                {
+                  "type": "Paragraph",
+                  "displayText": "Cookies are small files saved on your phone, table or computer when you visit a website."
+                },
+                {
+                  "type": "Subheading",
+                  "displayText": "Essential cookies"
+                },
+                {
+                  "type": "Paragraph",
+                  "displayText": "Essential cookies keep your information secure while you use this service. We do not need to ask your permission to use them."
+                },
+                {
+                  "type": "CookiesTable",
+                  "displayText": "",
+                  "cookies": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

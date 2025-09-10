@@ -1,0 +1,19 @@
+{
+  "name": "Your Service Name",
+  "firstPage": "firstPage",
+  "productName": "Demo",
+  "homePageUrl": "",
+  "cookieSecret": "0123456789-abc",
+  "pages": [
+    {
+      "id": "firstPage",
+      "nextPage": null,
+      "elements": [
+        {
+          "type": "InsetText",
+          "displayText": "Testing InsetText. This is display text."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+name: Jest Automatic Testing
+on: pull_request
+
+jobs:
+  run-unit-tests:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout under $GITHUB_WORKSPACE
+        uses: actions/checkout@v4
+
+      - name: Set up NodeJS
+        uses: actions/setup-node@v4.2.0
+        with:
+          node-version: lts/*
+
+      - name: Install all dependencies
+        run: npm install
+        working-directory: ./CoreRuntime
+
+      - name: Run tests and publish coverage report
+        uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          working-directory: ./CoreRuntime

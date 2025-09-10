@@ -1,0 +1,8 @@
+{% macro element(elementData) %}
+{% from "components/inset-text/macro.njk" import insetText %}
+
+{{ insetText({
+    html: elementData.displayText | trans()
+}) }}
+
+{% endmacro %}

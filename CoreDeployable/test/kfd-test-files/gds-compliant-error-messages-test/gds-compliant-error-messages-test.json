@@ -1,0 +1,140 @@
+{
+    "name": "Your Service Name",
+    "firstPage": "first",
+    "productName": "Demo",
+    "homePageUrl": "",
+    "cookieSecret": "0123456789-abc",
+    "footer": null,
+    "pages": [
+        {
+            "id": "first",
+            "nextPage": "second",
+            "elements": [
+                {
+                    "type": "ErrorList",
+                    "title": "There is a problem"
+                },
+                {
+                    "type": "Form",
+                    "elements": [
+                        {
+                            "type": "SelectListField",
+                            "displayText": "Dropdown",
+                            "name": "f-dropdown",
+                            "options": [
+                                {
+                                    "value": "",
+                                    "text": "-- Select an option --",
+                                    "valueText": "-- Select an option --"
+                                },
+                                {
+                                    "value": "opt1",
+                                    "text": "Choice 1",
+                                    "valueText": "Choice 1"
+                                },
+                                {
+                                    "value": "opt2",
+                                    "text": "Choice 2",
+                                    "valueText": "Choice 2"
+                                },
+                                {
+                                    "value": "opt3",
+                                    "text": "Choice 3",
+                                    "valueText": "Choice 3"
+                                }
+                            ],
+                            "validation": {
+                                "isMandatory": true
+                            }
+                        },
+        
+                        {
+                            "type": "DatePickerField",
+                            "name": "f-dateInput",
+                            "validation": {
+                                "isMandatory": true
+                            },
+                            "displayText": "Event Date",
+                            "labelClasses": "govuk-fieldset__legend--l",
+                            "isPageHeading": true,
+                            "hint": "For example 27 01 2024"
+                        },
+                        {
+                            "type": "RadioField",
+                            "name": "f-radio",
+                            "validation": {
+                                "isMandatory": true
+                            },
+                            "options": [
+                                {
+                                    "value": "England",
+                                    "text": "England",
+                                    "valueText": "England"
+                                },
+                                {
+                                    "value": "Scotland",
+                                    "text": "Scotland",
+                                    "valueText": "Scotland"
+                                },
+                                {
+                                    "value": "Wales",
+                                    "text": "Wales",
+                                    "valueText": "Wales"
+                                },
+                                {
+                                    "value": "Northern Ireland",
+                                    "text": "Northern Ireland",
+                                    "valueText": "Northern Ireland"
+                                }
+                            ],
+                            "displayText": "Where do you live?",
+                            "labelClasses": "govuk-fieldset__legend--l",
+                            "isPageHeading": true,
+                            "hint": "Select one of the below"
+                        },
+                        {
+                            "type": "TextAreaField",
+                            "displayText": "Can you provide more detail?",
+                            "labelClasses": "govuk-label--l",
+                            "isPageHeading": true,
+                            "hint": "Do not include personal or financial information, like your National Insurance number or credit card details",
+                            "name": "more-details-field",
+                            "validation": {
+                                "isMandatory": true
+                            }
+                        },
+                        {
+                            "type": "TextField",
+                            "displayText": "What is the name of the event?",
+                            "labelClasses": "govuk-label--l",
+                            "isPageHeading": true,
+                            "hint": "The name you’ll use on promotional material",
+                            "name": "name-of-event-field",
+                            "validation": {
+                                "isMandatory": true
+                            }
+                        },
+                        {
+                            "type": "SubmitButton",
+                            "displayText": "Save and continue"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "second",
+            "nextPage": null,
+            "elements": []
+        }
+    ],
+    "apiMappings": {},
+    "apiServiceDefinition": {
+        "openapi": "3.0.1",
+        "info": {
+            "title": "api",
+            "version": "1.0.0"
+        },
+        "paths": {}
+    }
+}

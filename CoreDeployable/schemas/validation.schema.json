@@ -1,0 +1,34 @@
+{
+  "$id": "https://schema.kainos.com/validation.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Validation",
+  "description": "The definition for validation object that can be applied to most of elements.",
+  "type": "object",
+  "properties": {
+    "error": {
+      "description": "Validation error",
+      "type": "string"
+    },
+    "mandatoryError": {
+      "description": "Validation error",
+      "type": "string"
+    },
+    "elementName": {
+      "description": "??",
+      "type": "string"
+    },
+    "regex": {
+      "description": "Regex to validate.",
+      "type": "string"
+    },
+    "validator": {
+      "description": "Validation function (value: any, context?: Context) => Promise<boolean>. If not provided then regex property is used.",
+      "type": "string"
+    },
+    "isMandatory": {
+      "description": "Indicates if the field is mandatory.",
+      "type": "boolean"
+    }
+  },
+  "required": ["error"]
+}

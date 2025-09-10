@@ -1,0 +1,19 @@
+{
+  "$id": "https://schema.kainos.com/subheading.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SubHeading",
+  "description": "[Deprecated - please use Heading instead] Representation of html h2 tag.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Unique type identifier.",
+      "type": "string",
+      "const": "SubHeading"
+    },
+    "displayText": {
+      "description": "Text to use within the heading.",
+      "type": "string"
+    }
+  },
+  "required": ["type"]
+}

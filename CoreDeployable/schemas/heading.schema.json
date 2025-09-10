@@ -1,0 +1,31 @@
+{
+  "$id": "https://schema.kainos.com/heading.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Heading",
+  "description": "Representation of html heading tag for selected size.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Unique type identifier.",
+      "type": "string",
+      "const": "Heading"
+    },
+    "displayText": {
+      "description": "Text to use within the heading.",
+      "type": "string"
+    },
+    "size": {
+      "description": "Size of heading with the right class. Default: h1",
+      "type": "string",
+      "oneOf": [
+        { "type": "string", "const": "h1" },
+        { "type": "string", "const": "h2" },
+        { "type": "string", "const": "h3" },
+        { "type": "string", "const": "h4" },
+        { "type": "string", "const": "h5" },
+        { "type": "string", "const": "h6" }
+      ]
+    }
+  },
+  "required": ["type"]
+}

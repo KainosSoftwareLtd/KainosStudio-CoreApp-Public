@@ -1,0 +1,31 @@
+{
+    "name": "Your Service Name",
+    "firstPage": "first",
+    "productName": "Demo",
+    "homePageUrl": "",
+    "cookieSecret": "0123456789-abc",
+    "footer": null,
+    "pages": [
+        {
+            "id": "not-found",
+            "nextPage": null,
+            "elements": [
+              {
+                "type": "Row2",
+                "elements": [
+                  {
+                    "type": "Column",
+                    "columnWidth": "two-thirds",
+                    "elements": [
+                      {
+                        "type": "Paragraph",
+                        "displayText": "My custom not found page for testing purposes"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+    ]
+}

@@ -1,0 +1,45 @@
+{
+    "name": "character counter test max length set",
+    "firstPage": "firstPage",
+    "productName": "example.com",
+    "homePageUrl": "https://example.com",
+    "cookieSecret": "0123456789-abc",
+    "pages": [
+      {
+        "id": "firstPage",
+        "nextPage": "",
+        "preRequisiteData": null,
+        "validation": null,
+        "elements": [
+          {
+            "type": "Row2",
+            "elements": [
+              {
+                "type": "Column",
+                "columnWidth": "two-thirds",
+                "elements": [
+                  {
+                    "type": "Form",
+                    "classes": "",
+                    "elements": [
+                      {
+                        "type": "ErrorList",
+                        "title": "There is a problem"
+                      },
+                      {
+                        "type": "TextAreaField",
+                        "name": "f_textarea_1",
+                        "displayText": "Description",
+                        "hint": "Please enter a description",
+                        "maxLength": 500
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

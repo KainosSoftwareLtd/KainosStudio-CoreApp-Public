@@ -1,0 +1,172 @@
+{% extends "govuk/template.njk" %}
+
+{% set assetPath = '/assets/fcads' %}
+
+{% set htmlLang = service.selectedLang | default(service.defaultLang) %}
+{% set serviceName = service.name | trans() %}
+
+{% block pageTitle %}
+  {% if page.id %}
+    {{ page.id }} - {{ serviceName }} - FCA
+  {% else %}
+    {{ serviceName }} - FCA
+  {% endif %}
+{% endblock %}
+
+{% block head %}
+  <link href="/public/fcads/css/fcads-main.css" rel="stylesheet" />
+
+  {% if service.googleAnalyticsMeasurementId %}
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ service.googleAnalyticsMeasurementId }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', '{{ service.googleAnalyticsMeasurementId }}');
+    </script>
+  {% endif %}
+{% endblock %}
+
+{% block bodyStart %}
+  {% if service.cookieBanner %}
+    {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
+
+    {% set cookieBannerHtml %}
+      <p class="govuk-body">{{ 'core:cookie-banner.content' | trans() }}</p>
+    {% endset %}
+
+    {% set cookieBannerActions = [
+      {
+        text: 'core:cookie-banner.hide-action-text' | trans(),
+        type: "button", 
+        attributes: { id: 'hideCookieMessageButton' } 
+      }] 
+    %}
+
+    {% if service.hasCookiePage %}
+      {% set cookieBannerActions = cookieBannerActions.concat(
+        { 
+          text: 'core:cookie-banner.view-cookies-action-text' | trans(), 
+          href: "cookie" 
+        })
+      %}
+    {% endif %}
+
+    {% set cookieHeadingText = 'core:cookie-banner.heading' | trans({ serviceName: serviceName}) %}
+
+    {{ govukCookieBanner({
+      attributes: { id: 'cookieBanner' },
+      ariaLabel: cookieHeadingText,
+      messages: [
+        {
+          headingText: cookieHeadingText,
+          html: cookieBannerHtml,
+          role: "alert",
+          actions: cookieBannerActions,
+          attributes: { 
+            tabindex: '-1' 
+          }
+        }
+      ]
+    }) }}
+  {% endif %}
+{% endblock %}
+
+{% block header %}
+  {% from "elements/Header.njk" import header %}
+
+  {{ header(service) }}
+{% endblock %}
+
+{% block beforeContent %}
+  {% from "elements/RenderElements.njk" import renderElementsOfType %}
+  {{ renderElementsOfType(page.allElements, 'Phase') }}
+
+  {% from "elements/LanguageSwitcher.njk" import languageSwitcher %}
+  {{ languageSwitcher(service) }}
+  
+  {{ renderElementsOfType(page.allElements, 'BackButton') }}
+{% endblock %}
+
+{% block content %}
+  {% if page.error %}
+    {% from "elements/ErrorList.njk" import element %}
+
+    {{ element(page.error) }}
+  {% endif %}
+
+  {% from "elements/RenderElements.njk" import renderContentElements %}
+  {{ renderContentElements(page.elements) }}
+{% endblock %}
+
+{% block footer %}
+  {% if service.footer %}
+    {% from "elements/Footer.njk" import footer %}
+
+    {{ footer(service) }}
+  {% endif %}
+{% endblock %}
+
+{% block bodyEnd %}
+  {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
+  <script type="module" src="/public/fcads/all.js"></script>
+  <script type="module">
+    import { initAll } from '/public/fcads/all.js'
+    {% from "GovUkTranslations.njk" import translations %}
+    {{ translations(htmlLang) }}
+    initAll(translations);
+  </script>
+
+  {% from "UploadFileScript.njk" import uploadFileScript %}
+  {{ uploadFileScript(data) }}
+
+  {% if service.cookieBanner %}
+
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', () => {
+      const cookieName = 'hide-cookie-banner';
+      const cookieValue = getCookieValue(cookieName);
+      if(cookieValue == 'true'){
+        hideCookieBanner();
+      }
+
+      document.getElementById('hideCookieMessageButton').addEventListener('click', () => {
+        hideCookieBanner();
+        setCookie(cookieName, 'true', 365);
+      });
+    });
+
+    function hideCookieBanner() {
+      document.getElementById('cookieBanner').setAttribute('hidden', '');
+    }
+
+    function setCookie(cookieName, value, days) {
+      var expires = "";
+      if (days) {
+          var date = new Date();
+          date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+          expires = "; expires=" + date.toUTCString();
+      }
+      const path = new URL(document.URL).pathname.split('/')[1];
+      document.cookie = cookieName + "=" + (value || "") + expires + "; path=/" + path + "; secure; samesite=strict";
+    }
+
+    function getCookieValue(cookieName) {
+      const name = cookieName + "=";
+      const decodedCookie = decodeURIComponent(document.cookie);
+      const cookieArray = decodedCookie.split(";");
+
+      for (let i = 0; i < cookieArray.length; i++) {
+          let cookie = cookieArray[i].trim();
+          if (cookie.indexOf(name) === 0) {
+              return cookie.substring(name.length, cookie.length);
+          }
+      }
+      return null; 
+    }
+  </script>
+  
+  {% endif %}
+{% endblock %}

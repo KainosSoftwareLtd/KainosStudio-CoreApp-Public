@@ -1,0 +1,178 @@
+name: Deploy Kainoscore to Dev
+
+on:
+  push:
+    branches:
+      - main
+
+
+env:
+  AWS_REGION: eu-west-2                   
+  DEPLOYMENT_ROLE: arn:aws:iam::975050265283:role/GHA-CodeBuild-Service-Role                     
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+permissions:
+  id-token: write 
+  contents: write 
+                                              
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: Dev
+    outputs:
+      version: ${{ steps.semver.outputs.version }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '23'
+
+      - name: Generate semantic version
+        id: semver
+        run: |
+          npm install -g semantic-release @semantic-release/git @semantic-release/changelog @semantic-release/exec conventional-changelog-conventionalcommits
+
+          cat <<EOF > .releaserc.json
+          {
+            "branches": ["main"],
+            "plugins": [
+              ["@semantic-release/commit-analyzer", {
+                "preset": "conventionalcommits",
+                "releaseRules": [
+                  {"type": "feat", "release": "minor"},
+                  {"type": "fix", "release": "patch"},
+                  {"type": "docs", "release": "patch"},
+                  {"type": "chore", "release": "patch"},
+                  {"type": "refactor", "release": "patch"},
+                  {"type": "test", "release": "patch"}
+                ]
+              }],
+              "@semantic-release/release-notes-generator",
+              ["@semantic-release/exec", {
+                "successCmd": "echo \\"SEMANTIC_VERSION=\${nextRelease.version}\\" >> \\$GITHUB_ENV"
+              }]
+            ]
+          }
+          EOF
+
+          echo "Running semantic-release dry-run to calculate next version..."
+          semantic-release --dry-run
+
+          if [ -z "$SEMANTIC_VERSION" ]; then
+            echo "No version bump from semantic-release, calculating manual increment..."
+            # Get latest tag, default to v1.0.0 if none exists
+            LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.9.0")
+            echo "Latest tag: $LATEST_TAG"
+            
+            # Extract version components
+            VERSION=${LATEST_TAG#v}
+            IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+            
+            # Determine increment based on commit messages since last tag
+            COMMIT_MSG=$(git log -1 --pretty=%B)
+            if echo "$COMMIT_MSG" | grep -q "^BREAKING CHANGE:" || echo "$COMMIT_MSG" | grep -q "^[a-zA-Z]\+!:"; then
+              # Major version bump for breaking changes
+              echo "Breaking change detected, bumping major version"
+              MAJOR=$((MAJOR + 1))
+              MINOR=0
+              PATCH=0
+            elif echo "$COMMIT_MSG" | grep -q "^feat"; then
+              # Minor version bump for features
+              echo "Feature detected, bumping minor version"
+              MINOR=$((MINOR + 1))
+              PATCH=0
+            else
+              # Patch version bump for everything else
+              echo "Fix/chore detected, bumping patch version"
+              PATCH=$((PATCH + 1))
+            fi
+            
+            SEMANTIC_VERSION="$MAJOR.$MINOR.$PATCH"
+            echo "Calculated version: $SEMANTIC_VERSION"
+            echo "SEMANTIC_VERSION=$SEMANTIC_VERSION" >> $GITHUB_ENV
+          fi
+
+          echo "Final semantic version: $SEMANTIC_VERSION"
+          echo "version=$SEMANTIC_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4.2.1
+        with:
+          role-to-assume: ${{ env.DEPLOYMENT_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install Typescript and dependencies
+        run: |
+          npm install -g typescript
+
+      - name: Get Dependency Versions
+        run: |
+          echo "NODE.JS version:"
+          node -v
+
+          echo "NPM version:"
+          npm -v
+
+          echo "AWS CLI version:"    
+          aws --version 
+
+      - name: Application Deployment
+        id: build-deploy 
+        run: |
+          echo "Deploying application..."
+          # make files executable
+          chmod +x ./pipeline_scripts/application_deploy.sh
+          chmod +x ./pipeline_scripts/build_core_kfd_api_application.sh
+          chmod +x ./pipeline_scripts/upload-zip-files.sh
+          chmod +x ./pipeline_scripts/update-lambda-functions.sh
+          
+          # Set environment variables directly in this step
+          export ENVIRONMENT=dev
+          export SEMANTIC_VERSION=${{ steps.semver.outputs.version }}
+          
+          # For debugging
+          echo "Setting ENVIRONMENT=$ENVIRONMENT"
+          echo "Setting SEMANTIC_VERSION=$SEMANTIC_VERSION"
+          
+          # run the deployment scripts with version parameter
+          echo "Running application deployment script...."
+          ./pipeline_scripts/application_deploy.sh "${{ steps.semver.outputs.version }}"
+          echo "Running KFD api scripts...."
+          ./pipeline_scripts/build_core_kfd_api_application.sh "${{ steps.semver.outputs.version }}"
+          echo "Running upload-zip-files script...."
+          ./pipeline_scripts/upload-zip-files.sh "${{ steps.semver.outputs.version }}"
+          echo "Running update-lambda-functions script...."
+          ./pipeline_scripts/update-lambda-functions.sh "${{ steps.semver.outputs.version }}"
+          
+          # Also add to GITHUB_ENV for subsequent steps
+          echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+          echo "SEMANTIC_VERSION=${{ steps.semver.outputs.version }}" >> $GITHUB_ENV
+          
+          echo "Deployment completed successfully."
+            
+      - name: Create Git tag
+        if: success()
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          
+          SEMANTIC_VERSION="${{ steps.semver.outputs.version }}"
+          if [ -z "$SEMANTIC_VERSION" ]; then
+            echo "Using version from environment: $SEMANTIC_VERSION"
+          fi
+          
+          # Check if tag already exists
+          if git rev-parse "v$SEMANTIC_VERSION" >/dev/null 2>&1; then
+            echo "Tag v$SEMANTIC_VERSION already exists. Skipping tag creation."
+          else
+            echo "Creating new tag v$SEMANTIC_VERSION"
+            git tag "v$SEMANTIC_VERSION"
+            git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git "v$SEMANTIC_VERSION"
+          fi

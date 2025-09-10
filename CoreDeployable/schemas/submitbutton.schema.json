@@ -1,0 +1,47 @@
+{
+  "$id": "https://schema.kainos.com/submitbutton.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SubmitButton",
+  "description": "Button to invoke form action",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Unique type identifier.",
+      "type": "string",
+      "const": "SubmitButton"
+    },
+    "displayText": {
+      "description": "Text for the input, button or a element.",
+      "type": "string"
+    },
+    "classes": {
+      "description": "Classes to add to the button component.",
+      "type": "string"
+    },
+    "action": {
+      "description": "The action to be performed by the button",
+      "type": "object",
+      "properties": {
+        "value": {
+          "description": "html input value??",
+          "type": "string"
+        },
+        "redirect": {
+          "description": "Id of page to redirect",
+          "type": "string",
+          "pattern": "^[a-zA-Z-]*$"
+        },
+        "operation": {
+          "description": "Open API operation",
+          "type": "string"
+        },
+        "validation": {
+          "description": "Decide if the form needs to be validate before invoking this action.",
+          "type": "boolean"
+        }
+      },
+      "required": ["operation"]
+    }
+  },
+  "required": ["type", "displayText", "action"]
+}

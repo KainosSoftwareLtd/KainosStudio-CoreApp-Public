@@ -1,0 +1,159 @@
+{
+  "name": "root.header.service-name",
+  "firstPage": "Upload Your Passport Photo",
+  "productName": "example.com",
+  "homePageUrl": "https://example.com",
+  "cookieSecret": "0123456789-abc",
+  "cookieBanner": null,
+  "footer": {},
+  "pages": [
+    {
+      "id": "Upload Your Passport Photo",
+      "nextPage": "Submitted",
+      "elements": [
+        {
+          "type": "Phase",
+          "name": "Alpha",
+          "displayText": "This is a new service"
+        },
+        {
+          "type": "BackButton",
+          "displayText": "Back"
+        },
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "elements": [
+                {
+                  "type": "ErrorList",
+                  "title": "There is a problem"
+                },
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "FileUpload",
+                      "name": "f-file-upload",
+                      "displayText": "Please upload your passport photo",
+                      "hint": "Ensure your photo is a clear",
+                      "labelClasses": "govuk-label--l",
+                      "isPageHeading": true,
+                      "validation": {
+                        "isMandatory": true
+                      },
+                      "maxFileSize": 5,
+                      "allowedFileTypes": [
+                        "application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                        "image/jpeg",
+                        "application/pdf",
+                        "image/png",
+                        "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                      ]
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Save and continue"
+                    }
+                  ]
+                }
+              ],
+              "columnWidth": "two-thirds"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Submitted",
+      "nextPage": "Feedback Page",
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "elements": [
+                {
+                  "type": "Panel",
+                  "title": "Enquiry saved",
+                  "text": "Your reference number"
+                },
+                {
+                  "type": "Heading",
+                  "displayText": "What happens next",
+                  "size": "h3"
+                },
+                {
+                  "type": "Paragraph",
+                  "displayText": "Your enquiry has been submitted"
+                },
+                {
+                  "type": "Paragraph",
+                  "displayText": "Leave feedback to help us improve this service"
+                }
+              ],
+              "columnWidth": "two-thirds"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "apiMappings": {
+    "submitForm": {
+      "request": {
+        "_SESSION-ID_": "_SESSION-ID_",
+        "f-file-upload": "f-file-upload"
+      },
+      "response": {
+        "title": "message",
+        "fieldNames": "data[*].fieldName",
+        "fieldErrorMessages": "data[*].errorMessage",
+        "numErrors": "length(data)",
+        "referenceNumber": "referenceNumber"
+      }
+    },
+    "sendFeedback": {
+      "request": {
+        "_SESSION-ID_": "_SESSION-ID_",
+        "feel-about-service": "feel-about-service",
+        "easy-to-use": "easy-to-use",
+        "meet-your-needs": "meet-your-needs",
+        "additional-feedback": "additional-feedback"
+      },
+      "response": {
+        "title": "message",
+        "fieldNames": "data[*].fieldName",
+        "fieldErrorMessages": "data[*].errorMessage",
+        "numErrors": "length(data)",
+        "referenceNumber": "referenceNumber"
+      }
+    }
+  },
+  "apiServiceDefinition": {
+    "openapi": "3.0.1",
+    "info": {
+      "title": "api",
+      "version": "1.0.0"
+    },
+    "paths": {
+      "/dev/submit-form/service": {
+        "servers": [
+          {
+            "url": "https://example.com"
+          }
+        ],
+        "post": {
+          "operationId": "submitForm",
+          "responses": {
+            "200": {
+              "description": "successful operation"
+            }
+          }
+        }
+      }
+    }
+  }
+}

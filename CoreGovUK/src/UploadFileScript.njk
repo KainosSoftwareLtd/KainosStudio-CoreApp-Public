@@ -1,0 +1,167 @@
+{% macro uploadFileScript(data) %}
+
+<script type="text/javascript">
+async function uploadFile(event, maxFileSize) {
+  const uploadButton = event.target;
+
+  const elementId = uploadButton.id.replace('-upload-button', '');
+
+  const allButtonsInForm = uploadButton.closest('form').getElementsByTagName('button');
+  const fileUploadGroup = uploadButton.closest('.govuk-form-group');
+  removeError(fileUploadGroup, elementId);
+
+  const fileInput = document.getElementById(elementId + '-upload-control-input');
+  const hiddenFileInput = document.getElementById(elementId);
+
+  if (!fileInput.files.length) {
+    addError(fileUploadGroup, elementId, "{{ 'core:file-upload.select-file' | trans() }}");
+    return;
+  }
+
+  const file = fileInput.files[0];
+  if (file.size === 0) {
+    addError(fileUploadGroup, elementId, "{{ 'core:file-upload.file-is-empty' | trans() }}");
+    return;
+  }
+
+  if (maxFileSize && file.size > maxFileSize * (1024 * 1024)) {
+    addError(fileUploadGroup, elementId, "{{ 'core:file-upload.file-is-too-large' | trans() }}" + `${maxFileSize} MB`);
+    return;
+  }
+
+  const acceptAttribute = fileInput.getAttribute('accept');
+  if (acceptAttribute) {
+    const acceptedTypes = acceptAttribute.split(',').map((type) => type.trim());
+    if (!acceptedTypes.includes(file.type)) {
+      addError(fileUploadGroup, elementId, "{{ 'core:file-upload.file-type-is-unsupported' | trans() }}");
+      return;
+    }
+  }
+
+  for (const button of allButtonsInForm) {
+    button.setAttribute('disabled', '');
+  }
+
+  uploadButton.innerHTML = "{{ 'core:file-upload.uploading' | trans() }}" + '<span class="loading loading-spinner loading-sm"></span>';
+
+  try {
+    const sessionId = '{{ data["_SESSION-ID_"] }}';
+    const serviceName = window.location.pathname.split('/')[1];
+    const params = new URLSearchParams({
+      sessionId: sessionId,
+      fileName: encodeURIComponent(file.name),
+      serviceName: serviceName,
+      elementId: encodeURIComponent(elementId),
+    });
+
+    const response = await fetch(`/api/getPresignedPost?${params.toString()}`, { method: 'GET' });
+
+    const { url, fields, cloudProvider, error } = await response.json();
+    if (!response.ok) {
+      throw new Error("{{ 'core:file-upload.api-error' | trans() }}" + error);
+    }
+
+    let uploadResponse;
+    if (cloudProvider === 'aws') {
+      const formData = new FormData();
+      Object.entries(fields).forEach(([field, value]) => {
+        formData.append(field, value);
+      });
+      formData.append('file', file);
+
+      uploadResponse = await fetch(url, {
+        method: 'POST',
+        body: formData,
+      });
+    } else if (cloudProvider === 'azure') {
+      uploadResponse = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'x-ms-blob-type': 'BlockBlob',
+          'Content-Type': file.type,
+        },
+        body: file,
+      });
+    } else {
+      throw new Error(`Invalid cloud provider: ${cloudProvider}`);
+    }
+
+    if (uploadResponse.ok) {
+      const fileName = file.name;
+      const uploadedFileElement = document.getElementById(elementId + '-uploaded-file');
+      if (uploadedFileElement) {
+        uploadedFileElement.textContent = "{{ 'core:file-upload.uploaded-file' | trans() }}" + `${fileName}`;
+      } else {
+        uploadButton.after(createUploadedFileElement(elementId, fileName));
+      }
+
+      hiddenFileInput.value = fileName;
+
+      fileInput.value = null;
+      fileInput.dispatchEvent(new Event('change'));
+    } else {
+      const uploadResposeBody = await uploadResponse.text();
+
+      let errorMessage = uploadResposeBody;
+      if (cloudProvider === 'aws') {
+        const parser = new DOMParser();
+        const xmlBody = parser.parseFromString(uploadResposeBody, 'application/xml');
+        const code = xmlBody.querySelector('Code')?.textContent;
+        const message = xmlBody.querySelector('Message')?.textContent;
+
+        errorMessage = message;
+        if (code === 'EntityTooLarge') {
+          const maxSizeAllowed = parseFloat(xmlBody.querySelector('MaxSizeAllowed')?.textContent);
+          errorMessage += ` ${maxSizeAllowed / (1024 * 1024)} MB`;
+        }
+      }
+
+      addError(fileUploadGroup, elementId, errorMessage || code || `Unexpected error. Status: ${uploadResponse.status}`);
+    }
+  } catch (error) {
+    console.error(error);
+    addError(fileUploadGroup, elementId, error.message);
+  } finally {
+    uploadButton.innerHTML = "{{ 'core:file-upload.upload' | trans() }}";
+
+    for (const button of allButtonsInForm) {
+      button.removeAttribute('disabled');
+    }
+  }
+}
+
+function addError(govukFormGroup, elementId, error) {
+  const errorElement = createErrorElement(elementId, error);
+  const dropZone = govukFormGroup.getElementsByClassName('govuk-drop-zone')[0];
+  govukFormGroup.insertBefore(errorElement, dropZone);
+  govukFormGroup.classList.add('govuk-form-group--error');
+}
+
+function removeError(govukFormGroup, elementId) {
+  const errorElement = document.getElementById(`${elementId}-error`);
+  errorElement?.remove();
+
+  govukFormGroup.classList.remove('govuk-form-group--error');
+}
+
+function createErrorElement(elementId, error) {
+  const errorElement = document.createElement('p');
+  errorElement.id = `${elementId}-error`;
+  errorElement.classList.add('govuk-error-message');
+  errorElement.innerHTML = `<span class="govuk-visually-hidden">Error:</span> ${error}`;
+
+  return errorElement;
+}
+
+function createUploadedFileElement(elementId, fileName) {
+  const errorElement = document.createElement('p');
+  errorElement.id = `${elementId}-uploaded-file`;
+  errorElement.classList.add('govuk-body');
+  errorElement.innerHTML = "{{ 'core:file-upload.uploaded-file' | trans() }}" + `${fileName}`;
+
+  return errorElement;
+}
+
+</script>
+
+{% endmacro %}

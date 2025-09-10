@@ -1,0 +1,46 @@
+{% macro element(elementData) %}
+{% from "components/input/macro.njk" import input %}
+
+{% set displayText = elementData.displayText | trans() %}
+
+{% if elementData.valid %}
+  {{ input({
+    label: {
+      text: displayText,
+      html: elementData.labelHtml | trans(),
+      isPageHeading: elementData.isPageHeading,
+      classes: elementData.labelClasses
+    },
+    id: elementData.name,
+    name: elementData.name,
+    autocomplete: elementData.autocomplete,
+    hint: {
+      text: elementData.hint | trans()
+    },
+    prefix: elementData.prefix | trans(),
+    value: elementData.value
+  }) }}
+{% else %}
+  {{ input({
+    label: {
+      text: displayText,
+      html: elementData.labelHtml | trans(),
+      isPageHeading: elementData.isPageHeading,
+      classes: elementData.labelClasses
+    },
+    id: elementData.name,
+    name: elementData.name,
+    autocomplete: elementData.autocomplete,
+    hint: {
+      text: elementData.hint | trans()
+    },
+    prefix: elementData.prefix | trans(),
+    errorMessage: {
+      text: elementData.validation.error | trans({ for: displayText})
+    },
+    value: elementData.value
+  }) }}
+{% endif %}
+{% endmacro %}
+
+

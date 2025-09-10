@@ -1,0 +1,89 @@
+{% extends "template.njk" %}
+
+{% set assetPath = '/assets/nhsuk' %}
+{% set htmlLang = service.selectedLang | default(service.defaultLang) %}
+{% set serviceName = service.name | trans() %}
+
+{% block pageTitle %}
+  {% if page.id %}
+    {{ page.id }} - {{ serviceName }} - NHS.UK
+  {% else %}
+    {{ serviceName }} - NHS.UK
+  {% endif %}
+{% endblock %}
+
+{% block head %}
+  <link href="/public/nhsuk/css/nhsuk-main.css" rel="stylesheet" />
+  <script type="module" src="/public/nhsuk/nhsuk-all.js"></script>
+
+  {% if service.googleAnalyticsMeasurementId %}
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ service.googleAnalyticsMeasurementId }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', '{{ service.googleAnalyticsMeasurementId }}');
+    </script>
+  {% endif %}
+{% endblock %}
+
+{% block bodyStart %}
+  {% if service.cookieBanner %}
+    {% from "elements/CookieBanner.njk" import cookieBanner %}
+    {{ cookieBanner(serviceName) }}
+  {% endif %}
+{% endblock %}
+
+{% block header %}
+  {% from "components/header/macro.njk" import header %}
+
+  {{ header({
+    showNav: "false",
+    showSearch: "false",
+    homeHref: service.homePageUrl | trans() if service.homePageUrl and service.homePageUrl != '' else '#',
+    transactionalService: {
+      name: serviceName,
+      href: service.firstPage
+    }
+  }) }}
+{% endblock %}
+
+{% block beforeContent %}
+  {% from "elements/RenderElements.njk" import renderElementsOfType %}
+  {{ renderElementsOfType(page.allElements, 'Phase') }}
+
+  {% from "elements/LanguageSwitcher.njk" import languageSwitcher %}
+  {{ languageSwitcher(service) }}
+  
+  {{ renderElementsOfType(page.allElements, 'BackButton') }}
+{% endblock %}
+
+{% block content %}
+  {% if page.error %}
+    {% from "elements/ErrorList.njk" import element %}
+
+    {{ element(page.error) }}
+  {% endif %}
+
+  {% from "elements/RenderElements.njk" import renderContentElements %}
+  {{ renderContentElements(page.elements) }}
+{% endblock %}
+
+{% block footer %}
+  {% if service.footer %}
+    {% from "components/footer/macro.njk" import footer %}
+
+    {{ footer({
+      links: service.footer.links
+    }) }}
+  {% endif %}
+{% endblock %}
+
+{% block bodyEnd %}
+  {% if service.cookieBanner %}
+    {% from "CookieBannerScript.njk" import cookieBannerScript %}
+    {{ cookieBannerScript() }}
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,67 @@
+{% macro element(elementData) %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set displayText = elementData.displayText | trans() %}
+
+{% if elementData.allowedFileTypes|length %}
+  {% set accceptTypes = elementData.allowedFileTypes|join(',') %}
+{% endif %}
+
+{% set errorMessage = '' %}
+{% if not elementData.valid %}
+  {% set errorMessage = { text: elementData.validation.error | trans({ for: displayText }) } %}
+{% endif %}
+
+{% set afterUploadInputHtml %}
+  <div class="govuk-!-margin-top-2">
+    {{ govukButton({
+      id: elementData.name + "-upload-button",
+      text: 'core:file-upload.upload' | trans(),
+      classes: "govuk-button--secondary govuk-!-margin-bottom-3",
+      type: "button",
+      preventDoubleClick: true
+    }) }}
+
+    {% if elementData.uploadedFileName %}
+      <p id="{{ elementData.name + '-uploaded-file' }}" class="govuk-body">
+          {{ 'core:file-upload.uploaded-file' | trans() + ' ' + elementData.uploadedFileName }}
+      </p>
+    {% endif %}
+
+    <input type="hidden" id="{{ elementData.name }}" name="{{ elementData.name }}" value="{{ elementData.uploadedFileName }}" />
+  </div>
+{% endset %}
+
+{{ govukFileUpload({
+  id: elementData.name + "-upload-control",
+  name: elementData.name + "-upload-control",
+  label: {
+    text: displayText,
+    isPageHeading: elementData.isPageHeading,
+    classes: elementData.labelClasses
+  },
+  hint: {
+    text: elementData.hint | trans()
+  },
+  attributes: {
+    accept: accceptTypes
+  },
+  errorMessage: errorMessage,
+  javascript: true,
+  formGroup: {
+    afterInput: {
+      html: afterUploadInputHtml
+    }
+  }
+}) }}
+
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('{{ elementData.name + "-upload-button" }}').addEventListener('click', (event) => {
+      uploadFile(event, {{ elementData.maxFileSize }});
+    });
+  });
+</script>
+
+{% endmacro %}

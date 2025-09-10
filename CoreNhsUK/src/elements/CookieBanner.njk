@@ -1,0 +1,22 @@
+{% macro cookieBanner(serviceName) %}
+{# created from scratch - there is no definition in https://service-manual.nhs.uk/design-system/components #}
+
+{% set cookieHeadingText = 'core:cookie-banner.heading' | trans({ serviceName: serviceName}) %}
+
+<div class="nhsuk-cookie-banner" role="region" aria-label="{{ cookieHeadingText }}" id="cookieBanner">
+    <div class="nhsuk-cookie-banner__message nhsuk-width-container" role="alert" tabindex="-1">
+        <div class="nhsuk-width-container">
+            <h2 class="nhsuk-cookie-banner__heading nhsuk-heading-m">{{ cookieHeadingText }}</h2>
+            <div class="nhsuk-cookie-banner__content">
+                <p class="nhsuk-body">{{ 'core:cookie-banner.content' | trans() }}</p>
+            </div>
+
+            <div class="nhsuk-button-group">
+                <button type="button" class="nhsuk-button" data-module="nhsuk-button" id="hideCookieMessageButton">{{ 'core:cookie-banner.hide-action-text' | trans() }}</button>
+                <a class="nhsuk-link" href="cookie">{{ 'core:cookie-banner.view-cookies-action-text' | trans() }}</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endmacro %}

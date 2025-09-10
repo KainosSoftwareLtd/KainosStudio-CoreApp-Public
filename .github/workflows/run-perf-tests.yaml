@@ -1,0 +1,90 @@
+name: K6 Performance Tests
+
+on: 
+  schedule:
+   - cron: '0 18 * * *'
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'The environment to run the tests against'
+        required: true
+        default: 'DEV'
+        type: choice
+        options:
+          - DEV
+          - STAGING
+
+jobs:
+  performance-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup environment variables
+      run: |
+        # Set environment - DEV for scheduled runs, or the selected input for manual runs
+        if [ "${{ github.event_name }}" = "schedule" ]; then
+          ENV="DEV"
+        else
+          ENV="${{ github.event.inputs.env }}"
+        fi
+        
+        # Set the appropriate URL based on environment
+        if [ "$ENV" = "STAGING" ]; then
+          PERF_TEST_URL="${{ secrets.PERF_TEST_URL_STG }}"
+        else
+          PERF_TEST_URL="${{ secrets.PERF_TEST_URL_DEV }}"
+        fi
+
+        # Check if PERF_TEST_URL is set
+        if [ -z "$PERF_TEST_URL" ]; then
+          echo "❌ ERROR: Required secret PERF_TEST_URL_${ENV} is not configured in GitHub Settings → Secrets and variables → Actions"
+          exit 1
+        fi
+        
+        echo "ENVIRONMENT=$ENV" >> $GITHUB_ENV
+        echo "PERF_TEST_URL=$PERF_TEST_URL" >> $GITHUB_ENV
+        echo "Running performance tests against: $PERF_TEST_URL (Environment: $ENV)"
+                
+    - name: Pull K6 Docker image
+      run: docker pull grafana/k6:latest
+      
+    - name: Lambda warmup phase
+      run: |
+        echo "🔥 Starting Lambda warmup to prevent cold start issues..."
+        chmod 777 ${{ github.workspace }}/CoreDeployable/test/performance
+        
+        docker run --rm \
+          -e PERF_TEST_URL="${PERF_TEST_URL}" \
+          -v ${{ github.workspace }}/CoreDeployable/test/performance:/test/ \
+          --user $(id -u):$(id -g) \
+          grafana/k6:latest run \
+          --insecure-skip-tls-verify \
+          /test/warmup.js
+          
+        echo "✅ Lambda warmup completed!"
+      
+    - name: Run K6 performance tests
+      run: |
+        echo "🚀 Starting main performance tests against warmed Lambda instances..."
+        
+        docker run --rm \
+          -p 5665:5665 \
+          -e K6_WEB_DASHBOARD=true \
+          -e PERF_TEST_URL="${PERF_TEST_URL}" \
+          -v ${{ github.workspace }}/CoreDeployable/test/performance:/test/ \
+          --user $(id -u):$(id -g) \
+          grafana/k6:latest run \
+          --insecure-skip-tls-verify \
+          --out csv=/test/test_results.csv \
+          /test/script.js
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: k6-performance-results-${{ github.event_name == 'schedule' && 'DEV' || github.event.inputs.env }}
+        path: CoreDeployable/test/performance/test_results.csv
+        retention-days: 30

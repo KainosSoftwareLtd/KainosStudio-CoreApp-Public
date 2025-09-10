@@ -1,0 +1,19 @@
+{
+  "$id": "https://schema.kainos.com/errorlist.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ErrorList",
+  "description": "Representation of error summary component.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Unique type identifier.",
+      "type": "string",
+      "const": "ErrorList"
+    },
+    "title": {
+      "description": "Text to use for the heading of the error summary block.",
+      "type": "string"
+    }
+  },
+  "required": ["type", "title"]
+}

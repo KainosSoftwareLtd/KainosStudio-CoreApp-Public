@@ -1,0 +1,33 @@
+{
+    "$id": "https://schema.kainos.com/addressfield.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "AddressField",
+    "description": "Representation of address input component.",
+    "type": "object",
+    "properties": {
+      "type": {
+        "description": "Unique type identifier.",
+        "type": "string",
+        "const": "AddressField"
+      },
+      "name": {
+        "description": "Field name used as mapping reference.",
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9-_]*$"
+      },
+      "displayText": {
+        "description": "Text to use within the label.",
+        "type": "string"
+      },
+      "labelClasses": {
+        "description": "Classes to add to the label.",
+        "type": "string"
+      },
+      "isPageHeading": {
+        "description": "Whether the label also acts as the heading for the page.",
+        "type": "boolean"
+      }
+    },
+    "required": ["type", "name", "displayText"],
+    "additionalProperties": false
+  }

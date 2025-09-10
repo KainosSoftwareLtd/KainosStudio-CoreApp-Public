@@ -1,0 +1,47 @@
+{% macro footer(service) %}
+
+<footer class="govuk-footer">
+  <div class="govuk-width-container">
+    <div class="govuk-footer__meta">
+      <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+        <h2 class="govuk-visually-hidden">Support links</h2>
+        <ul class="govuk-footer__inline-list">
+            <li class="govuk-footer__inline-list-item">
+              <a class="govuk-footer__link" href="https://www.gov.wales/accessibility-statement-govwales" aria-label="Accessibility statement for GOV.WALES">
+                {{ 'core:footer.links.accessibility' | trans() }}
+              </a>
+            </li>
+            <li class="govuk-footer__inline-list-item">
+              <a class="govuk-footer__link" href="https://www.gov.wales/copyright-statement" aria-label="Copyright statement for GOV.WALES">
+                {{ 'core:footer.links.copyright-statement' | trans() }}
+              </a>
+            </li>
+          {% for link in service.footer.links %}
+            <li class="govuk-footer__inline-list-item">
+              <a class="govuk-footer__link" href="{{ link.href }}">
+                {{ link.text }}
+              </a>
+            </li>
+          {% endfor %}
+            <li class="govuk-footer__inline-list-item">
+              <a class="govuk-footer__link" href="https://www.gov.wales/website-privacy-policy" aria-label="Website privacy notice">
+                {{ 'core:footer.links.privacy' | trans() }}
+              </a>
+            </li>
+            <li class="govuk-footer__inline-list-item">
+              <a class="govuk-footer__link" href="https://www.gov.wales/terms-and-conditions" aria-label="Terms and conditions for GOV.WALES">
+                {{ 'core:footer.links.terms-and-conditions' | trans() }}
+              </a>
+            </li>
+        </ul>
+      </div>
+    </div>
+    <div class="govuk-footer__meta">
+	    <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+        <a class="govuk-footer__link govuk-footer__copyright-logo"></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% endmacro %}

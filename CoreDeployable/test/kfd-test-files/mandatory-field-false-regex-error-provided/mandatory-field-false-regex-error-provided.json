@@ -1,0 +1,194 @@
+{
+    "name": "Your Service Name",
+    "firstPage": "firstPage",
+    "productName": "Demo",
+    "homePageUrl": "",
+    "cookieSecret": "0123456789-abc",
+    "footer": {
+  
+    },
+    "pages": [
+      {
+        "id": "firstPage",
+        "nextPage": "secondPage",
+        "elements": [
+          {
+            "type": "Form",
+            "elements": [
+              {
+                "type": "ErrorList",
+                "title": "There is a problem"
+              },
+              {
+                "type": "DatePickerField",
+                "name": "f-dateInput",
+                "displayText": "Event Date",
+                "hint": "Please provide the date of the event.",
+                "validation": {
+                    "mandatoryError": "Please provide the date of the event.",
+                    "IsMandatory": false
+                }
+              },
+              {
+                "type": "TextField",
+                "displayText": "What is the name of the event?",
+                "hint": "The name you’ll use on promotional material",
+                "name": "f-text",
+                "validation": {
+                    "regex": "^[a-z]*$",
+                    "error": "Please provide the name of the event using only lowercase letters.",
+                    "mandatoryError": "Please provide the name of the event.",
+                    "IsMandatory": false
+                }
+              },
+              {
+                "type": "TextAreaField",
+                "displayText": "Can you provide more detail?",
+                "hint": "Do not include personal or financial information",
+                "name": "f-textarea",
+                "validation": {
+                    "regex": "^[a-z]*$",
+                    "error": "Please provide the name of the event using only lowercase letters.",
+                    "mandatoryError": "Please provide more detail.",
+                    "IsMandatory": false
+                }
+              },
+              {
+                "type": "SelectListField",
+                "displayText": "Dropdown",
+                "name": "f-dropdown",
+                "options": [
+                  {
+                    "value": "",
+                    "text": "-- Select an option --",
+                    "valueText": "-- Select an option --"
+                  },
+                  {
+                    "value": "opt1",
+                    "text": "Choice 1",
+                    "valueText": "Choice 1"
+                  },
+                  {
+                    "value": "opt2",
+                    "text": "Choice 2",
+                    "valueText": "Choice 2"
+                  },
+                  {
+                    "value": "opt3",
+                    "text": "Choice 3",
+                    "valueText": "Choice 3"
+                  }
+                ],
+                "validation": {
+                    "regex": "^.{1,}$",
+                    "error": "Only select one option",
+                    "mandatoryError":"A selection has to be made",
+                    "IsMandatory": false
+                }
+              },
+              {
+                "type": "RadioField",
+                "name": "f-radio",
+                "displayText": "Choose one:",
+                "validation": {
+                    "regex": "^.{1,}$",
+                    "error": "Only select one option",
+                    "mandatoryError": "A selection has to be made",
+                    "IsMandatory": false
+                },
+                "options": [
+                  {
+                    "value": "England",
+                    "text": "England",
+                    "valueText": "England"
+                  },
+                  {
+                    "value": "Scotland",
+                    "text": "Scotland",
+                    "valueText": "Scotland"
+                  },
+                  {
+                    "value": "Wales",
+                    "text": "Wales",
+                    "valueText": "Wales"
+                  },
+                  {
+                    "value": "Northern Ireland",
+                    "text": "Northern Ireland",
+                    "valueText": "Northern Ireland"
+                  }
+                ],
+                "hint": " If you are not sure, give a best guess"
+              },
+              {
+                "type": "CheckboxField",
+                "name": "f-checkbox",
+                "displayText": "Checkbox options",
+                "validation": {
+                    "regex": "^.{1,}$",
+                    "error": "Only select one option",
+                    "mandatoryError": "A selection has to be made",
+                    "IsMandatory": false
+                },
+                "options": [
+                  {
+                    "value": "Checkbox option 1",
+                    "text": "Checkbox option 1",
+                    "valueText": "Checkbox option 1"
+                  },
+                  {
+                    "value": "Checkbox option 2",
+                    "text": "Checkbox option 2",
+                    "valueText": "Checkbox option 2"
+                  },
+                  {
+                    "value": "Checkbox option 3",
+                    "text": "Checkbox option 3",
+                    "valueText": "Checkbox option 3"
+                  },
+                  {
+                    "value": "Checkbox option 4",
+                    "text": "Checkbox option 4",
+                    "valueText": "Checkbox option 4"
+                  }
+                ],
+                "hint": "Select all that apply"
+              },
+              {
+                "type": "SubmitButton",
+                "displayText": "Save and Continue"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "secondPage",
+        "nextPage": null,
+        "elements": [
+          {
+            "type": "Form",
+            "elements": [
+              {
+                "type": "BackButton",
+                "displayText": "Back"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "apiMappings": {
+  
+    },
+    "apiServiceDefinition": {
+      "openapi": "3.0.1",
+      "info": {
+        "title": "api",
+        "version": "1.0.0"
+      },
+      "paths": {
+  
+      }
+    }
+  }

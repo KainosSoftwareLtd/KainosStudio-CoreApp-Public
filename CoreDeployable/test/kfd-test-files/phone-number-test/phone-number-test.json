@@ -1,0 +1,59 @@
+{
+  "name": "Address Input Demo",
+  "firstPage": "firstPage",
+  "productName": "Demo",
+  "homePageUrl": "",
+  "cookieSecret": "0123456789-abc",
+  "footer": {},
+  "pages": [
+    {
+      "id": "firstPage",
+      "nextPage": "secondPage",
+      "elements": [
+        {
+          "type": "Form",
+          "elements": [
+            {
+              "type": "ErrorList",
+              "title": "There is a problem"
+            },
+            {
+              "type": "PhoneNumberField",
+              "name": "phone",
+              "displayText": "What is your phone number?",
+              "labelClasses": "govuk-fieldset__legend--l",
+              "isPageHeading": true,
+              "validation": {
+                  "isMandatory": true
+                }
+            },
+            {
+              "type": "SubmitButton",
+              "displayText": "Save and Continue"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "secondPage",
+      "nextPage": null,
+      "elements": [
+        {
+          "type": "Summary",
+          "title": "Summary title",
+          "fieldNames": ["phone"]
+        }
+      ]
+    }
+  ],
+  "apiMappings": {},
+  "apiServiceDefinition": {
+    "openapi": "3.0.1",
+    "info": {
+      "title": "api",
+      "version": "1.0.0"
+    },
+    "paths": {}
+  }
+}

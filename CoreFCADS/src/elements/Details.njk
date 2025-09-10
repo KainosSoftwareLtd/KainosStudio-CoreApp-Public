@@ -1,0 +1,11 @@
+{% macro element(elementData) %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{{ govukDetails({
+    summaryText: elementData.summaryText | trans(),
+    text: elementData.text | trans()
+}) }}
+
+{% endmacro %}
+
+

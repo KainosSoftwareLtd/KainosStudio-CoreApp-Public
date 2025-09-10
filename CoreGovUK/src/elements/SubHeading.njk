@@ -1,0 +1,8 @@
+{# @deprecated Use Heading element instead #}
+{% macro element(elementData) %}
+{% from "./Heading.njk" import element as heading %}
+{{ heading({ 
+    displayText: elementData.displayText,
+    size: 'h2' 
+}) }}
+{% endmacro %}

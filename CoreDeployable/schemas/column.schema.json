@@ -1,0 +1,63 @@
+{
+  "$id": "https://schema.kainos.com/column.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Column",
+  "description": "Representation of column as html div tag.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Unique type identifier.",
+      "type": "string",
+      "const": "Column"
+    },
+    "columnWidth": {
+      "description": "Column width",
+      "type": "string",
+      "oneOf": [
+        { "type": "string", "const": "zero" },
+        { "type": "string", "const": "one-twelfth" },
+        { "type": "string", "const": "one-sixth" },
+        { "type": "string", "const": "one-quarter" },
+        { "type": "string", "const": "one-third" },
+        { "type": "string", "const": "five-twelfths" },
+        { "type": "string", "const": "one-half" },
+        { "type": "string", "const": "seven-twelfths" },
+        { "type": "string", "const": "two-thirds" },
+        { "type": "string", "const": "three-quarters" },
+        { "type": "string", "const": "five-sixths" },
+        { "type": "string", "const": "full" }
+      ]
+    },
+    "elements": {
+      "description": "Elements in column",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          { "$ref": "https://schema.kainos.com/checkboxfield.schema.schema.json" },
+          { "$ref": "https://schema.kainos.com/column.schema.json" },
+          { "$ref": "https://schema.kainos.com/datepickerfield.schema.json" },
+          { "$ref": "https://schema.kainos.com/details.schema.json" },
+          { "$ref": "https://schema.kainos.com/errorlist.schema.json" },
+          { "$ref": "https://schema.kainos.com/fileupload.schema.json" },
+          { "$ref": "https://schema.kainos.com/form.schema.json" },
+          { "$ref": "https://schema.kainos.com/heading.schema.json" },
+          { "$ref": "https://schema.kainos.com/insettext.schema.json" },
+          { "$ref": "https://schema.kainos.com/panel.schema.json" },
+          { "$ref": "https://schema.kainos.com/paragraph.schema.json" },
+          { "$ref": "https://schema.kainos.com/phase.schema.json" },
+          { "$ref": "https://schema.kainos.com/plainmarkup.schema.json" },
+          { "$ref": "https://schema.kainos.com/radiofield.schema.json" },
+          { "$ref": "https://schema.kainos.com/row.schema.json" },
+          { "$ref": "https://schema.kainos.com/row2.schema.json" },
+          { "$ref": "https://schema.kainos.com/selectlistfield.schema.json" },
+          { "$ref": "https://schema.kainos.com/subheading.schema.json" },
+          { "$ref": "https://schema.kainos.com/submitbutton.schema.json" },
+          { "$ref": "https://schema.kainos.com/summary.schema.json" },
+          { "$ref": "https://schema.kainos.com/textareafield.schema.json" },
+          { "$ref": "https://schema.kainos.com/textfield.schema.json" }
+        ]
+      }
+    }
+  },
+  "required": ["type", "elements"]
+}

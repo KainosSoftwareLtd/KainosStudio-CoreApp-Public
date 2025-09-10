@@ -1,0 +1,30 @@
+{% macro element(elementData) %}
+{% from "components/select/macro.njk" import select %}
+
+{% set displayText = elementData.displayText | trans() %}
+
+{% if elementData.valid %}
+  {{ select({
+    id: elementData.name,
+    name: elementData.name,
+    label: {
+      text: displayText
+    },
+    items: elementData.options
+  }) }}
+{% else %}
+  {{ select({
+    id: elementData.name,
+    name: elementData.name,
+    label: {
+      text: displayText
+    },
+    items: elementData.options,
+    errorMessage: {
+      text: elementData.validation.error | trans({ for: displayText})
+    }
+  }) }}
+{% endif %}
+{% endmacro %}
+
+

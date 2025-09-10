@@ -1,0 +1,103 @@
+{
+  "name": "Your Service Name",
+  "firstPage": "radio field",
+  "productName": "Demo",
+  "homePageUrl": "",
+  "cookieSecret": "0123456789-abc",
+  "cookieBanner": null,
+  "footer": null,
+  "pages": [
+    {
+      "id": "radio field",
+      "nextPage": {
+        "rules": [
+          {
+            "match": {
+              "f-radio-2": "Second"
+            },
+            "page": "secondPage"
+          },
+          {
+            "match": {
+              "f-radio-2": "Third"
+            },
+            "page": "thirdPage"
+          }
+        ]
+      },
+      "elements": [
+        {
+          "type": "Form",
+          "elements": [
+            {
+              "type": "RadioField",
+              "name": "f-radio-2",
+              "validation": {
+                "isMandatory": true
+              },
+              "options": [
+                {
+                  "value": "Second",
+                  "text": "Second",
+                  "valueText": "Second"
+                },
+                {
+                  "value": "Third",
+                  "text": "Third",
+                  "valueText": "Third"
+                }
+              ],
+              "displayText": "Choose one:",
+              "labelClasses": "govuk-fieldset__legend--l",
+              "isPageHeading": true,
+              "hint": "Select one option"
+            },
+            {
+              "type": "SubmitButton",
+              "displayText": "Save and continue"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "seconPage",
+      "nextPage": "thirdPage",
+      "elements": [
+        {
+          "type": "Form",
+          "elements": [
+            {
+              "type": "Heading",
+              "displayText": "This is the second page of the service"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "thirdPage",
+      "nextPage": null,
+      "elements": [
+        {
+          "type": "Form",
+          "elements": [
+            {
+              "type": "Heading",
+              "displayText": "This is the third page of the service"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "apiMappings": {},
+  "apiServiceDefinition": {
+    "openapi": "3.0.1",
+    "info": {
+      "title": "api",
+      "version": "1.0.0"
+    },
+    "paths": {}
+  }
+}

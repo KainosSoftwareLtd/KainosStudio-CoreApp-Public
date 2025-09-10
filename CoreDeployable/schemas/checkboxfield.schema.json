@@ -1,0 +1,64 @@
+{
+  "$id": "https://schema.kainos.com/checkboxfield.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CheckboxField",
+  "description": "Representation of checkbox component.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Unique type identifier.",
+      "type": "string",
+      "const": "CheckboxField"
+    },
+    "name": {
+      "description": "Name attribute for all checkbox items.",
+      "type": "string"
+    },
+    "displayText": {
+      "description": "Text to use within the legend.",
+      "type": "string"
+    },
+    "isPageHeading": {
+      "description": "Whether the legend also acts as the heading for the page.",
+      "type": "boolean"
+    },
+    "labelClasses": {
+      "description": "Classes to add to the label.",
+      "type": "string"
+    },
+    "html": {
+      "description": "??",
+      "type": "string"
+    },
+    "validation": {
+      "$ref": "https://schema.kainos.com/validation.schema.json"
+    },
+    "hint": {
+      "description": "Text to use within the hint.",
+      "type": "string"
+    },
+    "options": {
+      "description": "The checkbox items within the checkboxes component.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "valueText": {
+            "type": "string"
+          },
+          "hint": {
+            "type": "string"
+          }
+        },
+        "required": ["text"]
+      }
+    }
+  },
+  "required": ["type", "name", "options"]
+}

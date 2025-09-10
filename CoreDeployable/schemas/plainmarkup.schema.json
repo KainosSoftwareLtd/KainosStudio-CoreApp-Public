@@ -1,0 +1,19 @@
+{
+  "$id": "https://schema.kainos.com/plainmarkup.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PlainMarkup",
+  "description": "Representation of any plain markup.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Unique type identifier.",
+      "type": "string",
+      "const": "PlainMarkup"
+    },
+    "markup": {
+      "description": "Value of plain markup that needs to rendered.",
+      "type": "string"
+    }
+  },
+  "required": ["type"]
+}

@@ -1,0 +1,10 @@
+{% macro element(elementData) %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+{{ govukPanel({
+  titleText: elementData.title | trans(),
+  html: elementData.text | trans()
+}) }}
+
+{% endmacro %}
+

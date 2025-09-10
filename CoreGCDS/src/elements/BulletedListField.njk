@@ -1,0 +1,13 @@
+{% macro element(elementData) %}
+
+{% if elementData.displayText %}
+  <p class="govuk-body">{{ elementData.displayText | trans() }}</p>
+{% endif %}
+
+<ul class="govuk-list govuk-list--bullet">
+  {% for item in elementData.items %}
+    <li>{{ item.text | trans() }}</li>
+  {% endfor %}
+</ul>
+
+{% endmacro %}

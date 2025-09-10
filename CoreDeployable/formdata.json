@@ -1,0 +1,328 @@
+{
+  "name": "APPLICATION FOR A CERTIFICATE",
+  "firstPage": "ApplicantDetails",
+  "productName": "example.com",
+  "apiEndpoint": "https://example-endpoint.com/dev/submit-form/service",
+  "homePageUrl": "https://example.com",
+  "cookieSecret": "0123456789-abc",
+  "pages": [
+    {
+      "id": "ApplicantDetails",
+      "nextPage": "VehicleDetails",
+      "preRequisiteData": null,
+      "validation": null,
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Form",
+                  "classes": "",
+                  "elements": [
+                    {
+                      "type": "Heading",
+                      "displayText": "1. APPLICANT DETAILS"
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_1",
+                      "displayText": "Title:",
+                      "autocomplete": null,
+                      "validation": null,
+                      "classes": null,
+                      "hint": ""
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_2",
+                      "displayText": "Name:",
+                      "autocomplete": null,
+                      "validation": null,
+                      "classes": null,
+                      "hint": ""
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_3",
+                      "displayText": "Address :",
+                      "autocomplete": null,
+                      "validation": null,
+                      "classes": null,
+                      "hint": null
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_4",
+                      "displayText": "Postcode :",
+                      "autocomplete": null,
+                      "validation": null,
+                      "classes": null,
+                      "hint": null
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_5",
+                      "displayText": "Tel Number :",
+                      "autocomplete": null,
+                      "validation": null,
+                      "classes": null,
+                      "hint": null
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_6",
+                      "displayText": "Email Address :",
+                      "autocomplete": null,
+                      "validation": null,
+                      "classes": null,
+                      "hint": null
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_7",
+                      "displayText": "Which test location would you prefer? :",
+                      "autocomplete": null,
+                      "validation": null,
+                      "classes": null,
+                      "hint": null
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Submit"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "VehicleDetails",
+      "nextPage": "Declaration",
+      "preRequisiteData": null,
+      "validation": null,
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Form",
+                  "classes": "",
+                  "elements": [
+                    {
+                      "type": "Heading",
+                      "displayText": "2. VEHICLE DETAILS"
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_8",
+                      "displayText": "Vehicle Registration Mark :",
+                      "autocomplete": null,
+                      "validation": null,
+                      "classes": null,
+                      "hint": null
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_9",
+                      "displayText": "Chassis (VIN) No.:",
+                      "autocomplete": null,
+                      "validation": null,
+                      "classes": null,
+                      "hint": null
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_10",
+                      "displayText": "Chassis Make :",
+                      "autocomplete": null,
+                      "validation": null,
+                      "classes": null,
+                      "hint": null
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_11",
+                      "displayText": "Chassis Model :",
+                      "autocomplete": null,
+                      "validation": null,
+                      "classes": null,
+                      "hint": null
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_12",
+                      "displayText": "Body Make :",
+                      "autocomplete": null,
+                      "validation": null,
+                      "classes": null,
+                      "hint": null
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_13",
+                      "displayText": "Body Model :",
+                      "autocomplete": null,
+                      "validation": null,
+                      "classes": null,
+                      "hint": null
+                    },
+                    {
+                      "type": "CheckboxField",
+                      "name": "f_check_1",
+                      "displayText": "Which level of compliance is to be shown on the accessibility certificate? (A separate vehicle specification form will need to be completed and submitted with this application).",
+                      "validation": null,
+                      "classes": null,
+                      "hint": null,
+                      "options": [
+                        {
+                          "value": "Wheelchair Accessibility Only",
+                          "text": "Wheelchair Accessibility Only",
+                          "valueText": "Wheelchair Accessibility Only"
+                        },
+                        {
+                          "value": "General Accessibility Only",
+                          "text": "General Accessibility Only",
+                          "valueText": "General Accessibility Only"
+                        },
+                        {
+                          "value": "Wheelchair and General Accessibility",
+                          "text": "Wheelchair and General Accessibility",
+                          "valueText": "Wheelchair and General Accessibility"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Submit"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Declaration",
+      "nextPage": "complete",
+      "preRequisiteData": null,
+      "validation": null,
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Form",
+                  "classes": "",
+                  "elements": [
+                    {
+                      "type": "Heading",
+                      "displayText": "3. DATA PROTECTION, DECLARATION AND SIGNATURE"
+                    },
+                    {
+                      "type": "Paragraph",
+                      "displayText": "DECLARATION – I confirm that, as far as I know, all statements in this application are true."
+                    },
+                    {
+                      "type": "Paragraph",
+                      "displayText": "DATA PROTECTION – We collect, use and store your personal data so that we can process your application."
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_14",
+                      "displayText": "Signature :",
+                      "autocomplete": null,
+                      "validation": null,
+                      "classes": null,
+                      "hint": null
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_15",
+                      "displayText": "Print Full Name :",
+                      "autocomplete": null,
+                      "validation": null,
+                      "classes": null,
+                      "hint": null
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_16",
+                      "displayText": "Date :",
+                      "autocomplete": null,
+                      "validation": null,
+                      "classes": null,
+                      "hint": null
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Submit"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "complete",
+      "nextPage": "",
+      "preRequisiteData": null,
+      "validation": null,
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Form",
+                  "classes": "",
+                  "elements": [
+                    {
+                      "type": "Panel",
+                      "title": "Enquiry submitted",
+                      "text": "Your reference number is <b>ABCD1234</b>"
+                    },
+                    {
+                      "type": "Paragraph",
+                      "displayText": "We have sent you a confirmation email."
+                    },
+                    {
+                      "type": "SubHeading",
+                      "displayText": "What happens next"
+                    },
+                    {
+                      "type": "Paragraph",
+                      "displayText": "We have sent your enquiry."
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

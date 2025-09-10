@@ -1,0 +1,79 @@
+{% macro element(elementData) %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set displayText = elementData.displayText | trans() %}
+
+{% if elementData.isPageHeading %}
+  {% if elementData.valid %}
+    {{ govukRadios({
+      idPrefix: elementData.name,
+      name: elementData.name,
+      fieldset: {
+        legend: {
+          text: displayText,
+          isPageHeading: elementData.isPageHeading,
+          classes: elementData.labelClasses
+        }
+      },
+      hint: {
+        text: elementData.hint | trans() 
+      },
+      items: elementData.options
+    }) }}
+  {% else %}
+    {{ govukRadios({
+      idPrefix: elementData.name,
+      name: elementData.name,
+      fieldset: {
+        legend: {
+          text: displayText,
+          isPageHeading: elementData.isPageHeading,
+          classes: elementData.labelClasses
+        }
+      },
+      hint: {
+        text: elementData.hint | trans()
+      },
+      items: elementData.options,
+      errorMessage: {
+        text: elementData.validation.error | trans({ for: displayText })
+      }
+    }) }}
+  {% endif %}
+{% else %}
+  {% if elementData.valid %}
+    {{ govukRadios({
+      idPrefix: elementData.name,
+      name: elementData.name,
+      fieldset: {
+        legend: {
+          text: displayText
+        }
+      },
+      hint: {
+        text: elementData.hint | trans()
+      },
+      items: elementData.options
+    }) }}
+  {% else %}
+    {{ govukRadios({
+      idPrefix: elementData.name,
+      name: elementData.name,
+      fieldset: {
+        legend: {
+          text: displayText
+        }
+      },
+      hint: {
+        text: elementData.hint | trans() 
+      },
+      items: elementData.options,
+      errorMessage: {
+        text: elementData.validation.error | trans({ for: displayText })
+      }
+    }) }}
+  {% endif %}
+{% endif %}
+{% endmacro %}
+
+

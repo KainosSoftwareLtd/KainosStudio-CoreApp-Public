@@ -1,0 +1,23 @@
+{
+  "$id": "https://schema.kainos.com/details.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Details",
+  "description": "Representation of details component.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Unique type identifier.",
+      "type": "string",
+      "const": "Details"
+    },
+    "summaryText": {
+      "description": "Text to use within the summary element (the visible part of the details element).",
+      "type": "string"
+    },
+    "text": {
+      "description": "Text to use within the disclosed part of the details element.",
+      "type": "string"
+    }
+  },
+  "required": ["type", "summaryText", "text"]
+}

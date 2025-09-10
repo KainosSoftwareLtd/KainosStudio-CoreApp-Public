@@ -1,0 +1,12 @@
+{% macro countyInput(elementData) %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+  {{ govukInput({
+    label: {
+      text: 'core:address.county-input.label' | trans()
+    },
+    id: elementData.name + "-county",
+    name: elementData.name + "-county",
+    classes: "govuk-input govuk-!-width-two-thirds",
+    value: elementData.context.data[elementData.name + '-county']
+  }) }}
+{% endmacro %}

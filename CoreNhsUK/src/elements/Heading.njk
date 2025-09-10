@@ -1,0 +1,25 @@
+{% macro element(elementData) %}
+{% set text = elementData.displayText | trans() %}
+{% if elementData.size %}
+    {% switch elementData.size %}
+        {% case 'h1' %}
+            <h1 class='nhsuk-heading-xl'>{{ text }}</h1>
+        {% case 'h2' %}
+            <h2 class='nhsuk-heading-l'>{{ text }}</h2>
+        {% case 'h3' %}
+            <h3 class='nhsuk-heading-m'>{{ text }}</h3>
+        {% case 'h4' %}
+            <h4 class='nhsuk-heading-s'>{{ text }}</h4>
+        {% case 'h5' %}
+            <h5 class='nhsuk-heading-xs'>{{ text }}</h5>
+        {% case 'h6' %}
+            <h6 class='nhsuk-heading-xs'>{{ text }}</h6>
+        {% default %}
+            <h1 class='nhsuk-heading-xl'>{{ text }}</h1>
+    {% endswitch %}
+{% else %}
+    <h1 class='nhsuk-heading-xl'>{{ text }}</h1>
+{% endif %}
+{% endmacro %}
+
+

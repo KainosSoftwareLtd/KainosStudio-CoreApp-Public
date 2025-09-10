@@ -1,0 +1,10 @@
+{% macro element(elementData) %}
+{% if elementData.errorItems|length %}
+  {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+  {{ govukErrorSummary({
+    titleText: elementData.title | trans(),
+    errorList: elementData.errorItems
+  }) }}
+{% endif %}
+{% endmacro %}

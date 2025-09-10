@@ -1,0 +1,56 @@
+{
+  "name": "APPLICATION FOR A CERTIFICATE",
+  "firstPage": "ApplicantDetails",
+  "productName": "example.com",
+  "apiEndpoint": "https://example-endpoint.com/dev/submit-form/service",
+  "homePageUrl": "https://example.com",
+  "cookieSecret": "0123456789-abc",
+  "pages": [
+    {
+      "id": "ApplicantDetails",
+      "nextPage": null,
+      "preRequisiteData": null,
+      "validation": null,
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Form",
+                  "classes": "",
+                  "elements": [
+                    {
+                      "type": "Heading",
+                      "displayText": "Blank Form"
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Submit"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "apiMappings": {
+    "submitForm": {
+      "request": {
+        "_SESSION-ID_": "_SESSION-ID_"
+      },
+      "response": {
+        "title": "message",
+        "fieldNames": "data[*].fieldName",
+        "fieldErrorMessages": "data[*].errorMessage",
+        "numErrors": "length(data)"
+      }
+    }
+  }
+}

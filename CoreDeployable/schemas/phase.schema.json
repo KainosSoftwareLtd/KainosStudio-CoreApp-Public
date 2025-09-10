@@ -1,0 +1,23 @@
+{
+  "$id": "https://schema.kainos.com/phase.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Phase",
+  "description": "Representation of phase banner component.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Unique type identifier.",
+      "type": "string",
+      "const": "Phase"
+    },
+    "name": {
+      "description": "Text to use within the tag component.",
+      "type": "string"
+    },
+    "displayText": {
+      "description": "HTML to use within the phase banner. ",
+      "type": "string"
+    }
+  },
+  "required": ["type", "name", "displayText"]
+}

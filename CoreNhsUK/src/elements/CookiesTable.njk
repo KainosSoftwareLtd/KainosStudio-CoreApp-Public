@@ -1,0 +1,15 @@
+{% macro element(elementData) %}
+{% from "components/tables/macro.njk" import table %}
+
+{{ table({
+  panel: false,
+  caption: elementData.displayText | trans(),
+  captionClasses: "nhsuk-table__caption--m",
+  head: [
+    { text: 'core:cookie-table.name-column' | trans(), classes: "app-custom-class" },
+    { text: 'core:cookie-table.purpose-column' | trans(), classes: "app-custom-class" },
+    { text: 'core:cookie-table.expires-column' | trans(), classes: "app-custom-class" }
+  ],
+  rows: elementData.cookies
+}) }}
+{% endmacro %}

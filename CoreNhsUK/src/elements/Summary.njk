@@ -1,0 +1,11 @@
+{% macro element(elementData) %}
+
+<h3 class="nhsuk-heading-m">{{ elementData.title | trans() }}</h3>
+
+{% from "components/summary-list/macro.njk" import summaryList %}
+
+{{ summaryList({
+   rows: elementData.transformed
+}) }}
+
+{% endmacro %}

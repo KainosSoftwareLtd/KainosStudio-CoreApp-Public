@@ -1,0 +1,30 @@
+{% macro element(elementData) %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{% set displayText = elementData.displayText | trans() %}
+
+{% if elementData.valid %}
+  {{ govukSelect({
+    id: elementData.name,
+    name: elementData.name,
+    label: {
+      text: displayText
+    },
+    items: elementData.options
+  }) }}
+{% else %}
+  {{ govukSelect({
+    id: elementData.name,
+    name: elementData.name,
+    label: {
+      text: displayText
+    },
+    items: elementData.options,
+    errorMessage: {
+      text: elementData.validation.error | trans({ for: displayText})
+    }
+  }) }}
+{% endif %}
+{% endmacro %}
+
+

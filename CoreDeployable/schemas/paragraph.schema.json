@@ -1,0 +1,19 @@
+{
+  "$id": "https://schema.kainos.com/paragraph.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Paragraph",
+  "description": "Representation of html p tag.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Unique type identifier.",
+      "type": "string",
+      "const": "Paragraph"
+    },
+    "displayText": {
+      "description": "Text to use within the paragraph.",
+      "type": "string"
+    }
+  },
+  "required": ["type"]
+}

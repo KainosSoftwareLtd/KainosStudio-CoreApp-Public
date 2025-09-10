@@ -1,0 +1,631 @@
+{
+  "name": "APPLICATION FOR A CERTIFICATE",
+  "designSystem": "gds",
+  "firstPage": "firstPage",
+  "productName": "example.com",
+  "homePageUrl": "https://example.com",
+  "cookieSecret": "0123456789-abc",
+  "cookieBanner": {},
+  "footer": {
+    "links": [
+      {
+        "text": "example external link",
+        "href": "https://google.com",
+        "attributes": {
+          "target": "_blank"
+        }
+      },
+      {
+        "text": "example internal link",
+        "href": "cookie"
+      }
+    ]
+  },
+  "pages": [
+    {
+      "id": "firstPage",
+      "nextPage": "secondPage",
+      "preRequisiteData": null,
+      "validation": null,
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Form",
+                  "classes": "",
+                  "elements": [
+                    {
+                      "type": "ErrorList",
+                      "title": "There is a problem"
+                    },
+                    {
+                      "type": "InsetText",
+                      "displayText": "Example of inset text"
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_1",
+                      "displayText": "Short text input",
+                      "autocomplete": null,
+                      "validation": {
+                        "regex": "^[a-zA-Z ]*$",
+                        "error": "Only text allowed"
+                      },
+                      "classes": null,
+                      "hint": ""
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_2",
+                      "displayText": "Phone number",
+                      "autocomplete": null,
+                      "validation": {
+                        "regex": "^[0-9]*$",
+                        "error": "Only numbers allowed"
+                      },
+                      "classes": null,
+                      "hint": ""
+                    },
+                    {
+                      "type": "SelectListField",
+                      "name": "f_check_1",
+                      "displayText": "Dropdown",
+                      "validation": null,
+                      "classes": null,
+                      "hint": "",
+                      "options": [
+                        {
+                          "value": "Choice 1",
+                          "text": "Choice 1",
+                          "valueText": "Choice 1"
+                        },
+                        {
+                          "value": "Choice 2",
+                          "text": "Choice 2",
+                          "valueText": "Choice 2"
+                        },
+                        {
+                          "value": "Choice 3",
+                          "text": "Choice 3",
+                          "valueText": "Choice 3"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "DatePickerField",
+                      "name": "f_text_3",
+                      "displayText": "Date",
+                      "autocomplete": null,
+                      "validation": {
+                        "isMandatory": true
+                      },
+                      "classes": null,
+                      "hint": ""
+                    },
+                    {
+                      "type": "CheckboxField",
+                      "name": "f_check_2",
+                      "displayText": "Radio",
+                      "validation": {
+                        "isMandatory": true
+                      },
+                      "classes": null,
+                      "hint": "",
+                      "options": [
+                        {
+                          "value": "Radio option 1",
+                          "text": "Radio option 1",
+                          "valueText": "Radio option 1"
+                        },
+                        {
+                          "value": "Radio option 2",
+                          "text": "Radio option 2",
+                          "valueText": "Radio option 2"
+                        },
+                        {
+                          "value": "Radio option 3",
+                          "text": "Radio option 3",
+                          "valueText": "Radio option 3"
+                        },
+                        {
+                          "value": "Radio option 4",
+                          "text": "Radio option 4",
+                          "valueText": "Radio option 4"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Save and Exit",
+                      "classes": "govuk-button--secondary",
+                      "action": {
+                        "value": "saveExit",
+                        "redirect": "Saved",
+                        "operation": "saveForm",
+                        "validation": false
+                      }
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Save and Continue",
+                      "classes": "govuk-button--secondary",
+                      "action": {
+                        "value": "saveContinue",
+                        "operation": "saveForm",
+                        "validation": false
+                      }
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Continue"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "secondPage",
+      "nextPage": "Completed",
+      "preRequisiteData": null,
+      "validation": null,
+      "elements": [
+        {
+          "type": "BackButton"
+        },
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Form",
+                  "classes": "",
+                  "elements": [
+                    {
+                      "type": "ErrorList",
+                      "title": "There is a problem"
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_4",
+                      "displayText": "Short text input 2",
+                      "autocomplete": null,
+                      "validation": {
+                        "regex": "^[a-zA-Z ]*$",
+                        "error": "Only text allowed"
+                      },
+                      "classes": null,
+                      "hint": ""
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "f_text_5",
+                      "displayText": "Phone number",
+                      "autocomplete": null,
+                      "validation": {
+                        "regex": "^[0-9]*$",
+                        "error": "Only numbers allowed"
+                      },
+                      "classes": null,
+                      "hint": ""
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Error",
+                      "classes": "govuk-button--secondary",
+                      "action": {
+                        "value": "errorButton",
+                        "operation": "patchForm",
+                        "validation": false
+                      }
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Save and Exit",
+                      "classes": "govuk-button--secondary",
+                      "action": {
+                        "value": "saveExit",
+                        "redirect": "Saved",
+                        "operation": "saveForm",
+                        "validation": false
+                      }
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Submit",
+                      "action": {
+                        "value": "submit",
+                        "operation": "submitForm",
+                        "validation": true
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Saved",
+      "nextPage": "",
+      "preRequisiteData": null,
+      "validation": null,
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Form",
+                  "classes": "",
+                  "elements": [
+                    {
+                      "type": "Panel",
+                      "title": "Enquiry saved",
+                      "text": "Your reference number is <b>ABCD1234</b>"
+                    },
+                    {
+                      "type": "Paragraph",
+                      "displayText": "We have sent you an email with reference number to continue your application."
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Completed",
+      "nextPage": "",
+      "preRequisiteData": null,
+      "validation": null,
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Form",
+                  "classes": "",
+                  "elements": [
+                    {
+                      "type": "Panel",
+                      "title": "Enquiry submitted",
+                      "text": "Your reference number is <b>reference_number_placeholder</b>"
+                    },
+                    {
+                      "type": "Paragraph",
+                      "displayText": "We have sent you a confirmation email."
+                    },
+                    {
+                      "type": "SubHeading",
+                      "displayText": "What happens next"
+                    },
+                    {
+                      "type": "Paragraph",
+                      "displayText": "We have sent your enquiry."
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "apiMappings": {
+    "submitForm": {
+      "request": {
+        "_SESSION-ID_": "_SESSION-ID_",
+        "f_text_1": "f_text_1",
+        "f_text_2": "f_text_2",
+        "f_text_3": "Applicant.date",
+        "f_check_1": "Applicant.dropdown",
+        "f_check_2": "Applicant.radio"
+      },
+      "response": {
+        "title": "message",
+        "fieldNames": "data[*].fieldName",
+        "fieldErrorMessages": "data[*].errorMessage",
+        "numErrors": "length(data)"
+      }
+    },
+    "saveForm": {
+      "request": {
+        "_SESSION-ID_": "_SESSION-ID_",
+        "f_text_1": "f_text_1",
+        "f_text_2": "f_text_2",
+        "f_text_3": "Applicant.date",
+        "f_check_1": "Applicant.dropdown",
+        "f_check_2": "Applicant.radio"
+      },
+      "response": {
+        "title": "message"
+      }
+    },
+    "patchForm": {
+      "request": {
+        "_SESSION-ID_": "_SESSION-ID_"
+      },
+      "response": {
+        "title": "'Error'",
+        "fieldErrorMessages": "message",
+        "numErrors": "'1'"
+      }
+    }
+  },
+  "apiServiceDefinition": {
+    "openapi": "3.0.1",
+    "info": {
+      "title": "form-submission-API",
+      "version": "2024-06-13T12:12:41Z"
+    },
+    "servers": [
+      {
+        "url": "https://example-endpoint.com/{basePath}",
+        "variables": {
+          "basePath": {
+            "default": "dev"
+          }
+        }
+      }
+    ],
+    "tags": [
+      {
+        "name": "demo",
+        "description": "Mock endpoints to support demo form actions"
+      }
+    ],
+    "paths": {
+      "/submit-form/service": {
+        "description": "File upload and download operations",
+        "servers": [
+          {
+            "url": "https://example-endpoint.com/dev",
+            "description": "Override base path for all operations with the /files path"
+          }
+        ],
+        "post": {
+          "tags": ["demo"],
+          "summary": "Final submission of form data",
+          "operationId": "submitForm",
+          "requestBody": {
+            "description": "Final form submission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Form"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                },
+                "application/xml": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "validation error in data submitted",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                  }
+                },
+                "application/xml": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                },
+                "application/xml": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/save-form/service": {
+        "description": "File upload and download operations",
+        "put": {
+          "tags": ["demo"],
+          "summary": "Partial submission of form data",
+          "operationId": "saveForm",
+          "requestBody": {
+            "description": "Save form progress",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Form"
+                }
+              }
+            },
+            "required": true
+          },
+          "servers": [
+            {
+              "url": "https://example-endpoint.com/dev",
+              "description": "Override base path for the GET /ping operation"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                },
+                "application/xml": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                },
+                "application/xml": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "patch": {
+          "tags": ["demo"],
+          "summary": "Unsupported endpoint",
+          "operationId": "patchForm",
+          "requestBody": {
+            "description": "Patch form progress",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Form"
+                }
+              }
+            },
+            "required": true
+          },
+          "servers": [
+            {
+              "url": "https://example-endpoint.com/dev",
+              "description": "Override base path for the GET /ping operation"
+            }
+          ],
+          "responses": {
+            "500": {
+              "description": "server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                },
+                "application/xml": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "ApiResponse": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "formId": {
+              "type": "string"
+            }
+          }
+        },
+        "ErrorResponse": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "ValidationErrorResponse": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "data": {
+              "type": "array",
+              "xml": {
+                "wrapped": true
+              },
+              "items": {
+                "$ref": "#/components/schemas/ErrorData"
+              }
+            }
+          }
+        },
+        "ErrorData": {
+          "type": "object",
+          "properties": {
+            "fieldName": {
+              "type": "string"
+            },
+            "errorMessage": {
+              "type": "string"
+            }
+          }
+        },
+        "Form": {
+          "type": "object",
+          "properties": {
+            "_SESSION-ID_": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{% macro countyInput(elementData) %}
+{% from "components/input/macro.njk" import input %}
+  {{ input({
+    label: {
+      text: 'core:address.county-input.label' | trans()
+    },
+    id: elementData.name + "-county",
+    name: elementData.name + "-county",
+    classes: "nhsuk-input nhsuk-!-width-two-thirds",
+    value: elementData.context.data[elementData.name + '-county']
+  }) }}
+{% endmacro %}

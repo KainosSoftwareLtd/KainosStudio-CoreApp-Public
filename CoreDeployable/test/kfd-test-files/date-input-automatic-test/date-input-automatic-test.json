@@ -1,0 +1,97 @@
+{
+    "name": "Your Service Name",
+    "firstPage": "firstPage",
+    "productName": "Demo",
+    "homePageUrl": "",
+    "cookieSecret": "0123456789-abc",
+    "footer": {
+  
+    },
+    "pages": [
+      {
+        "id": "firstPage",
+        "nextPage": "secondPage",
+        "elements": [
+          {
+            "type": "Form",
+            "elements": [
+              {
+                "type": "ErrorList",
+                "title": "There is a problem"
+              },
+              {
+                "type": "DatePickerField",
+                "name": "f-dateInput-2",
+                "validation": {
+                  "isMandatory": true,
+                  "mandatoryError": "Cannot be left empty"
+                },
+                "displayText": "Event date",
+                "labelClasses": "govuk-fieldset__legend--l",
+                "isPageHeading": true,
+                "hint": "For example, 27 3 2007"
+              },
+              {
+                "type": "SubmitButton",
+                "displayText": "Save and Continue"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "secondPage",
+        "nextPage": "thirdPage",
+        "elements": [
+          {
+            "type": "Form",
+            "elements": [
+              {
+                "type": "ErrorList",
+                "title": "There is a problem"
+              },
+              {
+                "type": "DatePickerField",
+                "name": "f-dateInput-3",
+                "validation": {
+                  "isMandatory": false,
+                  "mandatoryError": "Cannot be left empty"
+                },
+                "displayText": "Event date",
+                "labelClasses": "govuk-fieldset__legend--l",
+                "isPageHeading": true,
+                "hint": "For example, 27 3 2007"
+              },
+              {
+                "type": "SubmitButton",
+                "displayText": "Save and Continue"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "thirdPage",
+        "nextPage": null,
+        "elements": [
+          {
+            "type": "Form",
+            "elements": []
+          }
+        ]
+      }
+    ],
+    "apiMappings": {
+  
+    },
+    "apiServiceDefinition": {
+      "openapi": "3.0.1",
+      "info": {
+        "title": "api",
+        "version": "1.0.0"
+      },
+      "paths": {
+  
+      }
+    }
+  }

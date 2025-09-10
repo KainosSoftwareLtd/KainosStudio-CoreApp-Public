@@ -1,0 +1,45 @@
+{% macro element(elementData) %}
+
+{% from "components/checkboxes/macro.njk" import checkboxes %}
+
+{% set displayText = elementData.displayText | trans() %}
+
+{% if elementData.valid %}
+  {{ checkboxes({
+    idPrefix: elementData.name,
+    name: elementData.name,
+    fieldset: {
+      legend: {
+        text: displayText,
+        isPageHeading: elementData.isPageHeading,
+        classes: elementData.labelClasses
+      }
+    },
+    items: elementData.options,
+    hint: {
+      text: elementData.hint | trans() 
+    }
+  }) }}
+{% else %}
+  {{ checkboxes({
+    idPrefix: elementData.name,
+    name: elementData.name,
+    fieldset: {
+      legend: {
+        text: displayText,
+        isPageHeading: elementData.isPageHeading,
+        classes: elementData.labelClasses
+      }
+    },
+    items: elementData.options,
+    hint: {
+      text: elementData.hint | trans() 
+    },
+    errorMessage: {
+      text: elementData.validation.error | trans({ for: displayText})
+    }
+  }) }}
+{% endif %}
+{% endmacro %}
+
+

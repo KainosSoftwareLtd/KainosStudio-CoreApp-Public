@@ -1,0 +1,25 @@
+{% macro element(elementData) %}
+
+{% from "components/fieldset/macro.njk" import fieldset %}
+{% from "../elements/AddressInputs/CountyInput.njk" import countyInput %}
+{% from "../elements/AddressInputs/Line1Input.njk" import line1Input %}
+{% from "../elements/AddressInputs/Line2Input.njk" import line2Input %}
+{% from "../elements/AddressInputs/PostcodeInput.njk" import postcodeInput %}
+{% from "../elements/AddressInputs/TownInput.njk" import townInput %}
+{% if elementData %}
+  {% call fieldset({
+    legend: {
+      text: elementData.displayText | trans(),
+      isPageHeading: elementData.isPageHeading,
+      classes: elementData.labelClasses
+    }
+  }) %}
+    {{ line1Input(elementData) }}
+    {{ line2Input(elementData) }}
+    {{ townInput(elementData) }}
+    {{ countyInput(elementData) }}
+    {{ postcodeInput(elementData) }}
+  {% endcall %}
+{% endif %}
+
+{% endmacro %}

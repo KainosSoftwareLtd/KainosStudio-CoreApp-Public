@@ -1,0 +1,449 @@
+{
+  "name": "_root.service-name",
+  "firstPage": "firstPage",
+  "productName": "_root.product-name",
+  "homePageUrl": "https://example.com",
+  "cookieSecret": "0123456789-abc",
+  "cookieBanner": {},
+  "footer": {},
+  "i18n": {
+    "languages": {
+      "en-GB": "English",
+      "cy-GB": "Cymraeg"
+    },
+    "default": "en-GB",
+    "resources": {
+      "en-GB": {
+        "translation": {
+          "_root": {
+            "service-name": "My translation example",
+            "product-name": "example.com"
+          },
+          "error-list-title": "There is a problem",
+          "event-field": "What is the name of the event?",
+          "event-hint": "The name you'll use on promotional material",
+          "event-mandatory-error": "This field is mandatory",
+          "event-regex-error": "Only text allowed",
+          "Date-field": "Event date",
+          "Date-hint": "For example, 27 3 2007",
+          "firstPage": {
+            "continue": "Continue",
+            "radioName": "<b>Choose one:</b>",
+            "radioError": "Choose one: must be provided",
+            "radio": {
+              "option-1": "England",
+              "option-2": "Scotland",
+              "option-3": "Wales",
+              "hint": "If you're not sure, give a best guess."
+            }
+          }
+        }
+      },
+      "cy-GB": {
+        "translation": {
+          "_root": {
+            "service-name": "Fy enghraifft cyfieithu",
+            "product-name": "example.com"
+          },
+          "error-list-title": "Mae problem",
+          "event-field": "Beth yw enw'r digwyddiad?",
+          "event-hint": "Yr enw y byddwch yn ei ddefnyddio ar ddeunydd hyrwyddo",
+          "event-mandatory-error": "Mae'r maes hwn yn orfodol",
+          "event-regex-error": "Dim ond testun a ganiateir",
+          "Date-field": "Dyddiad digwyddiad",
+          "firstPage": {
+            "continue": "Parhau",
+            "radioName": "<b>Dewiswch un:</b>",
+            "radioError": "Dewiswch un: rhaid ei ddarparu",
+            "radio": {
+              "option-1": "Lloegr",
+              "option-2": "Yr Alban",
+              "option-3": "Cymru",
+              "hint": "Os nad ydych yn siŵr, rhowch eich dyfalu gorau."
+            }
+          }
+        }
+      }
+    }
+  },
+  "pages": [
+    {
+      "id": "firstPage",
+      "nextPage": "secondPage",
+      "preRequisiteData": null,
+      "validation": null,
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {"type":"BackButton"},
+                {
+                  "type": "Form",
+                  "elements": [
+                    {
+                      "type": "ErrorList",
+                      "title": "error-list-title"
+                    },
+                    {
+                      "type":"TextField",
+                      "name": "text-field-1",
+                      "displayText": "event-field",
+                      "validation": {
+                        "isMandatory": "true",
+                        "mandatoryError": "event-mandatory-error",
+                        "regex": "^[a-zA-Z ]*$",
+                        "error":"event-regex-error"
+                      },
+                      "hint": "event-hint"
+                    },
+                    {
+                      "type": "RadioField",
+                      "name": "f_radio_1",
+                      "displayText": "firstPage.radioName",
+                      "isPageHeading": false,
+                      "validation": {
+                        "regex": "^(England|Scotland|Wales)$",
+                        "error": "firstPage.radioError"
+                      },
+                      "hint": "firstPage.radio.hint",
+                      "options": [
+                        {
+                          "value": "England",
+                          "text": "firstPage.radio.option-1",
+                          "valueText": "firstPage.radio.option-1"
+                        },
+                        {
+                          "value": "Scotland",
+                          "text": "firstPage.radio.option-2",
+                          "valueText": "firstPage.radio.option-2"
+                        },
+                        {
+                          "value": "Wales",
+                          "text": "firstPage.radio.option-3",
+                          "valueText": "firstPage.radio.option-3"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "DatePickerField",
+                      "name": "f-dateInput-2",
+                      "validation": {
+                        "isMandatory": true,
+                        "mandatoryError": "Cannot be left empty"
+                      },
+                      "displayText": "Date-field",
+                      "labelClasses": "govuk-fieldset__legend--l",
+                      "isPageHeading": true,
+                      "hint": "Date-hint"
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "firstPage.continue"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "apiMappings": {
+    "submitForm": {
+      "request": {
+        "_SESSION-ID_": "_SESSION-ID_",
+        "f_text_1": "f_text_1",
+        "f_text_2": "f_text_2",
+        "f_text_3": "Applicant.date",
+        "f_check_1": "Applicant.dropdown",
+        "f_check_2": "Applicant.radio"
+      },
+      "response": {
+        "title": "message",
+        "fieldNames": "data[*].fieldName",
+        "fieldErrorMessages": "data[*].errorMessage",
+        "numErrors": "length(data)"
+      }
+    },
+    "saveForm": {
+      "request": {
+        "_SESSION-ID_": "_SESSION-ID_",
+        "f_text_1": "f_text_1",
+        "f_text_2": "f_text_2",
+        "f_text_3": "Applicant.date",
+        "f_check_1": "Applicant.dropdown",
+        "f_check_2": "Applicant.radio"
+      },
+      "response": {
+        "title": "message"
+      }
+    },
+    "patchForm": {
+      "request": {
+        "_SESSION-ID_": "_SESSION-ID_"
+      },
+      "response": {
+        "title": "'Error'",
+        "fieldErrorMessages": "message",
+        "numErrors": "'1'"
+      }
+    }
+  },
+  "apiServiceDefinition": {
+    "openapi": "3.0.1",
+    "info": {
+      "title": "form-submission-API",
+      "version": "2024-06-13T12:12:41Z"
+    },
+    "servers": [
+      {
+        "url": "https://example-endpoint.com/{basePath}",
+        "variables": {
+          "basePath": {
+            "default": "dev"
+          }
+        }
+      }
+    ],
+    "tags": [
+      {
+        "name": "demo",
+        "description": "Mock endpoints to support demo form actions"
+      }
+    ],
+    "paths": {
+      "/submit-form/service": {
+        "description": "File upload and download operations",
+        "servers": [
+          {
+            "url": "https://example-endpoint.com/dev",
+            "description": "Override base path for all operations with the /files path"
+          }
+        ],
+        "post": {
+          "tags": ["demo"],
+          "summary": "Final submission of form data",
+          "operationId": "submitForm",
+          "requestBody": {
+            "description": "Final form submission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Form"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                },
+                "application/xml": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "validation error in data submitted",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                  }
+                },
+                "application/xml": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                },
+                "application/xml": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/save-form/service": {
+        "description": "File upload and download operations",
+        "put": {
+          "tags": ["demo"],
+          "summary": "Partial submission of form data",
+          "operationId": "saveForm",
+          "requestBody": {
+            "description": "Save form progress",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Form"
+                }
+              }
+            },
+            "required": true
+          },
+          "servers": [
+            {
+              "url": "https://example-endpoint.com/dev",
+              "description": "Override base path for the GET /ping operation"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                },
+                "application/xml": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                },
+                "application/xml": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "patch": {
+          "tags": ["demo"],
+          "summary": "Unsupported endpoint",
+          "operationId": "patchForm",
+          "requestBody": {
+            "description": "Patch form progress",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Form"
+                }
+              }
+            },
+            "required": true
+          },
+          "servers": [
+            {
+              "url": "https://example-endpoint.com/dev",
+              "description": "Override base path for the GET /ping operation"
+            }
+          ],
+          "responses": {
+            "500": {
+              "description": "server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                },
+                "application/xml": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "ApiResponse": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "formId": {
+              "type": "string"
+            }
+          }
+        },
+        "ErrorResponse": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "ValidationErrorResponse": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "data": {
+              "type": "array",
+              "xml": {
+                "wrapped": true
+              },
+              "items": {
+                "$ref": "#/components/schemas/ErrorData"
+              }
+            }
+          }
+        },
+        "ErrorData": {
+          "type": "object",
+          "properties": {
+            "fieldName": {
+              "type": "string"
+            },
+            "errorMessage": {
+              "type": "string"
+            }
+          }
+        },
+        "Form": {
+          "type": "object",
+          "properties": {
+            "_SESSION-ID_": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

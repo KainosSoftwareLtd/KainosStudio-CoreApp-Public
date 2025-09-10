@@ -1,0 +1,55 @@
+{
+  "$id": "https://schema.kainos.com/textfield.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TextField",
+  "description": "Representation of text input component.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Unique type identifier.",
+      "type": "string",
+      "const": "TextField"
+    },
+    "name": {
+      "description": "Field name used as mapping reference.",
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9-_]*$"
+    },
+    "displayText": {
+      "description": "Text to use within the label.",
+      "type": "string"
+    },
+    "labelHtml": {
+      "description": "HTML to use within the label. If is provided, the displayText option will be ignored.",
+      "type": "string"
+    },
+    "isPageHeading": {
+      "description": "Whether the label also acts as the heading for the page.",
+      "type": "boolean"
+    },
+    "labelClasses": {
+      "description": "Classes to add to the label.",
+      "type": "string"
+    },
+    "prefix": {
+      "description": "Can be used to add a prefix to the text input component.",
+      "type": "string"
+    },
+    "autocomplete": {
+      "description": "Attribute to identify input purpose, for instance 'postal-code' or 'username'. See autofill for full list of attributes that can be used.",
+      "type": ["string", "null"]
+    },
+    "validation": {
+      "$ref": "https://schema.kainos.com/validation.schema.json"
+    },
+    "classes": {
+      "description": "HTML classes to add to the input.",
+      "type": ["string", "null"]
+    },
+    "hint": {
+      "description": "Can be used to add a hint to a text input component.",
+      "type": ["string", "null"]
+    }
+  },
+  "required": ["type", "name"]
+}

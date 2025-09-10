@@ -1,0 +1,8 @@
+{% macro element(elementData) %}
+
+<form method="POST">
+  {% from "elements/RenderElements.njk" import renderContentElements %}
+  {{ renderContentElements(elementData.elements) }}
+</form>
+  
+{% endmacro %}

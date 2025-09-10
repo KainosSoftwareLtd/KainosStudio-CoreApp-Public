@@ -1,0 +1,50 @@
+{% macro element(elementData) %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set displayText = elementData.displayText | trans() %}
+
+{% if elementData.valid %}
+  {{ govukInput({
+    label: {
+      text: displayText,
+      html: elementData.labelHtml | trans(),
+      isPageHeading: elementData.isPageHeading,
+      classes: elementData.labelClasses
+    },
+    id: elementData.name,
+    name: elementData.name,
+    autocomplete: elementData.autocomplete,
+    hint: {
+      text: elementData.hint | trans()
+    },
+    prefix: {
+      text: elementData.prefix | trans()
+    },
+    value: elementData.value
+  }) }}
+{% else %}
+  {{ govukInput({
+    label: {
+      text: displayText,
+      html: elementData.labelHtml | trans(),
+      isPageHeading: elementData.isPageHeading,
+      classes: elementData.labelClasses
+    },
+    id: elementData.name,
+    name: elementData.name,
+    autocomplete: elementData.autocomplete,
+    hint: {
+      text: elementData.hint | trans()
+    },
+    prefix: {
+      text: elementData.prefix | trans()
+    },
+    errorMessage: {
+      text: elementData.validation.error | trans({ for: displayText})
+    },
+    value: elementData.value
+  }) }}
+{% endif %}
+{% endmacro %}
+
+

@@ -1,0 +1,14 @@
+{% macro element(elementData) %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{{ govukTable({
+  caption: elementData.displayText | trans(),
+  captionClasses: "govuk-table__caption--m",
+  head: [
+    { text: 'core:cookie-table.name-column' | trans(), classes: "app-custom-class" },
+    { text: 'core:cookie-table.purpose-column' | trans(), classes: "app-custom-class" },
+    { text: 'core:cookie-table.expires-column' | trans(), classes: "app-custom-class" }
+  ],
+  rows: elementData.cookies
+}) }}
+{% endmacro %}

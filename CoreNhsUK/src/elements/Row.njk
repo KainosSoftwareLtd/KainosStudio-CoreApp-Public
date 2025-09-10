@@ -1,0 +1,14 @@
+{% macro element(elementData) %}
+
+<div class="nhsuk-grid-row">
+{% for eachElement in elementData.elements %}
+  <div class="nhsuk-grid-column-{{ elementData.columnWidths[loop.index0] }}">
+    {% if eachElement.type != 'Phase' and eachElement.type != 'BackButton' %}
+      {% from "elements/" + eachElement.type + ".njk" import element %}
+      {{ element(eachElement) }}
+    {% endif %}
+  </div>
+{% endfor %}
+</div>
+
+{% endmacro %}

@@ -1,0 +1,14 @@
+node_modules/
+lib/
+
+.DS_Store
+.vscode
+.idea
+.env
+*.notes.txt
+bun.lockb
+
+core-*.tgz
+
+cucumber-report.html
+test_results.csv

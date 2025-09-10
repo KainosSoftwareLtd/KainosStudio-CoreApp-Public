@@ -1,0 +1,29 @@
+{% macro postcodeInput(elementData) %}
+{% from "components/input/macro.njk" import input %}
+  {% set errorMessage = '' %}
+  {% set classes = 'nhsuk-input nhsuk-input--width-10' %}
+
+  {% if elementData.invalid %}
+    {% if elementData.invalidPostcode %}
+      {% set errorMessage = { text: 'core:address.postcode-input.invalid-error' | trans() } %}
+      {% set classes = classes + 'nhsuk-input--error' %}
+    {% endif %}
+    
+    {% if elementData.missingPostcode %}
+      {% set errorMessage = { text: 'core:address.postcode-input.missing-error' | trans() } %}
+      {% set classes = classes + 'nhsuk-input--error' %}
+    {% endif %}
+  {% endif %}
+
+  {{ input({
+    label: {
+      text: 'core:address.postcode-input.label' | trans()
+    },
+    id: elementData.name + "-postcode",
+    name: elementData.name + "-postcode",
+    autocomplete: "postal-code",
+    classes: classes,
+    value: elementData.context.data[elementData.name + '-postcode'],
+    errorMessage: errorMessage
+  }) }}
+{% endmacro %}

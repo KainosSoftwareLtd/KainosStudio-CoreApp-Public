@@ -1,0 +1,13 @@
+{% macro element(elementData) %}
+
+{% if elementData.displayText %}
+  <p class="nhsuk-body">{{ elementData.displayText | trans() }}</p>
+{% endif %}
+
+<ul class="nhsuk-list nhsuk-list--bullet">
+  {% for item in elementData.items %}
+    <li>{{ item.text | trans() }}</li>
+  {% endfor %}
+</ul> 
+
+{% endmacro %}

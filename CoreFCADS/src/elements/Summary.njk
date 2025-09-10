@@ -1,0 +1,11 @@
+{% macro element(elementData) %}
+
+<h3 class="govuk-heading-m">{{ elementData.title | trans() }}</h3>
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{{ govukSummaryList({
+   rows: elementData.transformed
+}) }}
+
+{% endmacro %}

@@ -1,0 +1,210 @@
+{
+  "name": "Newsletter signup",
+  "firstPage": "firstPage",
+  "productName": "example.com",
+  "homePageUrl": "https://example.com",
+  "cookieSecret": "0123456789-abc",
+  "footer": {},
+  "pages": [
+    {
+      "id": "firstPage",
+      "nextPage": "Completed",
+      "preRequisiteData": null,
+      "validation": null,
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "ErrorList",
+                  "title": "There is a problem"
+                },
+                {
+                  "type": "Form",
+                  "classes": "",
+                  "elements": [
+                    {
+                      "type": "TextField",
+                      "name": "name",
+                      "displayText": "Your name",
+                      "autocomplete": null,
+                      "validation": null,
+                      "classes": null,
+                      "hint": ""
+                    },
+                    {
+                      "type": "TextField",
+                      "name": "email",
+                      "displayText": "Email address",
+                      "autocomplete": null,
+                      "validation": null,
+                      "classes": null,
+                      "hint": ""
+                    },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Submit",
+                      "action": {
+                        "value": "submit",
+                        "operation": "submitForm",
+                        "validation": true
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Completed",
+      "nextPage": "",
+      "preRequisiteData": null,
+      "validation": null,
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+                {
+                  "type": "Form",
+                  "classes": "",
+                  "elements": [
+                    {
+                      "type": "Panel",
+                      "title": "Enquiry submitted",
+                      "text": "Your reference number is <b>ABCD1234</b>"
+                    },
+                    {
+                      "type": "Paragraph",
+                      "displayText": "We have sent you a confirmation email."
+                    },
+                    {
+                      "type": "SubHeading",
+                      "displayText": "What happens next"
+                    },
+                    {
+                      "type": "Paragraph",
+                      "displayText": "We have sent your enquiry."
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "apiMappings": {
+    "submitForm": {
+      "request": {
+        "name": "userName",
+        "email": "userEmail"
+      },
+      "response": {
+        "title": "message",
+        "fieldNames": "data[*].fieldName",
+        "fieldErrorMessages": "data[*].errorMessage",
+        "numErrors": "length(data)"
+      }
+    }
+  },
+  "apiServiceDefinition": {
+    "openapi": "3.0.1",
+    "info": {
+      "title": "form-submission-API",
+      "version": "2024-06-13T12:12:41Z"
+    },
+    "servers": [
+      {
+        "url": "https://example-endpoint.com/{basePath}",
+        "variables": {
+          "basePath": {
+            "default": "dev-playground"
+          }
+        }
+      }
+    ],
+    "paths": {
+      "/submit-form/service": {
+        "post": {
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FormModel"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "200 response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Empty"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Empty": {
+          "title": "Empty Schema",
+          "type": "object"
+        },
+        "FormModel": {
+          "title": "FormModel",
+          "type": "object",
+          "properties": {
+            "applicant": {
+              "$ref": "#/components/schemas/FormModelApplicant"
+            }
+          }
+        },
+        "FormModelApplicant": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            },
+            "postcode": {
+              "type": "string"
+            },
+            "phoneNumber": {
+              "type": "number"
+            },
+            "emailAddress": {
+              "type": "string"
+            },
+            "testLocation": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

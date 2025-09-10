@@ -1,0 +1,91 @@
+{
+  "$id": "https://schema.kainos.com/page.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Page",
+  "description": "A page describing the single page of form.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "The name of the page. Used in the url to navigate between pages.",
+      "type": "string",
+      "pattern": "^[a-zA-Z- ]*$"
+    },
+    "nextPage": {
+      "description": "The next page definition. Used in the url to navigate between pages.",
+      "anyOf": [
+        {
+          "description": "The name of the next page.",
+          "type": "string",
+          "pattern": "^[a-zA-Z- ]*$"
+        },
+        {
+          "description": "The structure for conditional logic rules.",
+          "type": "object",
+          "properties": {
+            "rules": {
+              "description": "List of all rules.",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "description": "Single rule.",
+                "type": "object",
+                "properties": {
+                  "match": {
+                    "description": "Key-value pairs as properties. Key will be use to get user data and compare with value.",
+                    "type": "object",
+                    "additionalProperties": { "type": "string" }
+                  },
+                  "page": {
+                    "description": "The name of the next page if match.",
+                    "type": "string",
+                    "pattern": "^[a-zA-Z- ]*$"
+                  }
+                },
+                "required": ["match", "page"]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "preRequisiteData": {
+      "description": "???",
+      "type": ["string", "null"]
+    },
+    "validation": {
+      "$ref": "https://schema.kainos.com/validation.schema.json"
+    },
+    "elements": {
+      "description": "Elements on page",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          { "$ref": "https://schema.kainos.com/checkboxfield.schema.schema.json" },
+          { "$ref": "https://schema.kainos.com/column.schema.json" },
+          { "$ref": "https://schema.kainos.com/cookiestable.schema.json" },
+          { "$ref": "https://schema.kainos.com/datepickerfield.schema.json" },
+          { "$ref": "https://schema.kainos.com/details.schema.json" },
+          { "$ref": "https://schema.kainos.com/errorlist.schema.json" },
+          { "$ref": "https://schema.kainos.com/fileupload.schema.json" },
+          { "$ref": "https://schema.kainos.com/form.schema.json" },
+          { "$ref": "https://schema.kainos.com/heading.schema.json" },
+          { "$ref": "https://schema.kainos.com/insettext.schema.json" },
+          { "$ref": "https://schema.kainos.com/panel.schema.json" },
+          { "$ref": "https://schema.kainos.com/paragraph.schema.json" },
+          { "$ref": "https://schema.kainos.com/phase.schema.json" },
+          { "$ref": "https://schema.kainos.com/plainmarkup.schema.json" },
+          { "$ref": "https://schema.kainos.com/radiofield.schema.json" },
+          { "$ref": "https://schema.kainos.com/row.schema.json" },
+          { "$ref": "https://schema.kainos.com/row2.schema.json" },
+          { "$ref": "https://schema.kainos.com/selectlistfield.schema.json" },
+          { "$ref": "https://schema.kainos.com/subheading.schema.json" },
+          { "$ref": "https://schema.kainos.com/submitbutton.schema.json" },
+          { "$ref": "https://schema.kainos.com/summary.schema.json" },
+          { "$ref": "https://schema.kainos.com/textareafield.schema.json" },
+          { "$ref": "https://schema.kainos.com/textfield.schema.json" }
+        ]
+      }
+    }
+  },
+  "required": ["id", "elements"]
+}

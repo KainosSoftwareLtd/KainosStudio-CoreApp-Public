@@ -1,0 +1,24 @@
+{% macro footer(service) %}
+
+<footer class="govuk-footer">
+  <div class="govuk-width-container">
+    <div class="govuk-footer__meta">
+      <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+        <p class="govuk-footer__licence-description">Copyright © 2023 Financial Conduct Authority (FCA) and/or Prudential Regulation Authorisation (PRA)</p>
+        <h2 class="govuk-visually-hidden">Support links</h2>
+        <ul class="govuk-footer__inline-list">
+        {% for link in service.footer.links %}
+          <li class="govuk-footer__inline-list-item">
+            <a class="govuk-footer__link" href="{{ link.href }}">
+              {{ link.text }}
+            </a>
+          </li>
+        {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+{% endmacro %}

@@ -1,0 +1,42 @@
+{# The NHS does not support multiple languages; the component was prepared manually. Static texts in components from nhsuk-frontend are not translated. #}
+
+{% macro listItem(currentLangIsoCode, langIsoCode, langName) %}
+    <li class="language-switcher__list-item" {%- if currentLangIsoCode === langIsoCode %} aria-current="true"{% endif %}>
+        {% if currentLangIsoCode === langIsoCode %}
+            {{ langName }}
+        {% else  %}
+            <a href="?lang={{ langIsoCode }}"
+               hreflang="{{ langIsoCode }}"
+               lang="{{ langIsoCode }}"
+               rel="alternate"
+               class="nhsuk-link">{{ langName }}</a>
+        {% endif %}
+    </li>
+{% endmacro %}
+
+{% macro languageSwitcher(service) %}
+{% if service.i18n and service.i18n.languages %}
+    {% set supportedLanguages = service.i18n.languages | dictsort %}
+    {% if supportedLanguages | length  > 1 %}
+        {% set defaultLang = service.defaultLang %}
+        {% set currentLangIsoCode = service.selectedLang | default(defaultLang) %}
+
+        <nav class="language-switcher">
+            <ul class="language-switcher__list">
+            {# generate default language as first #}
+            {% for supportedLanguage in supportedLanguages %}
+                {% if supportedLanguage[0] == defaultLang %}
+                    {{ listItem(currentLangIsoCode, supportedLanguage[0], supportedLanguage[1]) }}
+                {% endif %}
+            {% endfor %}
+            {# generate other languages #}
+            {% for supportedLanguage in supportedLanguages %}
+                {% if supportedLanguage[0] != defaultLang %}
+                    {{ listItem(currentLangIsoCode, supportedLanguage[0], supportedLanguage[1]) }}
+                {% endif %}
+            {% endfor %}
+            </ul>
+        </nav>
+    {% endif %}
+{% endif %}
+{% endmacro %} 

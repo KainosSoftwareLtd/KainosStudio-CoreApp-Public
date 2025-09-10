@@ -1,0 +1,60 @@
+{
+  "$id": "https://schema.kainos.com/summary.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Summary",
+  "description": "Representation of summary list component.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Unique type identifier.",
+      "type": "string",
+      "const": "Summary"
+    },
+    "title": {
+      "description": "??",
+      "type": "string"
+    },
+    "fieldNames": {
+      "anyOf": [
+        {
+          "description": "Names of elements for which a summary is to be prepared.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "description": "The structure for conditional field names rules.",
+          "type": "object",
+          "properties": {
+            "rules": {
+              "description": "List of all rules.",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "description": "Single rule.",
+                "type": "object",
+                "properties": {
+                  "match": {
+                    "description": "Key-value pairs as properties. Key will be use to get user data and compare with value.",
+                    "type": "object",
+                    "additionalProperties": { "type": "string" }
+                  },
+                  "fieldNames": {
+                    "description": "Names of elements for which a summary is to be prepared for rule.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": ["match", "fieldNames"]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "required": ["type", "fieldNames"]
+}

@@ -1,0 +1,167 @@
+{
+    "name": "Your Service Name",
+    "firstPage": "radioField",
+    "productName": "Demo",
+    "homePageUrl": "",
+    "cookieSecret": "0123456789-abc",
+    "cookieBanner": null,
+    "footer": null,
+    "pages": [
+      {
+        "id": "radioField",
+        "nextPage": {
+          "rules": [
+            {
+              "match": {
+                "f-radio-2": "Second"
+              },
+              "page": "secondPage"
+            },
+            {
+              "match": {
+                "f-radio-2": "Third"
+              },
+              "page": "thirdPage"
+            },
+            {
+                "match": {
+                  "f-radio-2": "Fourth"
+                },
+                "page": "fourthPage"
+              },
+              {
+                "match": {
+                  "f-radio-2": "Fifth"
+                },
+                "page": "fifthPage"
+              }
+          ]
+        },
+        "elements": [
+          {
+            "type": "Form",
+            "elements": [
+              {
+                "type": "RadioField",
+                "name": "f-radio-2",
+                "validation": {
+                  "isMandatory": true
+                },
+                "options": [
+                  {
+                    "value": "Second",
+                    "text": "Second",
+                    "valueText": "Second"
+                  },
+                  {
+                    "value": "Third",
+                    "text": "Third",
+                    "valueText": "Third"
+                  },
+                  {
+                    "value": "Fourth",
+                    "text": "Fourth",
+                    "valueText": "Fourth"
+                  },
+                  {
+                    "value": "Fifth",
+                    "text": "Fifth",
+                    "valueText": "Fifth"
+                  }
+                ],
+                "displayText": "Choose one:",
+                "labelClasses": "govuk-fieldset__legend--l",
+                "isPageHeading": true,
+                "hint": "Select one option"
+              },
+              {
+                "type": "SubmitButton",
+                "displayText": "Save and continue"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "secondPage",
+        "nextPage": "thirdPage",
+        "elements": [
+            {
+                "type": "BackButton"
+            },
+          {
+            "type": "Form",
+            "elements": [
+              {
+                "type": "Heading",
+                "displayText": "This is the second page of the service"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "thirdPage",
+        "nextPage": null,
+        "elements": [
+            {
+                "type": "BackButton"
+            },
+          {
+            "type": "Form",
+            "elements": [
+              {
+                "type": "Heading",
+                "displayText": "This is the third page of the service"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "fourthPage",
+        "nextPage": null,
+        "elements": [
+            {
+                "type": "BackButton"
+            },
+          {
+            "type": "Form",
+            "elements": [
+              {
+                "type": "Heading",
+                "displayText": "This is the fourth page of the service"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "fifthPage",
+        "nextPage": null,
+        "elements": [
+            {
+                "type": "BackButton"
+            },
+          {
+            "type": "Form",
+            "elements": [
+              {
+                "type": "Heading",
+                "displayText": "This is the fifth page of the service"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "apiMappings": {},
+    "apiServiceDefinition": {
+      "openapi": "3.0.1",
+      "info": {
+        "title": "api",
+        "version": "1.0.0"
+      },
+      "paths": {}
+    }
+  }

@@ -1,0 +1,19 @@
+{
+  "$id": "https://schema.kainos.com/insettext.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "InsetText",
+  "description": "Representation of Inset Text component.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Unique type identifier.",
+      "type": "string",
+      "const": "InsetText"
+    },
+    "displayText": {
+      "description": "Text to use within the Inset Text.",
+      "type": "string"
+    }
+  },
+  "required": ["type"]
+}

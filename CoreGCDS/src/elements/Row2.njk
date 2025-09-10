@@ -1,0 +1,8 @@
+{% macro element(elementData) %}
+
+<div class="govuk-grid-row">
+  {% from "elements/RenderElements.njk" import renderContentElements %}
+  {{ renderContentElements(elementData.elements) }}
+</div>
+
+{% endmacro %}

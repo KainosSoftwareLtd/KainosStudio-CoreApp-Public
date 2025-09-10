@@ -1,0 +1,223 @@
+{
+  "name": "_root.service-name",
+  "firstPage": "Page 1",
+  "productName": "_root.product-name",
+  "homePageUrl": "https://example.com",
+  "cookieSecret": "0123456789-abc",
+  "cookieBanner": {},
+  "footer": {},
+  "i18n": {
+    "languages": {
+      "en-GB": "English",
+      "cy-GB": "Cymraeg"
+    },
+    "default": "en-GB",
+    "resources": {
+      "en-GB": {
+        "translation": {
+          "_root": {
+            "service-name": "My translation example",
+            "product-name": "example.com"
+          },
+          "error-list-title": "There is a problem",
+          "Date-field": "Event date",
+          "Date-hint": "For example, 27 3 2007",
+          "firstPage": {
+            "continue": "Continue",
+            "address-header": "What is your address?",
+            "phone-number-header": "What is your phone number?",
+            "postcode-header": "What is your postcode?",
+            "email-header": "What is your email address?"
+          }
+        }
+      },
+      "cy-GB": {
+        "translation": {
+          "_root": {
+            "service-name": "Fy enghraifft cyfieithu",
+            "product-name": "example.com"
+          },
+          "error-list-title": "Mae problem",
+          "Date-field": "Dyddiad digwyddiad",
+          "Date-hint": "Er enghraifft, 27 3 2007",
+          "firstPage": {
+            "continue": "Parhau",
+            "address-header": "Beth yw eich cyfeiriad?",
+            "phone-number-header": "Beth yw eich rhif ffôn?",
+            "postcode-header": "Beth yw eich cod post?",
+            "email-header": "Beth yw eich cyfeiriad e-bost?"
+          }
+        }
+      }
+    }
+  },
+  "pages": [
+        {
+            "id": "Page 1",
+            "nextPage": "Page 4",
+            "elements": [
+                {
+                    "type": "Form",
+                    "elements": [
+                        {
+                            "type": "ErrorList",
+                            "title": "error-list-title"
+                        },
+                        {
+                            "type": "AddressField",
+                            "name": "f-addressInput-2",
+                            "displayText": "firstPage.address-header",
+                            "labelClasses": "govuk-fieldset__legend--l",
+                            "isPageHeading": true
+                        },
+                        {
+                            "type": "DatePickerField",
+                            "name": "f-dateInput-2",
+                            "validation": {
+                                "isMandatory": true
+                            },
+                            "displayText": "Date-field",
+                            "labelClasses": "govuk-fieldset__legend--l",
+                            "isPageHeading": true,
+                            "hint": "Date-hint"
+                        },
+                        {
+                            "type": "PhoneNumberField",
+                            "name": "f-phoneNumberInput",
+                            "displayText": "firstPage.phone-number-header",
+                            "labelClasses": "govuk-label--l",
+                            "isPageHeading": true,
+                            "validation": {
+                                "isMandatory": true
+                            }
+                        },
+                        {
+                            "type": "PostcodeField",
+                            "name": "f-addressInput-3",
+                            "displayText": "firstPage.postcode-header",
+                            "labelClasses": "govuk-label--l",
+                            "isPageHeading": true,
+                            "validation": {
+                                "isMandatory": true
+                            }
+                        },
+                        {
+                            "type": "EmailField",
+                            "name": "f-emailInput-3",
+                            "displayText": "firstPage.email-header",
+                            "labelClasses": "govuk-label--l",
+                            "isPageHeading": true,
+                            "validation": {
+                                "isMandatory": true
+                            }
+                        },
+                        {
+                            "type": "SubmitButton",
+                            "displayText": "firstPage.continue"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "not-found",
+            "nextPage": null,
+            "elements": [
+                {
+                    "type": "Row2",
+                    "elements": [
+                        {
+                            "type": "Column",
+                            "columnWidth": "two-thirds",
+                            "elements": [
+                                {
+                                    "type": "Heading",
+                                    "displayText": "Page not found",
+                                    "size": "h1"
+                                },
+                                {
+                                    "type": "Paragraph",
+                                    "displayText": "\n            If you typed the web address, check it is correct.<br><br>\n            If you pasted the web address, check you copied the entire address.<br><br>\n            If the web address is correct or you selected a link or button, \n            <a href='#' class='govuk-link'>contact the [Placeholder] helpline</a> \n            if you need to speak to someone.\n          "
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "cookie",
+            "nextPage": null,
+            "elements": [
+                {
+                    "type": "Row2",
+                    "elements": [
+                        {
+                            "type": "Column",
+                            "columnWidth": "two-thirds",
+                            "elements": [
+                                {
+                                    "type": "Heading",
+                                    "displayText": "Cookies",
+                                    "size": "h1"
+                                },
+                                {
+                                    "type": "Paragraph",
+                                    "displayText": "Cookies are small files saved on your phone, tablet, or computer when you visit a website."
+                                },
+                                {
+                                    "type": "Paragraph",
+                                    "displayText": "We use cookies to make this site work and collect information about how you use our service."
+                                },
+                                {
+                                    "type": "Heading",
+                                    "displayText": "Essential cookies",
+                                    "size": "h2"
+                                },
+                                {
+                                    "type": "Paragraph",
+                                    "displayText": "Essential cookies keep your information secure while you use this service. We do not need to ask permission to use them."
+                                },
+                                {
+                                    "type": "CookiesTable",
+                                    "displayText": ""
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "Page 4",
+            "nextPage": null,
+            "elements": [
+                {
+                    "type": "Form",
+                    "elements": [
+                        {
+                            "type": "Summary",
+                            "title": "Summary title",
+                            "fieldNames": [
+                                "f-addressInput-2",
+                                "f-dateInput-2",
+                                "f-phoneNumberInput",
+                                "f-addressInput-3",
+                                "f-emailInput-3"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "apiMappings": {},
+    "apiServiceDefinition": {
+        "openapi": "3.0.1",
+        "info": {
+            "title": "api",
+            "version": "1.0.0"
+        },
+        "paths": {}
+    }
+}

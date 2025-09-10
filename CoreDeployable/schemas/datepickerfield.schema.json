@@ -1,0 +1,38 @@
+{
+  "$id": "https://schema.kainos.com/datepickerfield.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DatePickerField",
+  "description": "Representation of date input component.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Unique type identifier.",
+      "type": "string",
+      "const": "DatePickerField"
+    },
+    "name": {
+      "description": "This is used for the main component and to compose the ID attribute for each item. And also as aptional prefix. This is used to prefix each item name, separated by -",
+      "type": "string"
+    },
+    "displayText": {
+      "description": "Text to use within the legend.",
+      "type": "string"
+    },
+    "isPageHeading": {
+      "description": "Whether the legend also acts as the heading for the page.",
+      "type": "boolean"
+    },
+    "labelClasses": {
+      "description": "Classes to add to the label.",
+      "type": "string"
+    },
+    "hint": {
+      "description": "Text to use within the hint.",
+      "type": "string"
+    },
+    "validation": {
+      "$ref": "https://schema.kainos.com/validation.schema.json"
+    }
+  },
+  "required": ["type", "name"]
+}

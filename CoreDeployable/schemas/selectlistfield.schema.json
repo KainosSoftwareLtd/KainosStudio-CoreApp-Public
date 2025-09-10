@@ -1,0 +1,48 @@
+{
+  "$id": "https://schema.kainos.com/selectlistfield.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SelectListField",
+  "description": "Representation of select component.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Unique type identifier.",
+      "type": "string",
+      "const": "SelectListField"
+    },
+    "name": {
+      "description": "Name property for the select.",
+      "type": "string"
+    },
+    "displayText": {
+      "description": "Text to use within the label.",
+      "type": "string"
+    },
+    "validation": {
+      "$ref": "https://schema.kainos.com/validation.schema.json"
+    },
+    "options": {
+      "description": "The items within the select component.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "valueText": {
+            "type": "string"
+          },
+          "hint": {
+            "type": "string"
+          }
+        },
+        "required": ["text"]
+      }
+    }
+  },
+  "required": ["type", "name", "options"]
+}

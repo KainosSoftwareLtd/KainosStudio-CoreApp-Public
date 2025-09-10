@@ -1,0 +1,12 @@
+{% macro element(elementData) %}
+{% from "components/button/macro.njk" import button %}
+
+{{ button({
+  text: elementData.displayText | trans(),
+  classes: elementData.classes,
+  name: "action",
+  value: elementData.action.value,
+  preventDoubleClick: true
+}) }}
+
+{% endmacro %}

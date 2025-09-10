@@ -1,0 +1,8 @@
+{% macro element(elementData) %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{{ govukInsetText({
+    text: elementData.displayText | trans()
+}) }}
+
+{% endmacro %}

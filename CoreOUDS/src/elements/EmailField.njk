@@ -1,0 +1,30 @@
+{% macro element(elementData) %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+  {% if elementData %}
+    {% set displayText = elementData.displayText | trans() %}
+    {% set errorMessage = '' %}
+    {% set classes = 'govuk-input govuk-input--width-20' %}
+
+    {% if elementData.invalid %}
+        {% set errorMessage = { text: elementData.validation.error | trans({ for: displayText}) } %}
+        {% set classes = classes + ' govuk-input--error' %}
+    {% endif %}
+
+    {{ govukInput({
+      label: {
+        text: displayText,
+        html: elementData.labelHtml | trans(),
+        isPageHeading: elementData.isPageHeading,
+        classes: elementData.labelClasses
+      },
+      id: elementData.name,
+      name: elementData.name,
+      type: "email",
+      autocomplete: "email",
+      classes: classes,
+      value: elementData.value,
+      errorMessage: errorMessage
+    }) }}
+  {% endif %}
+{% endmacro %}

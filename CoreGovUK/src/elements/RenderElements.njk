@@ -1,0 +1,17 @@
+{% macro renderContentElements(elements) %}
+  {% for eachElement in elements %}
+    {% if eachElement.type != 'Phase' and eachElement.type != 'BackButton' %}
+      {% from "elements/" + eachElement.type + ".njk" import element %}
+      {{ element(eachElement) }}
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+{% macro renderElementsOfType(elements, type) %}
+  {% for eachElement in elements %}
+    {% if eachElement.type == type %}
+      {% from "elements/" + eachElement.type + ".njk" import element %}
+      {{ element(eachElement) }}
+    {% endif %}
+  {% endfor %}
+{% endmacro %}

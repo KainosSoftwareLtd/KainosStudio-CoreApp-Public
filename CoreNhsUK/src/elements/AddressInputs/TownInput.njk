@@ -1,0 +1,22 @@
+{% macro townInput(elementData) %}
+{% from "components/input/macro.njk" import input %}
+  {% set errorMessage = '' %}
+  {% set classes = 'nhsuk-input nhsuk-!-width-two-thirds' %}
+
+  {% if elementData.invalid and elementData.invalidTown %}
+    {% set errorMessage = { text: 'core:address.town-input.invalid-error' | trans() } %}
+    {% set classes = classes + 'nhsuk-input--error' %}
+  {% endif %}
+
+  {{ input({
+    label: {
+      text: 'core:address.town-input.label' | trans() 
+    },
+    id: elementData.name + "-town",
+    name: elementData.name + "-town",
+    autocomplete: "address-level2",
+    classes: classes,
+    value: elementData.context.data[elementData.name + '-town'],
+    errorMessage: errorMessage
+  }) }}
+{% endmacro %}

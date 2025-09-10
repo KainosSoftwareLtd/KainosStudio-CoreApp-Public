@@ -1,0 +1,36 @@
+{
+  "name": "core-gcds",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "type": "module",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "",
+    "build": "npm run add-runtime && npm i && tsc && npm run build-sass && node ../utils/recursiveCopy.js --originFolderPath src/. --targetFolderPath lib/ && npm run build-copyjs ",
+    "add-runtime": "node ../utils/fileCopy.js --originFilePath ../CoreRuntime/core-runtime-1.0.0.tgz --targetFilePath ./core-runtime-1.0.0.tgz && npm install core-runtime-1.0.0.tgz",
+    "build-sass": "sass src/css/govuk-gcds.scss lib/public/gcds/govuk-gcds.css",
+    "build-copyjs": "node ../utils/createFolder.js --dirPath lib/public/gcds && node ../utils/fileCopy.js --originFilePath node_modules/govuk-frontend/dist/govuk/govuk-frontend.min.js --targetFilePath lib/public/gcds/gds-all.js && node ../utils/fileCopy.js --originFilePath node_modules/@cdssnc/gcds-components/dist/gcds/ --targetFilePath lib/public/gcds/",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "tslint -p tsconfig.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@cdssnc/gcds-components": "^0.33.0",
+    "core-runtime": "file:core-runtime-1.0.0.tgz",
+    "govuk-frontend": "^5.9.0",
+    "nunjucks": "^3.2.4"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.9",
+    "@types/express": "^4.17.23",
+    "@types/nunjucks": "^3.2.6",
+    "sass": "^1.89.2",
+    "typescript": "^5.8.3"
+  }
+}

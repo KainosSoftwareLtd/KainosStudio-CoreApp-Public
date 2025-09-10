@@ -1,0 +1,28 @@
+{% macro footer(service) %}
+
+<footer class="govuk-footer">
+  <div class="govuk-width-container">
+    <div class="govuk-footer__meta">
+	  <div class="govuk-footer__meta-item">
+        <a class="govuk-footer__link govuk-footer__copyright-logo"></a>
+      </div>
+      <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+        <h2 class="govuk-visually-hidden">Support links</h2>
+        <ul class="govuk-footer__inline-list">
+		{% for link in service.footer.links %}
+          <li class="govuk-footer__inline-list-item">
+            <a class="govuk-footer__link" href="{{ link.href }}">
+              {{ link.text }}
+            </a>
+          </li>
+		{% endfor %}
+        </ul>
+        <span class="govuk-footer__licence-description">
+			{{ 'core:footer.ou-statement' | trans() }}
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% endmacro %}

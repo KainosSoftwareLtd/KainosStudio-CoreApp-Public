@@ -1,0 +1,143 @@
+{% macro translations(lang) %}
+{% if lang == 'cy-GB' %}
+    const translations = {
+        accordion: {
+            i18n: {
+                hideAllSections: 'Cuddio pob adran',
+                hideSection: 'Cuddio',
+                hideSectionAriaLabel: "Cuddio'r adran hon",
+                showAllSections: 'Dangos pob adran',
+                showSection: 'Dangos',
+                showSectionAriaLabel: 'Dangos yr adran hon',
+            },
+        },
+        characterCount: {
+            i18n: {
+                charactersUnderLimit: {
+                    one: 'Mae gennych %{count} cymeriad yn weddill',
+                    other: 'Mae gennych %{count} cymeriadau yn weddill',
+                },
+                charactersAtLimit: 'Mae gennych 0 cymeriad yn weddill',
+                charactersOverLimit: {
+                    one: 'Mae gennych %{count} cymeriad yn ormod',
+                    other: 'Mae gennych %{count} cymeriadau yn ormod',
+                },
+                wordsUnderLimit: {
+                    one: 'Mae gennych %{count} gair yn weddill',
+                    other: 'Mae gennych %{count} geiriau yn weddill',
+                },
+                wordsAtLimit: 'Mae gennych 0 gair yn weddill',
+                wordsOverLimit: {
+                    one: 'Mae gennych %{count} gair yn ormod',
+                    other: 'Mae gennych %{count} geiriau yn ormod',
+                },
+                textareaDescription: {
+                    other: '',
+                },
+            },
+        },
+        exitThisPage: {
+            i18n: {
+                activated: 'Llwytho.',
+                timedOut: 'Mae amser gadael y dudalen hon wedi dod i ben.',
+                pressTwoMoreTimes: 'Shift, pwyswch 2 waith arall i adael.',
+                pressOneMoreTime: 'Shift, pwyswch 1 waith arall i adael.',
+            },
+        },
+        passwordInput: {
+            i18n: {
+                showPassword: 'Dangos',
+                hidePassword: 'Cuddio',
+                showPasswordAriaLabel: 'Dangos cyfrinair',
+                hidePasswordAriaLabel: 'Cuddio cyfrinair',
+                passwordShownAnnouncement: 'Mae eich cyfrinair yn weladwy',
+                passwordHiddenAnnouncement: "Mae eich cyfrinair wedi'i guddio",
+            },
+        },
+        fileUpload: {
+            i18n: {
+                chooseFilesButton: 'Dewiswch ffeil',
+                dropInstruction: 'neu gollwng ffeil',
+                noFileChosen: 'Dim ffeil wedi’i dewis',
+                multipleFilesChosen: {
+                    one: '%{count} ffeil wedi’i dewis',
+                    other: '%{count} ffeil wedi’u dewis',
+                },
+                enteredDropZone: "Wedi mynd i'r ardal gollwng",
+                leftDropZone: 'Wedi gadael yr ardal gollwng',
+            }
+        },
+    };
+{% elif lang == 'fr-FR' or lang == 'fr-CA' %}
+    const translations = {
+        accordion: {
+            i18n: {
+                hideAllSections: 'Masquer toutes les sections',
+                hideSection: 'Masquer',
+                hideSectionAriaLabel: 'Masquer cette section',
+                showAllSections: 'Afficher toutes les sections',
+                showSection: 'Afficher',
+                showSectionAriaLabel: 'Afficher cette section',
+            }
+        },
+        characterCount: {
+            i18n: {
+                charactersUnderLimit: {
+                    one: 'Il vous reste %{count} caractère',
+                    other: 'Il vous reste %{count} caractères',
+                },
+                charactersAtLimit: 'Il vous reste 0 caractère',
+                charactersOverLimit: {
+                    one: 'Vous avez %{count} caractère en trop',
+                    other: 'Vous avez %{count} caractères en trop',
+                },
+                wordsUnderLimit: { 
+                    one: 'Il vous reste %{count} mot', 
+                    other: 'Il vous reste %{count} mots' 
+                },
+                wordsAtLimit: 'Il vous reste 0 mot',
+                wordsOverLimit: { 
+                    one: 'Vous avez %{count} mot en trop', 
+                    other: 'Vous avez %{count} mots en trop' 
+                },
+                textareaDescription: { 
+                    other: '' 
+                },
+            },
+        },
+        exitThisPage: {
+            i18n: {
+                activated: 'Chargement.',
+                timedOut: 'Expiration de la sortie de cette page.',
+                pressTwoMoreTimes: 'Maj, appuyez 2 fois de plus pour sortir.',
+                pressOneMoreTime: 'Maj, appuyez 1 fois de plus pour sortir.',
+            },
+        },
+        passwordInput: {
+            i18n: {
+                showPassword: 'Afficher',
+                hidePassword: 'Masquer',
+                showPasswordAriaLabel: 'Afficher le mot de passe',
+                hidePasswordAriaLabel: 'Masquer le mot de passe',
+                passwordShownAnnouncement: 'Votre mot de passe est visible',
+                passwordHiddenAnnouncement: 'Votre mot de passe est masqué',
+            },
+        },
+        fileUpload: {
+            i18n: {
+                chooseFilesButton: 'Choisir un fichier',
+                dropInstruction: 'ou déposer un fichier',
+                noFileChosen: 'Aucun fichier choisi',
+                multipleFilesChosen: {
+                    one: '%{count} fichier choisi',
+                    other: '%{count} fichiers choisis',
+                },
+                enteredDropZone: 'Zone de dépôt entrée',
+                leftDropZone: 'Zone de dépôt quittée',
+            }
+        },
+    };
+{% else %}
+    const translations = {};
+{% endif %}
+{% endmacro %}
