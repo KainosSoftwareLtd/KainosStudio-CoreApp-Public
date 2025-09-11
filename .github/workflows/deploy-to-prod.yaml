@@ -1,0 +1,139 @@
+name: Deploy Kainoscore to Prod
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to deploy to prod (e.g. 1.10.1)'
+        required: true
+
+env:
+  AWS_REGION: eu-west-2                   
+  DEPLOYMENT_ROLE: arn:aws:iam::696793786584:role/GHA-CodeBuild-Service-Role                      
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ENVIRONMENT: prod
+
+permissions:
+  id-token: write 
+  contents: write 
+                                              
+jobs:
+  deploy:
+    name: Deploy to Prod
+    runs-on: ubuntu-latest
+    environment: Prod
+    outputs:
+      version: ${{ github.event.inputs.version }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4.2.1
+        with:
+          role-to-assume: ${{ env.DEPLOYMENT_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install Required Tools
+        run: |
+          npm install -g typescript
+          echo "NODE.JS version: $(node -v)"
+          echo "NPM version: $(npm -v)"
+          echo "AWS CLI version: $(aws --version)"
+
+      - name: Prepare Scripts
+        run: |
+          # Make sure the script file exists before making it executable
+          if [ ! -f "./pipeline_scripts/deploy-to-prod.sh" ]; then
+            echo "ERROR: deploy-to-prod.sh not found in pipeline_scripts directory"
+            ls -la ./pipeline_scripts/
+            exit 1
+          fi
+          
+          chmod +x ./pipeline_scripts/deploy-to-prod.sh
+          chmod +x ./pipeline_scripts/update-lambda-functions.sh
+          chmod +x ./pipeline_scripts/functions.sh
+          chmod +x ./pipeline_scripts/deploy-static-files-prod.sh
+          ls -la ./pipeline_scripts/
+
+      - name: Copy Artifacts and Deploy to Prod
+        run: |
+          echo "Starting prod deployment for version ${{ github.event.inputs.version }}"
+          ./pipeline_scripts/deploy-to-prod.sh "${{ github.event.inputs.version }}"
+          ./pipeline_scripts/deploy-static-files-prod.sh "${{ github.event.inputs.version }}"
+      
+      - name: Deployment Summary
+        run: |
+          echo "✅ Successfully deployed version v${{ github.event.inputs.version }} to prod"
+          echo "  • Deployment Time: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+          echo "  • Deployed by: ${{ github.actor }}"
+          
+          # Create an artifact with deployment details for tracking
+          mkdir -p deployment-info
+          cat > deployment-info/prod-deployment.txt << EOF
+          Version: v${{ github.event.inputs.version }}
+          Time: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          Actor: ${{ github.actor }}
+          Workflow Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          EOF
+          
+      - name: Upload Deployment Info
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: prod-deployment-v${{ github.event.inputs.version }}-${{ github.run_id }}
+          path: deployment-info
+          retention-days: 90
+
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: deploy
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Generate release notes
+        id: release-notes
+        run: |
+          echo "Generating release notes for v${{ needs.deploy.outputs.version }}"
+          
+          # Extract commits since last release
+          git fetch --tags
+          PREV_TAG=$(git describe --tags --abbrev=0 --match "v*" 2>/dev/null || echo "none")
+          
+          if [ "$PREV_TAG" == "none" ]; then
+            COMMITS=$(git log --pretty=format:"- %s (%h)" -10)
+          else
+            COMMITS=$(git log --pretty=format:"- %s (%h)" ${PREV_TAG}..HEAD)
+          fi
+          
+          # Create release notes file
+          cat > release-notes.md << EOF
+          # Release v${{ needs.deploy.outputs.version }}
+          
+          ## What's Changed
+          ${COMMITS}
+          
+          ## Deployment Information
+          - Deployed to: Prod
+          - Deployment time: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          - Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          EOF
+          
+          cat release-notes.md
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2.2.2
+        with:
+          name: "v${{ needs.deploy.outputs.version }} (Prod)"
+          tag_name: "v${{ needs.deploy.outputs.version }}"
+          body_path: release-notes.md
+          draft: false
+          prerelease: true
+          token: ${{ secrets.GITHUB_TOKEN }}
