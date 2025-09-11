@@ -52,6 +52,7 @@ jobs:
       run: docker pull grafana/k6:latest
       
     - name: Lambda warmup phase
+      continue-on-error: true
       run: |
         echo "🔥 Starting Lambda warmup to prevent cold start issues..."
         chmod 777 ${{ github.workspace }}/CoreDeployable/test/performance
