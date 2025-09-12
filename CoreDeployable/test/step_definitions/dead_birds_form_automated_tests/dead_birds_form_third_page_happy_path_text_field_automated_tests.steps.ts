@@ -21,7 +21,7 @@ When('I type in the {int} into each of the text fields', async function (amountO
   await driver.findElement(By.id('songbirds_garden_birds')).sendKeys(amountOfBirds);
   await driver.findElement(By.id('swans')).sendKeys(amountOfBirds);
   await driver.findElement(By.id('other_wild_birds')).sendKeys(amountOfBirds);
-  await driver.findElement(By.id('describe_dead_birds')).click();
+   await driver.findElement(By.id('describe_wild_birds')).click();
   await driver.findElement(By.id('gulls_seabirds_waders')).click();
   await driver.findElement(By.id('gulls')).sendKeys(amountOfBirds);
   await driver.findElement(By.id('seabirds')).sendKeys(amountOfBirds);
