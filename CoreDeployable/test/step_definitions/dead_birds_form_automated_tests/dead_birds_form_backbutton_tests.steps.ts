@@ -3,7 +3,7 @@ import { driver, port } from '../../common.js';
 import { By } from 'selenium-webdriver';
 import assert from 'assert';
 
-let formId: string = 'report-demo';  
+let formId: string = 'report-demo-test';  
 let page: string;
 
 When('I am currently on the {string} of the system but I want to go back', async function (pageId: string) {

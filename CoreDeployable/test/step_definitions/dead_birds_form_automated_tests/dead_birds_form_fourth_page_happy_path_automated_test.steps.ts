@@ -27,7 +27,7 @@ When('I select the continue at the end of the form', async function () {
 });
 
 Then('I should be directed to the {string} of our form', async function (pageId: string) {
-  formId = 'report-demo';
+  formId = 'report-demo-test';
   page = pageId;
   const expectedUrl: string = `http://localhost:${port}/${formId}/${page}`;
   const actualUrl = await driver.getCurrentUrl();

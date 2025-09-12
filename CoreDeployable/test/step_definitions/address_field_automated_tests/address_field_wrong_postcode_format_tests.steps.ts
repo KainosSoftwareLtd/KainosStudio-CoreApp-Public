@@ -14,6 +14,6 @@ When('I attempt to move on to the next page using the save and continue button w
 });
 
 Then('I should see a wrong format error pop up saying {string}', async function (errorMessage: string) {
-    const errorElement = await driver.findElement(By.xpath('/html/body/div/main/form/div/div/div/ul/li[2]/a')).getText();
+    const errorElement = await driver.findElement(By.xpath('//div[contains(@class,"govuk-error-summary")]//a')).getText();
     assert.strictEqual(errorElement, errorMessage);
 });

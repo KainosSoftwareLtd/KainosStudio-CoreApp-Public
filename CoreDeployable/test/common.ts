@@ -1,6 +1,6 @@
-import '../src/env.js';
 
 import * as http from 'http';
+import * as dotenv from 'dotenv';
 
 import { After, AfterAll, BeforeAll, setDefaultTimeout } from '@cucumber/cucumber';
 import { Builder, ThenableWebDriver } from 'selenium-webdriver';
@@ -14,6 +14,7 @@ export const port = 8888;
 export let driver: ThenableWebDriver;
 
 setDefaultTimeout(15 * 1000);
+dotenv.config();
 
 let server: http.Server;
 
@@ -149,6 +150,17 @@ function updateContentIfNeeded(fileContent: string, fileName: string) {
         return JSON.stringify(json, null, 2);
       } catch (e) {
         console.error(`Failed to update values in ${fileName}:`, e);
+        return fileContent;
+      }
+    }
+    case 'report-demo-test.json': {
+      try {
+        const json = JSON.parse(fileContent);
+        json.apiServiceDefinition.servers[0].url = `${apiUrl}/{basePath}`;
+        json.apiServiceDefinition.paths['/submit-form/service'].servers[0].url = `${apiUrl}/dev`;
+        return JSON.stringify(json, null, 2);
+      } catch (e) {
+        console.error('Failed to update values in multi-buttons-automatic-test.json:', e);
         return fileContent;
       }
     }
