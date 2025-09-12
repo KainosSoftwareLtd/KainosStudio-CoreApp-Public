@@ -2,17 +2,17 @@ import { AuthConfigurationService } from '../services/AuthConfigurationService.j
 import express from 'express';
 import { logger } from 'core-runtime';
 
-const skipUrls = ['/public/govuk-frontend.min.js.map'];
+const reservedResourceNames = ['assets', 'public', 'favicon.ico', '.well-known'];
 
 async function ensureLoggedInMiddleware(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     const path = req.originalUrl || req.url;
-    if (skipUrls.includes(path)) {
+    const serviceName = req.params.form;
+    if (reservedResourceNames.includes(serviceName)) {
       return next();
     }
 
     logger.debug(`Checking access to endpoint: ${path}`);
-    const serviceName = path.split('/')[1];
 
     const authService = new AuthConfigurationService();
 
