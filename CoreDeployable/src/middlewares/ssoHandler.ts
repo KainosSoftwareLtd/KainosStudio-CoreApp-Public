@@ -11,7 +11,7 @@ const strategy = new MultiSamlStrategy(
         return done(new Error('returnTo is empty'));
       }
 
-      const serviceName = request.session.returnTo.split('/')[1];
+      const serviceName = decodeURI(request.session.returnTo.split('/')[1]);
 
       logger.debug(`Getting saml options for: ${serviceName}`);
       const authService = new AuthConfigurationService();

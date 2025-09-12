@@ -13,7 +13,6 @@ async function ensureLoggedInMiddleware(req: express.Request, res: express.Respo
     }
 
     logger.debug(`Checking access to endpoint: ${path}`);
-
     const authService = new AuthConfigurationService();
 
     const hasConfig = await authService.hasConfiguration(serviceName);
