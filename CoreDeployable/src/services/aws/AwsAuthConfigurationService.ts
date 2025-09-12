@@ -15,6 +15,7 @@ export class AwsAuthConfigurationService implements IAuthConfigurationService {
 
   async hasAuthConfiguration(serviceName: string, fileName: string): Promise<boolean> {
     try {
+      serviceName = serviceName?.toLowerCase();
       const objectKey = `${serviceName}/${fileName}.json`;
       
       logger.debug(`Check if configuration file: ${objectKey} exists in bucket: ${this._bucketName}`);
@@ -40,6 +41,7 @@ export class AwsAuthConfigurationService implements IAuthConfigurationService {
   }
 
   async getAuthConfiguration(serviceName: string, fileName: string): Promise<object> {
+    serviceName = serviceName?.toLowerCase();
     const objectKey = `${serviceName}/${fileName}.json`;
     
     logger.debug(`Getting configuration file: ${objectKey} from bucket: ${this._bucketName}`);
