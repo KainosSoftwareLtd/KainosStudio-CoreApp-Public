@@ -3,7 +3,7 @@ Feature: GDS Compliant error messages
 Background: 
     Given I am located on the "gds-compliant-error-messages-test" form which has error messages complaint with GDS standards
     When I clear all of the fields on the page to have an empty canvas
-
+@torun
 Scenario: Text fields return the correct GDS compliant error
     When I leave the specific text field "<text_field>" empty
     And I press the save and continue button at the bottom of my page to submit the empty text field
