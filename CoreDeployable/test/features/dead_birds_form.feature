@@ -1,4 +1,3 @@
-@torun
 Feature: Dead birds form automated testing
    Scenario: User selects the start now button to start the form
    Given The user is on the form service with the id of "report-demo-test"
