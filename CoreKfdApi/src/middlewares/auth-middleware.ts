@@ -17,7 +17,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
     return;
   }
 
-  const bearerMatch = authHeader.match(/^Bearer\s+([A-Za-z0-9._-]*)$/);
+  const bearerMatch = authHeader.match(/^Bearer\s+([A-Za-z0-9._-]+)$/);
 
   if (!bearerMatch) {
     res.status(401).json({ message: 'Authorization header must be in format: Bearer <api-key>' });
@@ -27,10 +27,12 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
   const providedKey = bearerMatch[1];
 
   const isValidKey = apiKeys.some((validKey) => {
-    if (validKey.length !== providedKey.length) {
+    try {
+      return crypto.timingSafeEqual(Buffer.from(validKey, 'utf8'), Buffer.from(providedKey, 'utf8'));
+    } catch {
+      // timingSafeEqual throws if buffers have different lengths
       return false;
     }
-    return crypto.timingSafeEqual(Buffer.from(validKey, 'utf8'), Buffer.from(providedKey, 'utf8'));
   });
 
   if (!isValidKey) {
