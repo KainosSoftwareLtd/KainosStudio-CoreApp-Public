@@ -73,6 +73,10 @@ jobs:
       with:
         role-to-assume: ${{ env.DEPLOYMENT_ROLE }}
         aws-region: eu-west-2  
+        
+    - name: Test Lambda permissions
+      run: |
+        aws lambda list-functions --region eu-west-2 --max-items 5
 
     - name: Lambda warmup phase
       continue-on-error: true
