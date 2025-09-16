@@ -7,7 +7,6 @@ const WARMUP_DURATION_MS = parseInt(process.env.WARMUP_DURATION_MS || '30000');
 
 const lambdaClient = new LambdaClient({ 
   region: AWS_REGION,
-  // Credentials will be picked up from environment or IAM role
 });
 
 async function setProvisionedConcurrency(functionName, concurrency) {
