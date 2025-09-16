@@ -49,7 +49,7 @@ async function removeProvisionedConcurrency(functionName) {
   }
 }
 
-async function waitForProvisionedConcurrency(functionName, maxWaitTime = 60000) {
+async function waitForProvisionedConcurrency(functionName, maxWaitTime = 120000) {
   console.log(`Waiting for provisioned concurrency to become ready`);
   
   const startTime = Date.now();
