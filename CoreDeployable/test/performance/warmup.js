@@ -14,7 +14,7 @@ async function setProvisionedConcurrency(functionName, concurrency) {
   
   const command = new PutProvisionedConcurrencyConfigCommand({
     FunctionName: functionName,
-    Qualifier: '$LATEST',
+    Qualifier: 'CoreLambda',
     ProvisionedConcurrentExecutions: concurrency,
   });
 
