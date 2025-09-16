@@ -17,6 +17,10 @@ env:
   AWS_REGION: eu-west-2                   
   DEPLOYMENT_ROLE: arn:aws:iam::975050265283:role/GHA-Performance-Test-Role
 
+permissions:
+  id-token: write 
+  contents: write 
+  
 jobs:
   performance-tests:
     runs-on: ubuntu-latest
