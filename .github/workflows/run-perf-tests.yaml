@@ -110,6 +110,33 @@ jobs:
           --out csv=/test/test_results.csv \
           /test/script.js
 
+    - name: Lambda cleanup phase
+      if: always()
+      env:
+        PROVISIONED_CONCURRENCY: 5
+        WARMUP_DURATION_MS: 30000
+      run: |
+        # Set Lambda function name based on environment (same logic as warmup)
+        if [ "${{ github.event_name }}" = "schedule" ]; then
+          ENV="DEV"
+        else
+          ENV="${{ github.event.inputs.environment }}"
+        fi
+        
+        if [ "$ENV" = "STAGING" ]; then
+          LAMBDA_FUNCTION_NAME="kainoscore-app-staging"
+        else
+          LAMBDA_FUNCTION_NAME="kainoscore-app-dev"
+        fi
+        
+        export LAMBDA_FUNCTION_NAME
+        echo "Starting Lambda cleanup to remove provisioned concurrency..."
+        echo "Environment: $ENV"
+        echo "Lambda Function: $LAMBDA_FUNCTION_NAME"
+        cd CoreDeployable/test/performance
+        node cleanup.js
+        echo "Lambda cleanup completed!"
+
     - name: Upload test results
       uses: actions/upload-artifact@v4
       if: always()

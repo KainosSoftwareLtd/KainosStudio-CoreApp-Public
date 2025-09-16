@@ -29,27 +29,6 @@ async function setProvisionedConcurrency(functionName, concurrency) {
   }
 }
 
-async function removeProvisionedConcurrency(functionName) {
-  console.log(`Removing provisioned concurrency for function: ${functionName}`);
-  
-  const command = new DeleteProvisionedConcurrencyConfigCommand({
-    FunctionName: functionName,
-    Qualifier: LAMBDA_QUALIFIER,
-  });
-
-  try {
-    await lambdaClient.send(command);
-    console.log(`Provisioned concurrency removed successfully`);
-  } catch (error) {
-    if (error.name === 'ResourceNotFoundException') {
-      console.log(`No provisioned concurrency configuration found (already removed)`);
-    } else {
-      console.error(`Failed to remove provisioned concurrency:`, error.message);
-      throw error;
-    }
-  }
-}
-
 async function waitForProvisionedConcurrency(functionName, maxWaitTime = 180000) {
   console.log(`Waiting for provisioned concurrency to become ready`);
   
@@ -103,7 +82,7 @@ async function warmupLambda() {
     if (isReady) {
       console.log(`Keeping Lambda warm for ${WARMUP_DURATION_MS}ms...`);
       await new Promise(resolve => setTimeout(resolve, WARMUP_DURATION_MS));
-      console.log('Warmup completed!');
+      console.log('Warmup completed! Lambda is ready for performance tests.');
     } else {
       console.log('Proceeding with performance tests even though warmup didn\'t fully complete.');
     }
@@ -111,12 +90,6 @@ async function warmupLambda() {
   } catch (error) {
     console.error('Warmup failed:', error.message);
     throw error;
-  } finally {
-    try {
-      await removeProvisionedConcurrency(FUNCTION_NAME);
-    } catch (cleanupError) {
-      console.error('Failed to clean up provisioned concurrency:', cleanupError.message);
-    }
   }
 }
 
