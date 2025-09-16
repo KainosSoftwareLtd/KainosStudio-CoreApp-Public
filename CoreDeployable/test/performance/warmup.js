@@ -33,7 +33,7 @@ async function removeProvisionedConcurrency(functionName) {
   
   const command = new DeleteProvisionedConcurrencyConfigCommand({
     FunctionName: functionName,
-    Qualifier: '$LATEST',
+    Qualifier: 'CoreLambda',
   });
 
   try {
@@ -59,7 +59,7 @@ async function waitForProvisionedConcurrency(functionName, maxWaitTime = 60000) 
     try {
       const command = new GetProvisionedConcurrencyConfigCommand({
         FunctionName: functionName,
-        Qualifier: '$LATEST',
+        Qualifier: 'CoreLambda',
       });
       
       const response = await lambdaClient.send(command);
