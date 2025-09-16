@@ -4,6 +4,7 @@ const FUNCTION_NAME = process.env.LAMBDA_FUNCTION_NAME || 'kainoscore-app-dev';
 const PROVISIONED_CONCURRENCY = parseInt(process.env.PROVISIONED_CONCURRENCY || '5');
 const AWS_REGION = process.env.AWS_REGION || 'eu-west-2';
 const WARMUP_DURATION_MS = parseInt(process.env.WARMUP_DURATION_MS || '30000');
+const LAMBDA_QUALIFIER = 'CoreLambda';
 
 const lambdaClient = new LambdaClient({ 
   region: AWS_REGION,
@@ -14,7 +15,7 @@ async function setProvisionedConcurrency(functionName, concurrency) {
   
   const command = new PutProvisionedConcurrencyConfigCommand({
     FunctionName: functionName,
-    Qualifier: 'CoreLambda',
+    Qualifier: LAMBDA_QUALIFIER,
     ProvisionedConcurrentExecutions: concurrency,
   });
 
@@ -33,7 +34,7 @@ async function removeProvisionedConcurrency(functionName) {
   
   const command = new DeleteProvisionedConcurrencyConfigCommand({
     FunctionName: functionName,
-    Qualifier: 'CoreLambda',
+    Qualifier: LAMBDA_QUALIFIER,
   });
 
   try {
@@ -59,12 +60,19 @@ async function waitForProvisionedConcurrency(functionName, maxWaitTime = 180000)
     try {
       const command = new GetProvisionedConcurrencyConfigCommand({
         FunctionName: functionName,
-        Qualifier: 'CoreLambda',
+        Qualifier: LAMBDA_QUALIFIER,
       });
       
       const response = await lambdaClient.send(command);
       
-      if (response.Status === 'Ready') {
+            // DEBUG: Let's see the exact response
+      console.log('DEBUG - Full response:', JSON.stringify(response, null, 2));
+      console.log('DEBUG - Status value:', `"${response.Status}"`);
+      console.log('DEBUG - Status type:', typeof response.Status);
+      console.log('DEBUG - Status length:', response.Status ? response.Status.length : 'undefined');
+
+      const status = response.Status;
+      if (status === 'READY' || status === 'Ready' || status === 'ready') {
         console.log(`Provisioned concurrency is ready! Available: ${response.AllocatedProvisionedConcurrencyCount}`);
         return true;
       }
