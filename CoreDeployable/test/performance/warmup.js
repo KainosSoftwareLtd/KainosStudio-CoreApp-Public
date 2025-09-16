@@ -1,52 +1,106 @@
-import { check, sleep } from 'k6';
-import http from 'k6/http';
+import { LambdaClient, PutProvisionedConcurrencyConfigCommand, DeleteProvisionedConcurrencyConfigCommand, GetProvisionedConcurrencyConfigCommand } from '@aws-sdk/client-lambda';
 
-export const options = {
-  vus: 1,
-  iterations: 1,
-  thresholds: {
-    http_req_failed: ['rate<0.1'],
-  },
-};
+const FUNCTION_NAME = process.env.LAMBDA_FUNCTION_NAME || 'kainoscore-app-dev';
+const PROVISIONED_CONCURRENCY = parseInt(process.env.PROVISIONED_CONCURRENCY || '5');
+const AWS_REGION = process.env.AWS_REGION || 'eu-west-2';
+const WARMUP_DURATION_MS = parseInt(process.env.WARMUP_DURATION_MS || '30000');
+const LAMBDA_QUALIFIER = 'CoreLambda';
 
-const BROWSER_HEADERS_FOR_GET = {
-  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36',
+const lambdaClient = new LambdaClient({ 
+  region: AWS_REGION,
+});
+
+async function setProvisionedConcurrency(functionName, concurrency) {
+  console.log(`Setting provisioned concurrency to ${concurrency} for function: ${functionName}`);
+  
+  const command = new PutProvisionedConcurrencyConfigCommand({
+    FunctionName: functionName,
+    Qualifier: LAMBDA_QUALIFIER,
+    ProvisionedConcurrentExecutions: concurrency,
+  });
+
+  try {
+    const response = await lambdaClient.send(command);
+    console.log(`Provisioned concurrency set successfully:`, response.Status);
+    return response;
+  } catch (error) {
+    console.error(`Failed to set provisioned concurrency:`, error.message);
+    throw error;
+  }
 }
 
-export default function () {
-  const testUrl = __ENV.PERF_TEST_URL;
-  if (!testUrl) {
-    throw new Error('PERF_TEST_URL environment variable is not set');
-  }
-
-  console.log('🔥 Starting Lambda warmup...');
-
-  const warmupRequests = [];
-    const warmupEndpoints = [
-    'perf/Start%20page',
-    'perf/Enter%20Text%20Information', 
-    'perf/Enter%20a%20Number',
-    'perf/Select%20an%20Option',
-    'perf/Enter%20a%20Date'
-  ];
-
-  warmupEndpoints.forEach((endpoint, index) => {
-    const res = http.get(`${testUrl}/${endpoint}`, {
-      headers: BROWSER_HEADERS_FOR_GET,
-      tags: { name: `warmup_${index + 1}` }
-    });
-    
-    check(res, {
-      [`Warmup ${index + 1} - ${endpoint} responded`]: (r) => {
-        const success = r.status >= 200 && r.status < 500;
-        console.log(`${success ? '✅' : '❌'} Warmup ${index + 1}: Status ${r.status}, Duration: ${r.timings.duration}ms`);
-        return success;
+async function waitForProvisionedConcurrency(functionName, maxWaitTime = 180000) {
+  console.log(`Waiting for provisioned concurrency to become ready`);
+  
+  const startTime = Date.now();
+  const checkInterval = 10000;
+  
+  while (Date.now() - startTime < maxWaitTime) {
+    try {
+      const command = new GetProvisionedConcurrencyConfigCommand({
+        FunctionName: functionName,
+        Qualifier: LAMBDA_QUALIFIER,
+      });
+      
+      const response = await lambdaClient.send(command);
+      
+      if (response.Status === 'READY') {
+        console.log(`Provisioned concurrency is ready!`);
+        return true;
       }
+      else {
+        console.log(`Provisioned concurrency is not ready yet. Current status: ${response.Status}`);
+      }
+            
+      // Wait before next check
+      await new Promise(resolve => setTimeout(resolve, checkInterval));
+      
+    } catch (error) {
+      console.error(`Error checking provisioned concurrency status:`, error.message);
+      await new Promise(resolve => setTimeout(resolve, checkInterval));
+    }
+  }
+  
+  console.log(`Timeout waiting for provisioned concurrency to become ready`);
+  return false;
+}
+
+async function warmupLambda() {
+  if (!process.env.LAMBDA_FUNCTION_NAME) {
+    throw new Error('LAMBDA_FUNCTION_NAME environment variable is required');
+  }
+  
+  console.log('Starting Lambda warmup with provisioned concurrency...');
+  console.log(`Function: ${FUNCTION_NAME}`);
+  console.log(`Region: ${AWS_REGION}`);
+  console.log(`Provisioned Concurrency: ${PROVISIONED_CONCURRENCY}`);
+  
+  try {
+    await setProvisionedConcurrency(FUNCTION_NAME, PROVISIONED_CONCURRENCY);
+    const isReady = await waitForProvisionedConcurrency(FUNCTION_NAME);
+    
+    if (isReady) {
+      console.log(`Keeping Lambda warm for ${WARMUP_DURATION_MS}ms...`);
+      await new Promise(resolve => setTimeout(resolve, WARMUP_DURATION_MS));
+      console.log('Warmup completed! Lambda is ready for performance tests.');
+    } else {
+      console.log('Proceeding with performance tests even though warmup didn\'t fully complete.');
+    }
+    
+  } catch (error) {
+    console.error('Warmup failed:', error.message);
+    throw error;
+  }
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  warmupLambda()
+    .then(() => {
+      console.log('Warmup script completed successfully');
+      process.exit(0);
+    })
+    .catch((error) => {
+      console.error('Warmup script failed:', error);
+      process.exit(1);
     });
-    sleep(0.5);
-  });
-  
-  sleep(2);
-  
-  console.log('✅ Warmup phase finished - Lambdas should be ready!');
 }

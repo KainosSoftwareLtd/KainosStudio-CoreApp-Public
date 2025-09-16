@@ -5,7 +5,7 @@ on:
    - cron: '0 18 * * *'
   workflow_dispatch:
     inputs:
-      env:
+      environment:
         description: 'The environment to run the tests against'
         required: true
         default: 'DEV'
@@ -13,6 +13,13 @@ on:
         options:
           - DEV
           - STAGING
+env:
+  AWS_REGION: eu-west-2                   
+  PERF_TEST_ROLE: arn:aws:iam::975050265283:role/GHA-Performance-Test-Role
+
+permissions:
+  id-token: write 
+  contents: write 
 
 jobs:
   performance-tests:
@@ -28,7 +35,7 @@ jobs:
         if [ "${{ github.event_name }}" = "schedule" ]; then
           ENV="DEV"
         else
-          ENV="${{ github.event.inputs.env }}"
+          ENV="${{ github.event.inputs.environment }}"
         fi
         
         # Set the appropriate URL based on environment
@@ -48,28 +55,49 @@ jobs:
         echo "PERF_TEST_URL=$PERF_TEST_URL" >> $GITHUB_ENV
         echo "Running performance tests against: $PERF_TEST_URL (Environment: $ENV)"
                 
+    - name: Setup Node.js for warmup script
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install warmup script dependencies
+      run: |
+        cd CoreDeployable/test/performance
+        npm install
+        
     - name: Pull K6 Docker image
       run: docker pull grafana/k6:latest
-      
+
+    - name: Configure AWS credentials via OIDC
+      uses: aws-actions/configure-aws-credentials@v4.2.1
+      with:
+        role-to-assume: ${{ env.PERF_TEST_ROLE }}
+        aws-region: eu-west-2  
+
     - name: Lambda warmup phase
       continue-on-error: true
+      env:
+        PROVISIONED_CONCURRENCY: 5
+        WARMUP_DURATION_MS: 30000
       run: |
-        echo "🔥 Starting Lambda warmup to prevent cold start issues..."
-        chmod 777 ${{ github.workspace }}/CoreDeployable/test/performance
+        # Set Lambda function name based on environment
+        if [ "${{ github.event.inputs.environment }}" = "STAGING" ]; then
+          LAMBDA_FUNCTION_NAME="kainoscore-app-staging"
+        elif [ "${{ github.event.inputs.environment }}" = "DEV" ]; then
+          LAMBDA_FUNCTION_NAME="kainoscore-app-dev"
+        fi
         
-        docker run --rm \
-          -e PERF_TEST_URL="${PERF_TEST_URL}" \
-          -v ${{ github.workspace }}/CoreDeployable/test/performance:/test/ \
-          --user $(id -u):$(id -g) \
-          grafana/k6:latest run \
-          --insecure-skip-tls-verify \
-          /test/warmup.js
-          
-        echo "✅ Lambda warmup completed!"
+        export LAMBDA_FUNCTION_NAME
+        echo "Starting Lambda warmup with provisioned concurrency..."
+        echo "Environment: ${{ github.event.inputs.environment }}"
+        echo "Lambda Function: $LAMBDA_FUNCTION_NAME"
+        cd CoreDeployable/test/performance
+        node warmup.js
+        echo "Lambda warmup completed!"
       
     - name: Run K6 performance tests
       run: |
-        echo "🚀 Starting main performance tests against warmed Lambda instances..."
+        echo "Starting main performance tests against warmed Lambda instances..."
         
         docker run --rm \
           -p 5665:5665 \
@@ -82,10 +110,37 @@ jobs:
           --out csv=/test/test_results.csv \
           /test/script.js
 
+    - name: Lambda cleanup phase
+      if: always()
+      env:
+        PROVISIONED_CONCURRENCY: 5
+        WARMUP_DURATION_MS: 30000
+      run: |
+        # Set Lambda function name based on environment (same logic as warmup)
+        if [ "${{ github.event_name }}" = "schedule" ]; then
+          ENV="DEV"
+        else
+          ENV="${{ github.event.inputs.environment }}"
+        fi
+        
+        if [ "$ENV" = "STAGING" ]; then
+          LAMBDA_FUNCTION_NAME="kainoscore-app-staging"
+        else
+          LAMBDA_FUNCTION_NAME="kainoscore-app-dev"
+        fi
+        
+        export LAMBDA_FUNCTION_NAME
+        echo "Starting Lambda cleanup to remove provisioned concurrency..."
+        echo "Environment: $ENV"
+        echo "Lambda Function: $LAMBDA_FUNCTION_NAME"
+        cd CoreDeployable/test/performance
+        node cleanup.js
+        echo "Lambda cleanup completed!"
+
     - name: Upload test results
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: k6-performance-results-${{ github.event_name == 'schedule' && 'DEV' || github.event.inputs.env }}
+        name: k6-performance-results-${{ github.event_name == 'schedule' && 'DEV' || github.event.inputs.environment }}
         path: CoreDeployable/test/performance/test_results.csv
         retention-days: 30

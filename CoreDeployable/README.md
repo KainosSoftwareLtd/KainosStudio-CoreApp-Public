@@ -261,7 +261,7 @@ All performance testing scripts are located in the `test/performance` folder:
     - **Form submission performance**: POST request testing with realistic form data
     - **End-to-end user journey**: Complete workflow testing from initial page load through final submission
 - **warmup.js** - Lambda cold start mitigation script
-    - **Purpose**: Triggers Lambda instances before main performance tests to eliminate cold start delays
+    - **Purpose**: Provisions 5 Lambda instances before main performance tests to eliminate cold start delays
     - **Execution**: Sends 5 concurrent requests to warm up Lambda instances
     - **Integration**: Automatically executed in GitHub Actions workflow before main performance tests
 
