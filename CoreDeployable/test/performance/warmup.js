@@ -2,7 +2,7 @@ import { LambdaClient, PutProvisionedConcurrencyConfigCommand, DeleteProvisioned
 
 const FUNCTION_NAME = process.env.LAMBDA_FUNCTION_NAME || 'kainoscore-app-dev';
 const PROVISIONED_CONCURRENCY = parseInt(process.env.PROVISIONED_CONCURRENCY || '5');
-const AWS_REGION = process.env.AWS_REGION || 'us-west-2';
+const AWS_REGION = process.env.AWS_REGION || 'eu-west-2';
 const WARMUP_DURATION_MS = parseInt(process.env.WARMUP_DURATION_MS || '30000');
 
 const lambdaClient = new LambdaClient({ 
@@ -49,11 +49,11 @@ async function removeProvisionedConcurrency(functionName) {
   }
 }
 
-async function waitForProvisionedConcurrency(functionName, maxWaitTime = 120000) {
+async function waitForProvisionedConcurrency(functionName, maxWaitTime = 180000) {
   console.log(`Waiting for provisioned concurrency to become ready`);
   
   const startTime = Date.now();
-  const checkInterval = 5000;
+  const checkInterval = 10000;
   
   while (Date.now() - startTime < maxWaitTime) {
     try {
@@ -67,6 +67,9 @@ async function waitForProvisionedConcurrency(functionName, maxWaitTime = 120000)
       if (response.Status === 'Ready') {
         console.log(`Provisioned concurrency is ready! Available: ${response.AllocatedProvisionedConcurrencyCount}`);
         return true;
+      }
+      else {
+        console.log(`Provisioned concurrency is not ready yet. Current status: ${response.Status}`);
       }
             
       // Wait before next check

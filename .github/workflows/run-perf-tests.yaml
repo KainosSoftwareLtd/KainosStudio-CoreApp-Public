@@ -15,7 +15,7 @@ on:
           - STAGING
 env:
   AWS_REGION: eu-west-2                   
-  DEPLOYMENT_ROLE: arn:aws:iam::975050265283:role/GHA-Performance-Test-Role #todo rename
+  PERF_TEST_ROLE: arn:aws:iam::975050265283:role/GHA-Performance-Test-Role
 
 permissions:
   id-token: write 
@@ -71,7 +71,7 @@ jobs:
     - name: Configure AWS credentials via OIDC
       uses: aws-actions/configure-aws-credentials@v4.2.1
       with:
-        role-to-assume: ${{ env.DEPLOYMENT_ROLE }}
+        role-to-assume: ${{ env.PERF_TEST_ROLE }}
         aws-region: eu-west-2  
 
     - name: Lambda warmup phase
@@ -95,20 +95,20 @@ jobs:
         node warmup.js
         echo "Lambda warmup completed!"
       
-    # - name: Run K6 performance tests
-    #   run: |
-    #     echo "Starting main performance tests against warmed Lambda instances..."
+    - name: Run K6 performance tests
+      run: |
+        echo "Starting main performance tests against warmed Lambda instances..."
         
-    #     docker run --rm \
-    #       -p 5665:5665 \
-    #       -e K6_WEB_DASHBOARD=true \
-    #       -e PERF_TEST_URL="${PERF_TEST_URL}" \
-    #       -v ${{ github.workspace }}/CoreDeployable/test/performance:/test/ \
-    #       --user $(id -u):$(id -g) \
-    #       grafana/k6:latest run \
-    #       --insecure-skip-tls-verify \
-    #       --out csv=/test/test_results.csv \
-    #       /test/script.js
+        docker run --rm \
+          -p 5665:5665 \
+          -e K6_WEB_DASHBOARD=true \
+          -e PERF_TEST_URL="${PERF_TEST_URL}" \
+          -v ${{ github.workspace }}/CoreDeployable/test/performance:/test/ \
+          --user $(id -u):$(id -g) \
+          grafana/k6:latest run \
+          --insecure-skip-tls-verify \
+          --out csv=/test/test_results.csv \
+          /test/script.js
 
     - name: Upload test results
       uses: actions/upload-artifact@v4
