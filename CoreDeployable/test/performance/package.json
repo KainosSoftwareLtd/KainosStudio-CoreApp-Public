@@ -1,0 +1,9 @@
+{
+  "name": "lambda-warmup-script",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "AWS Lambda warmup script using provisioned concurrency",
+  "dependencies": {
+    "@aws-sdk/client-lambda": "^3.0.0"
+  }
+}

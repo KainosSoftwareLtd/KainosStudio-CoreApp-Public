@@ -48,28 +48,46 @@ jobs:
         echo "PERF_TEST_URL=$PERF_TEST_URL" >> $GITHUB_ENV
         echo "Running performance tests against: $PERF_TEST_URL (Environment: $ENV)"
                 
+    - name: Setup Node.js for warmup script
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install warmup script dependencies
+      run: |
+        cd CoreDeployable/test/performance
+        npm install
+        
     - name: Pull K6 Docker image
       run: docker pull grafana/k6:latest
       
     - name: Lambda warmup phase
       continue-on-error: true
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: eu-west-2
+        PROVISIONED_CONCURRENCY: 5
+        WARMUP_DURATION_MS: 30000
       run: |
-        echo "🔥 Starting Lambda warmup to prevent cold start issues..."
-        chmod 777 ${{ github.workspace }}/CoreDeployable/test/performance
+        # Set Lambda function name based on environment
+        if [ "${{ env.ENVIRONMENT }}" = "STAGING" ]; then
+          LAMBDA_FUNCTION_NAME="kainoscore-app-staging"
+        elif [ "${{ env.ENVIRONMENT }}" = "DEV" ]; then
+          LAMBDA_FUNCTION_NAME="kainoscore-app-dev"
+        fi
         
-        docker run --rm \
-          -e PERF_TEST_URL="${PERF_TEST_URL}" \
-          -v ${{ github.workspace }}/CoreDeployable/test/performance:/test/ \
-          --user $(id -u):$(id -g) \
-          grafana/k6:latest run \
-          --insecure-skip-tls-verify \
-          /test/warmup.js
-          
-        echo "✅ Lambda warmup completed!"
+        export LAMBDA_FUNCTION_NAME
+        echo "Starting Lambda warmup with provisioned concurrency..."
+        echo "Environment: ${{ env.ENVIRONMENT }}"
+        echo "Lambda Function: $LAMBDA_FUNCTION_NAME"
+        cd CoreDeployable/test/performance
+        node warmup.js
+        echo "Lambda warmup completed!"
       
     - name: Run K6 performance tests
       run: |
-        echo "🚀 Starting main performance tests against warmed Lambda instances..."
+        echo "Starting main performance tests against warmed Lambda instances..."
         
         docker run --rm \
           -p 5665:5665 \
