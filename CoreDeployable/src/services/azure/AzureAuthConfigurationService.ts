@@ -19,6 +19,7 @@ export class AzureAuthConfigurationService implements IAuthConfigurationService 
   async hasAuthConfiguration(serviceName: string, fileName: string): Promise<boolean> {
     try {
       const blobServiceClient = new BlobServiceClient(this._storageAccountUrl, this._credential);
+      serviceName = serviceName?.toLowerCase();
       const blobName = `${serviceName}/${fileName}.json`;
       
       logger.debug(`Check if configuration file: ${blobName} exists in container: ${this._containerName}`);
@@ -44,6 +45,7 @@ export class AzureAuthConfigurationService implements IAuthConfigurationService 
 
   async getAuthConfiguration(serviceName: string, fileName: string): Promise<object> {
     const blobServiceClient = new BlobServiceClient(this._storageAccountUrl, this._credential);
+    serviceName = serviceName?.toLowerCase();
     const blobName = `${serviceName}/${fileName}.json`;
     
     logger.debug(`Getting configuration file: ${blobName} from container: ${this._containerName}`);

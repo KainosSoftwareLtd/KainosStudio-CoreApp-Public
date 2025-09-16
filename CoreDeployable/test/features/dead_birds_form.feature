@@ -1,6 +1,6 @@
 Feature: Dead birds form automated testing
    Scenario: User selects the start now button to start the form
-   Given The user is on the form service with the id of "report-demo"
+   Given The user is on the form service with the id of "report-demo-test"
     When I choose to click the start now button to begin the dead birds form
     Then I should be redirected to "firstPage" of this form
 
@@ -11,10 +11,10 @@ Feature: Dead birds form automated testing
    Scenario: User selects a radio field and continues on with the form
      When I select a radio field 
      And I click the button to continue
-     Then I should be taken to the second page of the "report-demo" with the page id "secondPage"
+     Then I should be taken to the second page of the "report-demo-test" with the page id "secondPage"
 
    Scenario: User doesn't select radio fields on the second page
-    When I confirm I am on the "secondPage" of the form service "report-demo"
+    When I confirm I am on the "secondPage" of the form service "report-demo-test"
     And I do not fill out the radio fields on the specified page and click the continue button
     Then I should see an error at the top of the page "There is a problem"
 
@@ -41,7 +41,7 @@ Feature: Dead birds form automated testing
    Scenario: User selects appropriate radio fields and continues on to the next page
     When I select all the radio fields on the page
     And I press the continue button at the bottom of the page
-    Then I should be taken to the next page "thirdPage" on the "report-demo" form
+    Then I should be taken to the next page "thirdPage" on the "report-demo-test" form
 
    Scenario: User inputs invalid data into all of the text fields referring to the no. of certain types of birds
     When I type in the <wrong format> into a text field
@@ -56,7 +56,7 @@ Feature: Dead birds form automated testing
    Scenario: User inputs valid data into all of the text fields referring to the no. of certain types of birds
     When I type in the <correct format> into each of the text fields
     And I press the continue button
-    Then I should be taken to the "fourthPage" page of the "report-demo" form
+    Then I should be taken to the "fourthPage" page of the "report-demo-test" form
 
     Examples:
     | correct format |
@@ -91,22 +91,22 @@ Feature: Dead birds form automated testing
     Then I should be directed to the "fifthPage" of our form
 
    Scenario: User wants to change the country of their dead bird find before submission
-    When I am currently on the "fifthPage" of the "report-demo" form
+    When I am currently on the "fifthPage" of the "report-demo-test" form
     And I click the link to change my answer
     Then I should be taken to the "firstPage" where i can change my answer
 
    Scenario: User wants to change the place where the bird was found before submission
-    When I am located on the "fifthPage" of the "report-demo" form where i can see the summary
+    When I am located on the "fifthPage" of the "report-demo-test" form where i can see the summary
     And I click on the link to change where the dead bird is located
     Then I should be taken to the "secondPage" where i can change the location of the dead bird
 
    Scenario: User wants to change the amount of dead birds found
-    When I am located on the "fifthPage" on the "report-demo" form where the summary of my answers can be seen 
+    When I am located on the "fifthPage" on the "report-demo-test" form where the summary of my answers can be seen 
     And I click on a link to change one of my answers
     Then I should be taken to the "thirdPage" where i can change how many dead birds I found
 
    Scenario: User submits the whole form
-    When I am on the "fifthPage" on the "report-demo" form and I am happy with all my answers
+    When I am on the "fifthPage" on the "report-demo-test" form and I am happy with all my answers
     And I press the button to submit all my answers on the bottom of the page
     Then I should see "Submission complete" and see that my form has been submitted 
 
