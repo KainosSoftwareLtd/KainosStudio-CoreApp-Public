@@ -65,15 +65,8 @@ async function waitForProvisionedConcurrency(functionName, maxWaitTime = 180000)
       
       const response = await lambdaClient.send(command);
       
-            // DEBUG: Let's see the exact response
-      console.log('DEBUG - Full response:', JSON.stringify(response, null, 2));
-      console.log('DEBUG - Status value:', `"${response.Status}"`);
-      console.log('DEBUG - Status type:', typeof response.Status);
-      console.log('DEBUG - Status length:', response.Status ? response.Status.length : 'undefined');
-
-      const status = response.Status;
-      if (status === 'READY' || status === 'Ready' || status === 'ready') {
-        console.log(`Provisioned concurrency is ready! Available: ${response.AllocatedProvisionedConcurrencyCount}`);
+      if (response.Status === 'READY') {
+        console.log(`Provisioned concurrency is ready! Available: ${response.AllocatedProvisionedConcurrencyExecutions}`);
         return true;
       }
       else {
