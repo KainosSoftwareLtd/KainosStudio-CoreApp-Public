@@ -5,7 +5,7 @@ on:
    - cron: '0 18 * * *'
   workflow_dispatch:
     inputs:
-      env:
+      environment:
         description: 'The environment to run the tests against'
         required: true
         default: 'DEV'
@@ -13,6 +13,9 @@ on:
         options:
           - DEV
           - STAGING
+env:
+  AWS_REGION: eu-west-2                   
+  DEPLOYMENT_ROLE: todo                     
 
 jobs:
   performance-tests:
@@ -28,7 +31,7 @@ jobs:
         if [ "${{ github.event_name }}" = "schedule" ]; then
           ENV="DEV"
         else
-          ENV="${{ github.event.inputs.env }}"
+          ENV="${{ github.event.inputs.environment }}"
         fi
         
         # Set the appropriate URL based on environment
@@ -60,26 +63,29 @@ jobs:
         
     - name: Pull K6 Docker image
       run: docker pull grafana/k6:latest
-      
+
+    - name: Configure AWS credentials via OIDC
+      uses: aws-actions/configure-aws-credentials@v4.2.1
+      with:
+        role-to-assume: ${{ env.DEPLOYMENT_ROLE }}
+        aws-region: eu-west-2  
+
     - name: Lambda warmup phase
       continue-on-error: true
       env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: eu-west-2
         PROVISIONED_CONCURRENCY: 5
         WARMUP_DURATION_MS: 30000
       run: |
         # Set Lambda function name based on environment
-        if [ "${{ env.ENVIRONMENT }}" = "STAGING" ]; then
+        if [ "${{ github.event.inputs.environment }}" = "STAGING" ]; then
           LAMBDA_FUNCTION_NAME="kainoscore-app-staging"
-        elif [ "${{ env.ENVIRONMENT }}" = "DEV" ]; then
+        elif [ "${{ github.event.inputs.environment }}" = "DEV" ]; then
           LAMBDA_FUNCTION_NAME="kainoscore-app-dev"
         fi
         
         export LAMBDA_FUNCTION_NAME
         echo "Starting Lambda warmup with provisioned concurrency..."
-        echo "Environment: ${{ env.ENVIRONMENT }}"
+        echo "Environment: ${{ github.event.inputs.environment }}"
         echo "Lambda Function: $LAMBDA_FUNCTION_NAME"
         cd CoreDeployable/test/performance
         node warmup.js
@@ -104,6 +110,6 @@ jobs:
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: k6-performance-results-${{ github.event_name == 'schedule' && 'DEV' || github.event.inputs.env }}
+        name: k6-performance-results-${{ github.event_name == 'schedule' && 'DEV' || github.event.inputs.environment }}
         path: CoreDeployable/test/performance/test_results.csv
         retention-days: 30
