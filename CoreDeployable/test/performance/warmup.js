@@ -82,7 +82,7 @@ async function waitForProvisionedConcurrency(functionName, maxWaitTime = 60000) 
   return false;
 }
 
-export default async function () {
+async function warmupLambda() {
   if (!process.env.LAMBDA_FUNCTION_NAME) {
     throw new Error('LAMBDA_FUNCTION_NAME environment variable is required');
   }
@@ -114,4 +114,16 @@ export default async function () {
       console.error('Failed to clean up provisioned concurrency:', cleanupError.message);
     }
   }
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  warmupLambda()
+    .then(() => {
+      console.log('Warmup script completed successfully');
+      process.exit(0);
+    })
+    .catch((error) => {
+      console.error('Warmup script failed:', error);
+      process.exit(1);
+    });
 }
