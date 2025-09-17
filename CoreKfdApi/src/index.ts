@@ -1,6 +1,7 @@
 import { deleteKfd, putKfd } from './controllers/kfd-controller.js';
 
 import { appLogger } from './logConfig.js';
+import { authMiddleware } from './middlewares/auth-middleware.js';
 import { contentTypeValidator } from './middlewares/content-type-validator.js';
 import { customErrorHandler } from './middlewares/error-handler.js';
 import express from 'express';
@@ -17,6 +18,7 @@ export function createApp(): express.Express {
   app.use(nocache());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use(authMiddleware);
   app.use(contentTypeValidator);
   app.use(methodValidator);
 
@@ -25,9 +27,9 @@ export function createApp(): express.Express {
 
   app.use((req, res) => {
     appLogger.warn('req path: ' + req.originalUrl);
-    res.status(404).json({message: 'not known path:' + req.originalUrl});
+    res.status(404).json({ message: 'not known path:' + req.originalUrl });
   });
-  
+
   app.use(customErrorHandler);
 
   return app;

@@ -28,6 +28,13 @@ const envConfig = {
     }
     return provider;
   },
+  get apiKeys() {
+    const keys = process.env.API_KEYS;
+    if (!keys || keys.trim() === '') {
+      return [];
+    }
+    return keys.split(',').map(key => key.trim()).filter(key => key.length > 0);
+  },
 };
 
 export default envConfig;
