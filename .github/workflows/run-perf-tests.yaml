@@ -81,15 +81,21 @@ jobs:
         WARMUP_DURATION_MS: 30000
       run: |
         # Set Lambda function name based on environment
-        if [ "${{ github.event.inputs.environment }}" = "STAGING" ]; then
+        if [ "${{ github.event_name }}" = "schedule" ]; then
+          ENV="DEV"
+        else
+          ENV="${{ github.event.inputs.environment }}"
+        fi
+        
+        if [ "$ENV" = "STAGING" ]; then
           LAMBDA_FUNCTION_NAME="kainoscore-app-staging"
-        elif [ "${{ github.event.inputs.environment }}" = "DEV" ]; then
+        else
           LAMBDA_FUNCTION_NAME="kainoscore-app-dev"
         fi
         
         export LAMBDA_FUNCTION_NAME
         echo "Starting Lambda warmup with provisioned concurrency..."
-        echo "Environment: ${{ github.event.inputs.environment }}"
+        echo "Environment: $ENV"
         echo "Lambda Function: $LAMBDA_FUNCTION_NAME"
         cd CoreDeployable/test/performance
         node warmup.js
