@@ -17,7 +17,7 @@ export function createApp(): express.Express {
   app.use(securityHeaders);
   app.use(nocache());
   app.use(express.json({ limit: '6MB' }));
-  app.use(express.urlencoded({ extended: true }));
+  app.use(express.urlencoded({ extended: true, limit: '6MB' }));
   app.use(authMiddleware);
   app.use(contentTypeValidator);
   app.use(methodValidator);
