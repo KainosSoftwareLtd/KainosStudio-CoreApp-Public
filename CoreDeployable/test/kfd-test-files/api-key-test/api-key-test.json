@@ -1,0 +1,249 @@
+{
+  "name": "API Key Integration Test Form",
+  "firstPage": "firstPage",
+  "productName": "example.com",
+  "homePageUrl": "https://example.com",
+  "cookieSecret": "0123456789-abc",
+  "pages": [
+    {
+      "id": "firstPage",
+      "nextPage": "completed",
+      "preRequisiteData": null,
+      "validation": null,
+      "elements": [
+        {
+          "type": "Row2",
+          "elements": [
+            {
+              "type": "Column",
+              "columnWidth": "two-thirds",
+              "elements": [
+              {
+                "type": "Form",
+                "classes": "",
+                "elements": [
+                  {
+                    "type": "ErrorList",
+                    "title": "There is a problem"
+                  },
+                  {
+                    "type": "TextField",
+                    "name": "f_text_1",
+                    "displayText": "Name",
+                    "autocomplete": null,
+                    "validation": {
+                      "regex": "^[a-zA-Z ]*$",
+                      "error": "Only text allowed"
+                    },
+                    "classes": null,
+                    "hint": ""
+                  },
+                  {
+                    "type": "TextField",
+                    "name": "f_email_1",
+                    "displayText": "Email",
+                    "autocomplete": null,
+                    "validation": {
+                      "regex": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
+                      "error": "Enter a valid email address"
+                    },
+                    "classes": null,
+                    "hint": ""
+                  },
+                  {
+                    "type": "SubmitButton",
+                    "displayText": "Submit with API Key",
+                    "action": {
+                      "value": "submitWithApiKey",
+                      "operation": "submitFormWithApiKey"
+                    },
+                    "classes": "govuk-button"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "apiMappings": {
+    "submitFormWithApiKey": {
+      "request": {
+        "_SESSION-ID_": "_SESSION-ID_",
+        "f_text_1": "applicant.name", 
+        "f_email_1": "applicant.email"
+      },
+      "response": {
+        "title": "message",
+        "fieldNames": "errors[*].field",
+        "fieldErrorMessages": "errors[*].message",
+        "numErrors": "length(errors)"
+      },
+      "apiKey": "demo-api-key-abc123xyz"
+    }
+  },
+  "apiServiceDefinition": {
+    "openapi": "3.0.1",
+    "info": {
+      "title": "form-submission-API-with-api-key",
+      "version": "2024-09-22T12:00:00Z"
+    },
+    "servers": [
+      {
+        "url": "https://api.example.com/{basePath}",
+        "variables": {
+          "basePath": {
+            "default": "v1"
+          }
+        }
+      }
+    ],
+    "paths": {
+      "/submit-form": {
+        "post": {
+          "summary": "Submit form data with API key authentication",
+          "operationId": "submitFormWithApiKey",
+          "security": [
+            {
+              "ApiKeyAuth": []
+            }
+          ],
+          "requestBody": {
+            "description": "Form data to be submitted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FormSubmission"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successful submission",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/SuccessResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Validation error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized - Invalid or missing API key",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden - API key lacks required permissions",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "ApiKeyAuth": {
+          "type": "apiKey",
+          "in": "header", 
+          "name": "X-API-Key"
+        }
+      },
+      "schemas": {
+        "FormSubmission": {
+          "type": "object",
+          "properties": {
+            "_SESSION-ID_": {
+              "type": "string"
+            },
+            "applicant": {
+              "$ref": "#/components/schemas/Applicant"
+            }
+          }
+        },
+        "Applicant": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            }
+          }
+        },
+        "SuccessResponse": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "referenceNumber": {
+              "type": "string"
+            }
+          }
+        },
+        "ErrorResponse": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "errors": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/FieldError"
+              }
+            }
+          }
+        },
+        "FieldError": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

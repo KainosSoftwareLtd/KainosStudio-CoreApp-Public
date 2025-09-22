@@ -314,19 +314,29 @@ export class Creator {
         logger.info('External API endpoint: ' + JSON.stringify(endpoint));
         logger.debug('External API request: ' + JSON.stringify(requestModel));
 
+        const headers: Record<string, string> = {
+          'Content-Type': 'application/json',
+        };
+
+        if (apiMapping.apiKey) {
+          headers['X-API-Key'] = apiMapping.apiKey;
+          logger.info(`API key provided for operation: ${pageAction.operation}`);
+        } else {
+          logger.debug(`No API key provided for operation: ${pageAction.operation}`);
+        }
+        
         const response = await fetch(endpoint.url, {
           method: endpoint.method,
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers,
           body: JSON.stringify(requestModel),
         });
 
         const responseBody = await response.json();
+
         logger.debug('External API response: ' + response.status + JSON.stringify(responseBody));
 
         if (response.status >= 400) {
-          logger.info('Error from external service: ' + response.status + ' ' + response.statusText);
+          logger.error('Error from external service: ' + response.status + ' ' + response.statusText);
 
           // set error response to context
           context.service.errorResponse = responseBody;
