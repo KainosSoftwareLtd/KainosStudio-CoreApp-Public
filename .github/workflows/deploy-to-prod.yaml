@@ -34,6 +34,7 @@ jobs:
         with:
           role-to-assume: ${{ env.DEPLOYMENT_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
+          audience: sts.amazonaws.com
 
       - name: Install Required Tools
         run: |
