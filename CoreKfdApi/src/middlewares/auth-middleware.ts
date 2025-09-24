@@ -10,21 +10,21 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
     return next();
   }
 
-  const authHeader = req.headers.authorization;
+  const apiKeyHeader = Object.keys(req.headers).find(key => 
+    key.toLowerCase() === 'x-api-key'
+  );
 
-  if (!authHeader) {
-    res.status(401).json({ message: 'Authorization header is required' });
+  if (!apiKeyHeader) {
+    res.status(401).json({ message: 'x-api-key header is required' });
     return;
   }
 
-  const bearerMatch = authHeader.match(/^Bearer\s+([A-Za-z0-9._-]+)$/);
+  const providedKey = req.headers[apiKeyHeader] as string;
 
-  if (!bearerMatch) {
-    res.status(401).json({ message: 'Authorization header must be in format: Bearer <api-key>' });
+  if (!providedKey || typeof providedKey !== 'string') {
+    res.status(401).json({ message: 'x-api-key header must contain a valid API key' });
     return;
   }
-
-  const providedKey = bearerMatch[1];
 
   const isValidKey = apiKeys.some((validKey) => {
     try {
