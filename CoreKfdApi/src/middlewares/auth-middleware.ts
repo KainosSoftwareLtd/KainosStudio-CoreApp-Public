@@ -10,19 +10,9 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
     return next();
   }
 
-  const apiKeyHeader = Object.keys(req.headers).find(key => 
-    key.toLowerCase() === 'x-api-key'
-  );
-
-  if (!apiKeyHeader) {
+  const providedKey = req.get('x-api-key');
+  if (!providedKey) {
     res.status(401).json({ message: 'x-api-key header is required' });
-    return;
-  }
-
-  const providedKey = req.headers[apiKeyHeader] as string;
-
-  if (!providedKey || typeof providedKey !== 'string') {
-    res.status(401).json({ message: 'x-api-key header must contain a valid API key' });
     return;
   }
 
