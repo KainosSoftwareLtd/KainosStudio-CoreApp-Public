@@ -18,60 +18,61 @@
               "type": "Column",
               "columnWidth": "two-thirds",
               "elements": [
-              {
-                "type": "Form",
-                "classes": "",
-                "elements": [
-                  {
-                    "type": "ErrorList",
-                    "title": "There is a problem"
-                  },
-                  {
-                    "type": "TextField",
-                    "name": "f_text_1",
-                    "displayText": "Name",
-                    "autocomplete": null,
-                    "validation": {
-                      "regex": "^[a-zA-Z ]*$",
-                      "error": "Only text allowed"
+                {
+                  "type": "Form",
+                  "classes": "",
+                  "elements": [
+                    {
+                      "type": "ErrorList",
+                      "title": "There is a problem"
                     },
-                    "classes": null,
-                    "hint": ""
-                  },
-                  {
-                    "type": "TextField",
-                    "name": "f_email_1",
-                    "displayText": "Email",
-                    "autocomplete": null,
-                    "validation": {
-                      "regex": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
-                      "error": "Enter a valid email address"
+                    {
+                      "type": "TextField",
+                      "name": "f_text_1",
+                      "displayText": "Name",
+                      "autocomplete": null,
+                      "validation": {
+                        "regex": "^[a-zA-Z ]*$",
+                        "error": "Only text allowed"
+                      },
+                      "classes": null,
+                      "hint": ""
                     },
-                    "classes": null,
-                    "hint": ""
-                  },
-                  {
-                    "type": "SubmitButton",
-                    "displayText": "Submit with API Key",
-                    "action": {
-                      "value": "submitWithApiKey",
-                      "operation": "submitFormWithApiKey"
+                    {
+                      "type": "TextField",
+                      "name": "f_email_1",
+                      "displayText": "Email",
+                      "autocomplete": null,
+                      "validation": {
+                        "regex": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
+                        "error": "Enter a valid email address"
+                      },
+                      "classes": null,
+                      "hint": ""
                     },
-                    "classes": "govuk-button"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
+                    {
+                      "type": "SubmitButton",
+                      "displayText": "Submit with API Key",
+                      "action": {
+                        "value": "submitWithApiKey",
+                        "operation": "submitFormWithApiKey"
+                      },
+                      "classes": "govuk-button"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
   "apiMappings": {
     "submitFormWithApiKey": {
       "request": {
         "_SESSION-ID_": "_SESSION-ID_",
-        "f_text_1": "applicant.name", 
+        "f_text_1": "applicant.name",
         "f_email_1": "applicant.email"
       },
       "response": {
@@ -179,7 +180,7 @@
       "securitySchemes": {
         "ApiKeyAuth": {
           "type": "apiKey",
-          "in": "header", 
+          "in": "header",
           "name": "X-API-Key"
         }
       },

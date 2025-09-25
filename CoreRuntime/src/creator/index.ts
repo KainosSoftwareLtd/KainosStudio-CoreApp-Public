@@ -1,8 +1,8 @@
 import { Action, FileUploadElement, ValueElement } from '../service/Element.js';
 import { RenderControl, Renderer } from '../rendering/index.js';
 import { allowedOrigin, checkOrigin } from './CheckOriginMiddleware.js';
+import { apiKeyHeaderKeyName, langKey, referenceNumberFieldName, sessionIdKey } from '../consts.js';
 import { getErrorPageService, getNotFoundService } from '../service/DefinedKfdServices.js';
-import { langKey, referenceNumberFieldName, sessionIdKey } from '../consts.js';
 
 import { ConditionalNextPage } from '../service/Page.js';
 import { Context } from '../context/index.js';
@@ -319,12 +319,12 @@ export class Creator {
         };
 
         if (apiMapping.apiKey) {
-          headers['X-API-Key'] = apiMapping.apiKey;
+          headers[apiKeyHeaderKeyName] = apiMapping.apiKey;
           logger.info(`API key provided for operation: ${pageAction.operation}`);
         } else {
           logger.debug(`No API key provided for operation: ${pageAction.operation}`);
         }
-        
+
         const response = await fetch(endpoint.url, {
           method: endpoint.method,
           headers,
