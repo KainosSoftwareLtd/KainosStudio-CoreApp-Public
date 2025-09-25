@@ -77,6 +77,7 @@ export interface ApiMappings {
 export interface FormMappings {
   request: RequestMappings;
   response: ResponseMappings;
+  apiKey?: string;
 }
 
 export interface ResponseMappings {
