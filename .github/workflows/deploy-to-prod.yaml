@@ -9,7 +9,8 @@ on:
 
 env:
   AWS_REGION: eu-west-2                   
-  DEPLOYMENT_ROLE: arn:aws:iam::696793786584:role/GHA-CodeBuild-Service-Role                      
+  NON_PROD_DEPLOYMENT_ROLE: arn:aws:iam::975050265283:role/GHA-CodeBuild-Service-Role
+  PROD_DEPLOYMENT_ROLE: arn:aws:iam::696793786584:role/GHA-CodeBuild-Service-Role                      
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   ENVIRONMENT: prod
 
@@ -29,10 +30,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Configure AWS credentials via OIDC
+      - name: Configure AWS credentials for Prod
         uses: aws-actions/configure-aws-credentials@v4.2.1
         with:
-          role-to-assume: ${{ env.DEPLOYMENT_ROLE }}
+          role-to-assume: ${{ env.PROD_DEPLOYMENT_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Install Required Tools
@@ -54,25 +55,92 @@ jobs:
           chmod +x ./pipeline_scripts/deploy-to-prod.sh
           chmod +x ./pipeline_scripts/update-lambda-functions.sh
           chmod +x ./pipeline_scripts/functions.sh
-          chmod +x ./pipeline_scripts/deploy-static-files-prod.sh
           ls -la ./pipeline_scripts/
 
       - name: Copy Artifacts and Deploy to Prod
         run: |
           echo "Starting prod deployment for version ${{ github.event.inputs.version }}"
           ./pipeline_scripts/deploy-to-prod.sh "${{ github.event.inputs.version }}"
-          ./pipeline_scripts/deploy-static-files-prod.sh "${{ github.event.inputs.version }}"
-      
+
+  deploy-static-files:
+    name: Deploy Static Files to Prod
+    runs-on: ubuntu-latest
+    needs: deploy
+    environment: Prod
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials for Non-Prod (Staging)
+        uses: aws-actions/configure-aws-credentials@v4.2.1
+        with:
+          role-to-assume: ${{ env.NON_PROD_DEPLOYMENT_ROLE }}
+          aws-region: us-east-1
+          role-session-name: staging-access
+
+      - name: Download staging files
+        run: |
+          mkdir -p temp-static-files
+          chmod +x ./pipeline_scripts/functions.sh
+          cd ./pipeline_scripts
+          source ./functions.sh
+          s3_bucket_static_files
+          STAGING_BUCKET="$S3-staging"
+          echo "Downloading from staging bucket: $STAGING_BUCKET"
+          aws s3 sync s3://$STAGING_BUCKET/ ../temp-static-files/
+
+      - name: Configure AWS credentials for Prod
+        uses: aws-actions/configure-aws-credentials@v4.2.1
+        with:
+          role-to-assume: ${{ env.PROD_DEPLOYMENT_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Deploy static files to prod
+        run: |
+          chmod +x ./pipeline_scripts/functions.sh
+          cd ./pipeline_scripts
+          source ./functions.sh
+          s3_bucket_static_files
+          PROD_BUCKET="$S3-prod"
+          echo "Uploading to prod bucket: $PROD_BUCKET"
+          
+          # Count files
+          file_count=$(find ../temp-static-files -type f | wc -l)
+          echo "Found $file_count files to upload"
+          
+          # Upload files
+          aws s3 sync ../temp-static-files/ s3://$PROD_BUCKET/ --delete
+          
+          # Verify
+          prod_count=$(aws s3 ls s3://$PROD_BUCKET/ --recursive | wc -l)
+          echo "Files in prod bucket: $prod_count"
+          
+          # Tag bucket
+          aws s3api put-bucket-tagging --bucket $PROD_BUCKET --tagging "TagSet=[{Key=DeployedVersion,Value=v${{ needs.deploy.outputs.version }}},{Key=DeployedDate,Value=$(date +"%Y-%m-%d")}]"
+          
+          echo "✅ Successfully deployed static files to prod"
+
+  finalize-deployment:
+    name: Finalize Deployment
+    runs-on: ubuntu-latest
+    needs: [deploy, deploy-static-files]
+    
+    steps:
       - name: Deployment Summary
         run: |
-          echo "✅ Successfully deployed version v${{ github.event.inputs.version }} to prod"
+          echo "✅ Successfully deployed version v${{ needs.deploy.outputs.version }} to prod"
+          echo "  • Lambda Functions: ✅ Deployed"
+          echo "  • Static Files: ✅ Deployed" 
           echo "  • Deployment Time: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
           echo "  • Deployed by: ${{ github.actor }}"
           
           # Create an artifact with deployment details for tracking
           mkdir -p deployment-info
           cat > deployment-info/prod-deployment.txt << EOF
-          Version: v${{ github.event.inputs.version }}
+          Version: v${{ needs.deploy.outputs.version }}
+          Lambda Functions: Deployed
+          Static Files: Deployed
           Time: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
           Actor: ${{ github.actor }}
           Workflow Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -81,14 +149,14 @@ jobs:
       - name: Upload Deployment Info
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: prod-deployment-v${{ github.event.inputs.version }}-${{ github.run_id }}
+          name: prod-deployment-v${{ needs.deploy.outputs.version }}-${{ github.run_id }}
           path: deployment-info
           retention-days: 90
 
   create-release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
-    needs: deploy
+    needs: [deploy, deploy-static-files, finalize-deployment]
     permissions:
       contents: write
       
