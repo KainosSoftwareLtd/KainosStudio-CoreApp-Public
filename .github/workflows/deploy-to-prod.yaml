@@ -76,7 +76,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4.2.1
         with:
           role-to-assume: ${{ env.NON_PROD_DEPLOYMENT_ROLE }}
-          aws-region: us-east-1
+          aws-region: ${{ env.AWS_REGION }}
           role-session-name: staging-access
 
       - name: Download staging files
