@@ -3,6 +3,8 @@ import { NextFunction, Request, Response } from 'express';
 import crypto from 'crypto';
 import envConfig from '../config/envConfig.js';
 
+const apiKeyHeaderKeyName = 'X-API-Key';
+
 export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   const apiKeys = envConfig.apiKeys;
 
@@ -10,9 +12,9 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
     return next();
   }
 
-  const providedKey = req.get('x-api-key');
+  const providedKey = req.get(apiKeyHeaderKeyName);
   if (!providedKey) {
-    res.status(401).json({ message: 'x-api-key header is required' });
+    res.status(401).json({ message: `${apiKeyHeaderKeyName} header is required` });
     return;
   }
 
