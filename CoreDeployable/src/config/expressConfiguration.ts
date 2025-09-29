@@ -1,4 +1,5 @@
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import envConfig from './envConfig.js';
 import express from 'express';
 import { getCloudServices } from '../container/CloudServicesRegistry.js';
@@ -48,6 +49,10 @@ export const expressConfiguration = (app: express.Express) => {
   app.use(permissionsPolicy());
   app.use(nocache());
 
+  app.use(bodyParser.json({ type: 'application/json' }));
+  app.use(cookieParser());
+  app.use(bodyParser.urlencoded({ extended: true }));
+  
   app.use(
     session({
       secret: envConfig.sessionSecret,
@@ -65,14 +70,25 @@ export const expressConfiguration = (app: express.Express) => {
 
   app.post(
     '/login/callback',
-    bodyParser.urlencoded({ extended: false }),
     passport.authenticate('saml', {
       failureRedirect: '/',
       failureFlash: true,
     }),
     function (req, res) {
-      const redirectUrl = decodeURIComponent(req.body.RelayState);
-      logger.debug(`Redirect to: ${redirectUrl}`);
+      // Handle RelayState from either body or query parameters, with fallback to session
+      const relayState = req.body?.RelayState || req.query?.RelayState || req.session?.returnTo;
+      const redirectUrl = relayState ? decodeURIComponent(relayState) : '/';
+      
+      logger.debug(`SAML callback - RelayState: ${relayState}, Redirect to: ${redirectUrl}`);
+      logger.debug(`Request body:`, req.body);
+      logger.debug(`Request query:`, req.query);
+      logger.debug(`Session returnTo:`, req.session?.returnTo);
+      
+      // Clear the returnTo from session after using it
+      if (req.session?.returnTo) {
+        delete req.session.returnTo;
+      }
+      
       res.redirect(redirectUrl);
     },
   );

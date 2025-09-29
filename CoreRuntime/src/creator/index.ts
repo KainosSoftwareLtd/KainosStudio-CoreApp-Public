@@ -17,8 +17,6 @@ import { Service } from '../service/Service.js';
 import SubmitButton from '../elements/SubmitButton.js';
 import { Validator } from '../context/Validator.js';
 import { appLogger } from '../logConfig.js';
-import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import { fileURLToPath } from 'url';
@@ -92,10 +90,6 @@ export class Creator {
   private configureApp = (
     authMiddleware: (req: express.Request, res: express.Response, next: express.NextFunction) => Promise<void>,
   ) => {
-    this.app.use(bodyParser.json({ type: 'application/json' }));
-    this.app.use(cookieParser());
-    this.app.use(bodyParser.urlencoded({ extended: true }));
-
     logger.info(`environment variable: NODE_DEV=${process.env.NODE_ENV}`);
     logger.info(`environment variable: LOG_LEVEL=${process.env.LOG_LEVEL}`);
 
