@@ -194,6 +194,13 @@ jobs:
           TEST_HOME_PAGE_URL: https://www.kainos.com/
           TEST_API_URL: https://s4ucihjr0e.execute-api.eu-west-2.amazonaws.com
           BUCKET_NAME: kainoscore-kfd-files-dev
+          TEST_AUTH_ISSUER: ${{ secrets.TEST_AUTH_ISSUER }}
+          TEST_AUTH_CALLBACK: ${{ secrets.TEST_AUTH_CALLBACK }}
+          TEST_AUTH_IDP_CERT: ${{ secrets.TEST_AUTH_IDP_CERT }}
+          TEST_AUTH_AUDIENCE: ${{ secrets.TEST_AUTH_AUDIENCE }}
+          TEST_AUTH_ENTRY_POINT: ${{ secrets.TEST_AUTH_ENTRY_POINT }}
+          TEST_USERNAME: ${{ secrets.TEST_AUTH_USERNAME }}
+          TEST_PASSWORD: ${{ secrets.TEST_AUTH_PASSWORD }}
 
         run: |
           echo "Starting automated test execution against DEV environment..."
