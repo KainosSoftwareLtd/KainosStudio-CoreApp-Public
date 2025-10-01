@@ -189,6 +189,7 @@ jobs:
           TEST_HOME_PAGE_URL: https://www.kainos.com/
           TEST_API_URL: https://s4ucihjr0e.execute-api.eu-west-2.amazonaws.com
 
+
         run: |
           echo "Starting automated test execution against DEV environment..."
           echo "Test Environment: $TEST_ENVIRONMENT"
