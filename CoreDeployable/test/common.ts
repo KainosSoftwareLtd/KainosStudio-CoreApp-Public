@@ -18,16 +18,14 @@ dotenv.config();
 
 let server: http.Server;
 
-BeforeAll(async function () {
+BeforeAll({timeout: 60 * 1000}, async function () {
   if (process.env.TEST_ENVIRONMENT === 'local') {
   console.log("Using local services for testing.");
   process.env.USE_LOCAL_SERVICES = 'false';
   const app = createLocalApp();
   server = app.listen(port);
   }
-  else {
-    console.log("Using deployed services for testing.");
-  }
+  
   const firefoxOptions = new Options();
   firefoxOptions.addArguments('--headless');
 
