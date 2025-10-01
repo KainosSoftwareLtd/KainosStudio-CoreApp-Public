@@ -31,7 +31,9 @@ BeforeAll(async function () {
   const firefoxOptions = new Options();
   firefoxOptions.addArguments('--headless');
 
+  console.log('Starting Firefox browser for testing.');
   driver = new Builder().forBrowser('firefox').setFirefoxOptions(firefoxOptions).build();
+  console.log('Maximizing Firefox browser window.');
   await driver.manage().window().maximize();
   await uploadingKfdTestFiles();
 });
