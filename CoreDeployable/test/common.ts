@@ -18,14 +18,14 @@ dotenv.config();
 
 let server: http.Server;
 
-BeforeAll({timeout: 60 * 1000}, async function () {
+BeforeAll({ timeout: 60 * 1000 }, async function () {
   if (process.env.TEST_ENVIRONMENT === 'local') {
-  console.log("Using local services for testing.");
-  process.env.USE_LOCAL_SERVICES = 'false';
-  const app = createLocalApp();
-  server = app.listen(port);
+    console.log("Using local services for testing.");
+    process.env.USE_LOCAL_SERVICES = 'false';
+    const app = createLocalApp();
+    server = app.listen(port);
   }
-  
+
   const firefoxOptions = new Options();
   firefoxOptions.addArguments('--headless');
 
@@ -48,7 +48,9 @@ After(async function (scenario) {
 });
 
 AfterAll(async function () {
-  server.close();
+  if (process.env.TEST_ENVIRONMENT === 'local') {
+    server.close();
+  }
   await driver.quit();
 });
 

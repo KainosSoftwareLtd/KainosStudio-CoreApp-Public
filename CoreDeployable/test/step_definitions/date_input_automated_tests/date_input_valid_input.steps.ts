@@ -25,6 +25,6 @@ When('I press the save and continue button at the bottom of the page to continue
 
 Then('I should be redirected to the {string} of the form with the date successfully submitted', async function (expectedPath: string) {
   const currentUrl = await driver.getCurrentUrl();
-  const expectedUrl = `http://localhost:8888/date-input-automatic-test/secondPage`;
+  const expectedUrl = `${process.env.TEST_URL}/date-input-automatic-test/secondPage`;
   assert.strictEqual(currentUrl, expectedUrl);
 });
