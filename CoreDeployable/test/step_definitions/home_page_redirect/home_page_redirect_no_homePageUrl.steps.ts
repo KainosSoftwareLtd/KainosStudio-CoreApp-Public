@@ -12,7 +12,7 @@ Given('I have a form service which has an id {string}', function (id: string) {
 });
 
 When('I open the above specified page', async function () {
-  await driver.get(`http://localhost:${port}/${formId}`);
+  await driver.get(`${process.env.TEST_URL}/${formId}`);
 });
 
 When('I click on the home button in the top left', async function () {
@@ -24,7 +24,7 @@ When('I click on the home button in the top left', async function () {
 
 Then('I should be taken to the {string} page', async function (pageId: string) {
   page = pageId;
-    let expectedUrl: string = `http://localhost:${port}/${formId}/${page}`;
+    let expectedUrl: string = `${process.env.TEST_URL}/${formId}/${page}`;
     let actualUrl = await driver.getCurrentUrl();
     assert.equal(actualUrl, expectedUrl);
 });

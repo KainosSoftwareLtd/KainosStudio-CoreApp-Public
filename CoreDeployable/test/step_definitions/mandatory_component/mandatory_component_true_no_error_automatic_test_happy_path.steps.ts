@@ -9,7 +9,7 @@ let page: string;
 
 Given('I open the form page {string} that accepts no empty values', async function (id: string) {
     formId = id;
-    await driver.get(`http://localhost:${port}/${formId}`);
+    await driver.get(`${process.env.TEST_URL}/${formId}`);
   });
   
   When('I fill out the form with values such as letters, numbers and special characters', async function () {
@@ -31,7 +31,7 @@ Given('I open the form page {string} that accepts no empty values', async functi
   
   Then('I should be taken to the {string} of the mandatory form', async function (pageID: string) {
     page = pageID;
-    let expectedUrl: string = `http://localhost:${port}/${formId}/${page}`;
+    let expectedUrl: string = `${process.env.TEST_URL}/${formId}/${page}`;
     let actualUrl = await driver.getCurrentUrl();
     assert.equal(actualUrl, expectedUrl);
   });

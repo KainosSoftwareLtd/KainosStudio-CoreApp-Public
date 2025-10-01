@@ -7,7 +7,7 @@ let formId: string;
 
 When('The user has navigated to the phone number test service with an id {string}', async function (id: string) {
     formId = id;
-    await driver.get(`http://localhost:${port}/${formId}`);
+    await driver.get(`${process.env.TEST_URL}/${formId}`);
 });
 
 When('I leave the phone number field blank', async function () {

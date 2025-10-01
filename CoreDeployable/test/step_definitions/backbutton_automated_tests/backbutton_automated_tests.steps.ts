@@ -10,7 +10,7 @@ let page: string;
 When('I am on the {string} of the {string} form where a submit button is present', async function (pageId: string, id: string) {
   formId = id;
   page = pageId;
-  await driver.get(`http://localhost:${port}/${formId}/${page}`);
+  await driver.get(`${process.env.TEST_URL}/${formId}/${page}`);
   });
 
 When('I press the submit button to go to the second page',async function(){
@@ -20,7 +20,7 @@ When('I press the submit button to go to the second page',async function(){
 
 When('I confirm that i am on the next page of the form {string}',async function(pageId:string){
     page = pageId;
-    let expectedUrl: string = `http://localhost:${port}/${formId}/${page}`;
+    let expectedUrl: string = `${process.env.TEST_URL}/${formId}/${page}`;
     let actualUrl = await driver.getCurrentUrl();
     assert.equal(actualUrl, expectedUrl);
   });
@@ -31,7 +31,7 @@ When('I confirm that i am on the next page of the form {string}',async function(
 
 Then('I am on the correct {string} page of the form', async function (pageId:string) {
     page = pageId;
-    let expectedUrl: string = `http://localhost:${port}/${formId}/${page}`;
+    let expectedUrl: string = `${process.env.TEST_URL}/${formId}/${page}`;
     let actualUrl = await driver.getCurrentUrl();
     assert.equal(actualUrl, expectedUrl);
 });

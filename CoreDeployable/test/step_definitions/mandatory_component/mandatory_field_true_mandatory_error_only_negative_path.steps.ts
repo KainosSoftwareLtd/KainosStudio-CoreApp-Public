@@ -8,7 +8,7 @@ let formId: string;
 
 Given('I am located on the {string} page that has mandatory fields but no regex set', async function (id: string) {
     formId = id;
-    await driver.get(`http://localhost:${port}/${formId}`);
+    await driver.get(`${process.env.TEST_URL}/${formId}`);
   });
   
   When('I leave the more details field empty on the form', async function () {

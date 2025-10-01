@@ -8,12 +8,12 @@ let page: string;
 
 When('I am on the translation form service with the id of {string}', async function (id: string) {
     formId = id;
-    await driver.get(`http://localhost:${port}/${formId}`);
+    await driver.get(`${process.env.TEST_URL}/${formId}`);
 });
 
 When('I am on the english version of the service', async function () {
     page = "Page 1?lang=en-GB";
-    await driver.get(`http://localhost:${port}/${formId}/${page}`);  
+    await driver.get(`${process.env.TEST_URL}/${formId}/${page}`);  
 });
 
 When('I translate the service into welsh using a button', async function(){

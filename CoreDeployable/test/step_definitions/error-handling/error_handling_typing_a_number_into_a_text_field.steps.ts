@@ -9,7 +9,7 @@ let expectedError: string;
 
 Given('User navigates to the form service with an id {string}', async function (id: string) {
   formId = id;
-  await driver.get(`http://localhost:${port}/${formId}`);
+  await driver.get(`${process.env.TEST_URL}/${formId}`);
 });
 
 When('I fill out the name field with an unaccepted character {string}', async function (wrongChar: string) {

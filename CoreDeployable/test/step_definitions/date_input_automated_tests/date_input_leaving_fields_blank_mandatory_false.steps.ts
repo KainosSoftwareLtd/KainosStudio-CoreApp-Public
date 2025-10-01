@@ -7,7 +7,7 @@ let formId: string;
 
 When('I navigate in the {string} to the {string} of the form', async function (id: string, page: string) {
     formId = id;
-    await driver.get(`http://localhost:${port}/${formId}/${page}`);
+    await driver.get(`${process.env.TEST_URL}/${formId}/${page}`);
 });
 
 When('I use the button at the bottom of the page to submit without entering any values', async function () {
@@ -17,7 +17,7 @@ When('I use the button at the bottom of the page to submit without entering any 
 });
 
 Then('I should be brought to the {string} of the form', async function (nextPage: string) {
-    const expectedUrl = `http://localhost:${port}/${formId}/${nextPage}`;
+    const expectedUrl = `${process.env.TEST_URL}/${formId}/${nextPage}`;
     const actualUrl = await driver.getCurrentUrl();
     assert.equal(actualUrl, expectedUrl);
 });

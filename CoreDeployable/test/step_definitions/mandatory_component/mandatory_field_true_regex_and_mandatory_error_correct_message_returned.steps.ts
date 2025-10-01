@@ -9,7 +9,7 @@ let expectedError: string;
 
 Given('I am currently on the {string} page that has mandatory fields and regex validation', async function (id: string) {
   formId = id;
-  await driver.get(`http://localhost:${port}/${formId}`);
+  await driver.get(`${process.env.TEST_URL}/${formId}`);
 });
 
 When('I fill out the name of even field with {string}', async function (wrongChar: string) {

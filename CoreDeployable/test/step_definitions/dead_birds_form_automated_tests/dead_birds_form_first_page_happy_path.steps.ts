@@ -20,7 +20,7 @@ Then(
   async function (form: string, pageId: string) {
     formId = form;
     page = pageId;
-    let expectedUrl: string = `http://localhost:${port}/${formId}/${page}`;
+    let expectedUrl: string = `${process.env.TEST_URL}/${formId}/${page}`;
     let actualUrl = await driver.getCurrentUrl();
     assert.equal(actualUrl, expectedUrl);
   },

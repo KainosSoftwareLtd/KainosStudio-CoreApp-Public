@@ -12,7 +12,7 @@ When(
   async function (pageId: string, id: string) {
     formId = id;
     page = pageId;
-    await driver.get(`http://localhost:${port}/${formId}/${page}`);
+    await driver.get(`${process.env.TEST_URL}/${formId}/${page}`);
   },
 );
 

@@ -10,7 +10,7 @@ let page: string;
 When('I am currently on the {string} of the {string} form', async function (pageId: string, id: string) {
   formId = id;
   page = pageId;
-  await driver.get(`http://localhost:${port}/${formId}/${page}`);
+  await driver.get(`${process.env.TEST_URL}/${formId}/${page}`);
 });
 
 When('I click the link to change my answer', async function () {
@@ -19,7 +19,7 @@ When('I click the link to change my answer', async function () {
 
 Then('I should be taken to the {string} where i can change my answer', async function (pageId: string) {
   page = pageId;
-  let expectedUrl: string = `http://localhost:${port}/${formId}/${page}`;
+  let expectedUrl: string = `${process.env.TEST_URL}/${formId}/${page}`;
   let actualUrl = await driver.getCurrentUrl();
   assert.equal(actualUrl, expectedUrl);
 });

@@ -5,7 +5,7 @@ import { By } from 'selenium-webdriver';
 import assert from 'assert';
 
 When('I enter the form URL with the ID {string} in randomly mixed case', async function (mixedCaseId: string) {
-  await driver.get(`http://localhost:${port}/${mixedCaseId}`);
+  await driver.get(`${process.env.TEST_URL}/${mixedCaseId}`);
 });
 
 Then('the correct page content should be displayed', async function () {

@@ -11,7 +11,7 @@ Given('I have a form service with the id {string}', function (id: string) {
 });
 
 When('I open the page', async function () {
-  await driver.get(`http://localhost:${port}/${formId}`);
+  await driver.get(`${process.env.TEST_URL}/${formId}`);
 });
 
 When('I fill out the form with all the details on the page', async function () {

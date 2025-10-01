@@ -11,7 +11,7 @@ let expectedError: string;
 When('I confirm I am on the {string} of the form service {string}', async function (pageId: string, id: string) {
   formId = id;
   page = pageId;
-  let expectedUrl: string = `http://localhost:${port}/${formId}/${page}`;
+  let expectedUrl: string = `${process.env.TEST_URL}/${formId}/${page}`;
   let actualUrl = await driver.getCurrentUrl();
   assert.equal(actualUrl, expectedUrl);
 });

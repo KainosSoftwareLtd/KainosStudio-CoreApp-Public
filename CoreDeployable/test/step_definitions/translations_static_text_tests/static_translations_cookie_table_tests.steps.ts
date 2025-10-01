@@ -9,7 +9,7 @@ let page: string;
 When('I am on the welsh cookie page of the translated service {string}', async function (id:string) {
     formId = id;
     page = "cookie?lang=cy-GB";
-    await driver.get(`http://localhost:${port}/${formId}/${page}`);  
+    await driver.get(`${process.env.TEST_URL}/${formId}/${page}`);  
 });
 
 Then('The {string} elements should be translated into the {string}', async function (element: string, translation: string) {

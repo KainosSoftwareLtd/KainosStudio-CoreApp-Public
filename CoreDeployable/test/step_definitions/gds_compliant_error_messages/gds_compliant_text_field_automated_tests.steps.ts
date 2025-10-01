@@ -8,7 +8,7 @@ let formId: string;
 
 Given('I am located on the {string} form which has error messages complaint with GDS standards', async function (id: string) {
   formId = id;
-  await driver.get(`http://localhost:${port}/${formId}`);
+  await driver.get(`${process.env.TEST_URL}/${formId}`);
 });
 
 When('I clear all of the fields on the page to have an empty canvas', async function () {

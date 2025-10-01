@@ -8,7 +8,7 @@ let formId: string;
 
 Given('I open the form page {string} that accepts specific non-empty values', async function (id: string) {
     formId = id;
-    await driver.get(`http://localhost:${port}/${formId}`);
+    await driver.get(`${process.env.TEST_URL}/${formId}`);
   });
   
   When('I leave out the name of the event field blank', async function () {

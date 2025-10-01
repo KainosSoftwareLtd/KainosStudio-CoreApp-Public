@@ -8,7 +8,7 @@ let formId: string;
 
 Given('I am on the {string} form which has a date component', async function (id: string) {
     formId = id;
-    await driver.get(`http://localhost:${port}/${formId}`);
+    await driver.get(`${process.env.TEST_URL}/${formId}`);
   });
 
 When('I fill out the day field with {string} the month field with {string} and the year field with {string}', async function (day: string, month: string, year: string) {

@@ -9,7 +9,7 @@ let page: string;
 
 Given('I am located on the {string} page which has regex set for all the fields but none are mandatory', async function (id: string) {
     formId = id;
-    await driver.get(`http://localhost:${port}/${formId}`);
+    await driver.get(`${process.env.TEST_URL}/${formId}`);
   });
   
   When('I fill out the page with valid data and select all the necessary options on the page', async function () {
@@ -34,7 +34,7 @@ Given('I am located on the {string} page which has regex set for all the fields 
   
   Then('I should be taken to the {string} of the non mandatory form with the regex set', async function (pageID: string) {
     page = pageID;
-    let expectedUrl: string = `http://localhost:${port}/${formId}/${page}`;
+    let expectedUrl: string = `${process.env.TEST_URL}/${formId}/${page}`;
     let actualUrl = await driver.getCurrentUrl();
     assert.equal(actualUrl, expectedUrl);
   });
