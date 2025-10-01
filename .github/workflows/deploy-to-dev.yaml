@@ -193,6 +193,10 @@ jobs:
           BUCKET_REGION_FOR_FORM_FILES: ${{env.AWS_REGION}}
           TEST_HOME_PAGE_URL: https://www.kainos.com/
           TEST_API_URL: https://s4ucihjr0e.execute-api.eu-west-2.amazonaws.com
+          COOKIE_SECRET: ${{ secrets.TEST_COOKIE_SECRET }}
+          SESSION_SECRET: ${{ secrets.TEST_SESSION_SECRET }}
+          AUTH_CONFIG_FILE_NAME: auth
+          ALLOWED_ORIGIN: http://localhost:4000/
           FORM_SESSION_TABLE_NAME: Core_FormSessions_dev
 
         run: |
