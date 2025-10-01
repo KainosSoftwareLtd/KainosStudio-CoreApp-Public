@@ -17,12 +17,12 @@ export class AwsFileService implements IFileService {
       });
       const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 * 24 });
 
-      return { isSuccesfull: true, value: url };
+      return { isSuccessful: true, value: url };
     } catch (err) {
       logger.error(err);
 
       return {
-        isSuccesfull: false,
+        isSuccessful: false,
         error: 'Unexpected error while getting signed url for download.',
       };
     }
@@ -47,12 +47,12 @@ export class AwsFileService implements IFileService {
         Expires: 60,
       });
 
-      return { isSuccesfull: true, value: { ...presignedPost, cloudProvider: CloudProvider.aws } };
+      return { isSuccessful: true, value: { ...presignedPost, cloudProvider: CloudProvider.aws } };
     } catch (err) {
       logger.error(err);
 
       return {
-        isSuccesfull: false,
+        isSuccessful: false,
         error: 'Unexpected error while getting presigned post.',
       };
     }

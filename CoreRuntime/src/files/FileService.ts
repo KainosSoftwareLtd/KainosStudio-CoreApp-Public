@@ -6,10 +6,10 @@ export interface IFileService {
 
 export type FileServiceResult<T> =
   | {
-      isSuccesfull: true;
+      isSuccessful: true;
       value: T;
     }
-  | { isSuccesfull: false; error: string };
+  | { isSuccessful: false; error: string };
 
 export type PresignedPost = {
   cloudProvider: 'aws' | 'azure';
