@@ -80,13 +80,9 @@ jobs:
       - name: Download staging files
         run: |
           mkdir -p temp-static-files
-          chmod +x ./pipeline_scripts/functions.sh
-          cd ./pipeline_scripts
-          source ./functions.sh
-          s3_bucket_static_files
-          STAGING_BUCKET="$S3-staging"
+          STAGING_BUCKET="kainoscore-static-files-staging"
           echo "Downloading from staging bucket: $STAGING_BUCKET"
-          aws s3 sync s3://$STAGING_BUCKET/ ../temp-static-files/
+          aws s3 sync s3://$STAGING_BUCKET/ temp-static-files/
 
       - name: Configure AWS credentials for Prod
         uses: aws-actions/configure-aws-credentials@v4.2.1
