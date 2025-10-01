@@ -59,13 +59,13 @@ describe('Creator - Comprehensive Tests', () => {
 
     // Setup mock file service
     mockFileService = {
-      saveFile: jest.fn().mockResolvedValue({ isSuccesfull: true, value: 'file-id' }),
+      saveFile: jest.fn().mockResolvedValue({ isSuccessful: true, value: 'file-id' }),
       getPresignedPost: jest.fn().mockResolvedValue({
-        isSuccesfull: true,
+        isSuccessful: true,
         value: { url: 'https://upload.url', fields: {} },
       }),
       getPresignedUrlForDownload: jest.fn().mockResolvedValue({
-        isSuccesfull: true,
+        isSuccessful: true,
         value: 'https://download.url',
       }),
     } as any;
@@ -350,7 +350,7 @@ describe('Creator - Comprehensive Tests', () => {
 
       jest.spyOn(creator['contextBuilder'], 'build').mockResolvedValue(mockContext as any);
       mockFileService.getPresignedPost.mockResolvedValue({
-        isSuccesfull: false,
+        isSuccessful: false,
         error: 'File service error',
       });
 
@@ -916,7 +916,7 @@ describe('Creator - Comprehensive Tests', () => {
       jest.spyOn(creator['objectBuilder'], 'create').mockResolvedValue({ data: 'value' });
 
       mockFileService.getPresignedUrlForDownload.mockResolvedValue({
-        isSuccesfull: false,
+        isSuccessful: false,
         error: 'File download error',
       });
 
