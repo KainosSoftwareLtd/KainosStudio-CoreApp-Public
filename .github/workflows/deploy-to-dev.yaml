@@ -177,13 +177,16 @@ jobs:
             git tag "v$SEMANTIC_VERSION"
             git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git "v$SEMANTIC_VERSION"
           fi
-          
+
       - name: Run automated tests
         id: test-run
         working-directory: ./CoreDeployable
         env:
           TEST_ENVIRONMENT: dev
           TEST_BASE_URL: https://dev.core.giab.kainos-labs.com/
+          CLOUD_PROVIDER: aws
+          USE_LOCAL_SERVICES: false
+
         run: |
           echo "Starting automated test execution against DEV environment..."
           echo "Test Environment: $TEST_ENVIRONMENT"
