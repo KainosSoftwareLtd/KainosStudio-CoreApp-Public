@@ -180,6 +180,11 @@ jobs:
             git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git "v$SEMANTIC_VERSION"
           fi
 
+      - name: Setup Firefox
+        uses: browser-actions/setup-firefox@v1
+        with:
+          firefox-version: latest
+
       - name: Run automated tests
         id: test-run
         working-directory: ./CoreDeployable
