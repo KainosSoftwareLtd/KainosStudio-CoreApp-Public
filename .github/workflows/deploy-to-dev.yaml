@@ -190,9 +190,10 @@ jobs:
           USE_LOCAL_SERVICES: false
           BUCKET_NAME_FOR_FORM_FILES: submitted-form-data-bucket
           BUCKET_NAME: kainoscore-kfd-files-dev
-          BUCKET_REGION_FOR_FORM_FILES: ${{ env.AWS_REGION }}
+          BUCKET_REGION_FOR_FORM_FILES: ${{env.AWS_REGION}}
           TEST_HOME_PAGE_URL: https://www.kainos.com/
           TEST_API_URL: https://s4ucihjr0e.execute-api.eu-west-2.amazonaws.com
+          FORM_SESSION_TABLE_NAME: Core_FormSessions_dev
 
         run: |
           echo "Starting automated test execution against DEV environment..."
