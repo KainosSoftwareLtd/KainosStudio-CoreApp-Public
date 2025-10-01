@@ -35,7 +35,7 @@ When('I press the continue button', async function () {
 Then('I should be taken to the {string} page of the {string} form', async function (pageId: string, form: string) {
   formId = form;
   page = pageId;
-  const expectedUrl: string = `http://localhost:${port}/${formId}/${page}`;
+  const expectedUrl: string = `${process.env.TEST_URL}/${formId}/${page}`;
   const actualUrl = await driver.getCurrentUrl();
   assert.equal(actualUrl, expectedUrl);
 });

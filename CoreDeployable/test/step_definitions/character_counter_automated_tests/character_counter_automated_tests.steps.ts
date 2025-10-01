@@ -8,7 +8,7 @@ let formId: string;
 
 When('I am currently on the {string} form with a text box', async function (id: string) {
     formId = id;
-    await driver.get(`http://localhost:${port}/${formId}`);
+    await driver.get(`${process.env.TEST_URL}/${formId}`);
   },
 );
 

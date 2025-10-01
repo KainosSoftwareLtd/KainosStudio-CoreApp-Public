@@ -8,7 +8,7 @@ let formId: string;
 
 Given('I am on the service {string} which has a custom page not found message set', async function (id: string) {
     formId = id;
-    await driver.get(`http://localhost:${port}/${formId}`);
+    await driver.get(`${process.env.TEST_URL}/${formId}`);
   });
   
   Then('I should see a custom page not found message which says {string}', async function (errorMessage: string) {

@@ -9,7 +9,7 @@ let page: string;
 
 Given('I open the form page {string} where there is no validation on the page', async function (id: string) {
     formId = id;
-    await driver.get(`http://localhost:${port}/${formId}`);
+    await driver.get(`${process.env.TEST_URL}/${formId}`);
   });
   
   When('I do not fill out the form with any data I press the Save and Continue button at the bottom of the page', async function () {
@@ -20,7 +20,7 @@ Given('I open the form page {string} where there is no validation on the page', 
   
   Then('I should be taken to the {string} of this not mandatory form', async function (pageID: string) {
     page = pageID;
-    let expectedUrl: string = `http://localhost:${port}/${formId}/${page}`;
+    let expectedUrl: string = `${process.env.TEST_URL}/${formId}/${page}`;
     let actualUrl = await driver.getCurrentUrl();
     assert.equal(actualUrl, expectedUrl);
   });

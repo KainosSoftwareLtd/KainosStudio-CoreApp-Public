@@ -12,7 +12,7 @@ Given('I have a form service open with the id of {string}', function (id: string
 });
 
 When('I open that page', async function () {
-  await driver.get(`http://localhost:${port}/${formId}`);
+  await driver.get(`${process.env.TEST_URL}/${formId}`);
 });
 
 When('I press the save and continue button', async function () {
@@ -23,7 +23,7 @@ When('I press the save and continue button', async function () {
 
 Then('I should be taken to {string}', async function (pageId: string) {
   page = pageId;
-  let expectedUrl: string = `http://localhost:${port}/${formId}/${page}`;
+  let expectedUrl: string = `${process.env.TEST_URL}/${formId}/${page}`;
   let actualUrl = await driver.getCurrentUrl();
   assert.equal(actualUrl, expectedUrl);
 });

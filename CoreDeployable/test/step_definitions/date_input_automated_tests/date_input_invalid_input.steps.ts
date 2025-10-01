@@ -7,7 +7,7 @@ let formId: string;
 
 Given('the user navigates to the form service with an id {string}', async function (id: string) {
   formId = id;
-  await driver.get(`http://localhost:${port}/${formId}`);
+  await driver.get(`${process.env.TEST_URL}/${formId}`);
 });
 
 When('I enter {string} into day, {string} into month and {string} into year field', async function (day: string, month: string, year: string) {

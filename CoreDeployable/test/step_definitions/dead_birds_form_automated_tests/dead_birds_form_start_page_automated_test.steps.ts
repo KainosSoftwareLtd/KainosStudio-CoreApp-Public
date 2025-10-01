@@ -7,7 +7,7 @@ let formId: string;
 
 Given('The user is on the form service with the id of {string}', async function (id: string) {
     formId = id;
-    await driver.get(`http://localhost:${port}/${formId}`);
+    await driver.get(`${process.env.TEST_URL}/${formId}`);
 });
 
 When('I choose to click the start now button to begin the dead birds form', async function () {
@@ -15,7 +15,7 @@ When('I choose to click the start now button to begin the dead birds form', asyn
 });
 
 Then('I should be redirected to {string} of this form', async function (nextPage: string) {
-    const expectedUrl = `http://localhost:${port}/${formId}/${nextPage}`;
+    const expectedUrl = `${process.env.TEST_URL}/${formId}/${nextPage}`;
     const actualUrl = await driver.getCurrentUrl();
     assert.equal(actualUrl, expectedUrl);
 });

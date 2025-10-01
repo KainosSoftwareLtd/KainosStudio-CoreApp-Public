@@ -11,7 +11,7 @@ Given('I have a form service requires auth with id {string}', function (id: stri
 });
 
 When('I open the form page I am redirected to the login page', async function () {
-  await driver.get(`http://localhost:${port}/${formId}`);
+  await driver.get(`${process.env.TEST_URL}/${formId}`);
   const entryPoint = process.env.TEST_AUTH_ENTRY_POINT;
   if (!entryPoint) {
     throw new Error('TEST_AUTH_ENTRY_POINT environment variable is not set');

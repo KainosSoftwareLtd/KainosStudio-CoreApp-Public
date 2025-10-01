@@ -8,7 +8,7 @@ let formId: string;
 
 Given('The user is on the form with the ID {string} that has radio buttons with conditional logic', async function (id: string) {
   formId = id;
-  await driver.get(`http://localhost:${port}/${formId}`);
+  await driver.get(`${process.env.TEST_URL}/${formId}`);
 });
 
 When('I select a {string} radio field', async function (radioField: string) {
@@ -23,7 +23,7 @@ When('I select the save and continue button at the very bottom of the page to su
 
 
 Then('I should be taken to the right {string} of the form', async function (page:string) {
-    let expectedUrl: string = `http://localhost:${port}/${formId}/${page}`;
+    let expectedUrl: string = `${process.env.TEST_URL}/${formId}/${page}`;
     let actualUrl = await driver.getCurrentUrl();
     assert.equal(actualUrl, expectedUrl);
 });

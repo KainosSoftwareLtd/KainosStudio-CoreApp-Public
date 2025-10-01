@@ -9,12 +9,12 @@ let page: string;
 
 Given('I am on the {string} service which has no custom page not found message set', async function (id: string) {
   formId = id;
-  await driver.get(`http://localhost:${port}/${formId}`);
+  await driver.get(`${process.env.TEST_URL}/${formId}`);
 });
 
 When('I try to go on the page {string} which does not exist in the kfd', async function (pageId: string) {
     page = pageId;
-    await driver.get(`http://localhost:${port}/${formId}/${page}`);  
+    await driver.get(`${process.env.TEST_URL}/${formId}/${page}`);  
 });
 
 Then('I should see the default page not found message {string}', async function (errorMessage: string) {

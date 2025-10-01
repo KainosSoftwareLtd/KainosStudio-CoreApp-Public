@@ -8,7 +8,7 @@ let formId: string;
 
 Given('I open the {string} page which has regex set for all the fields but none are mandatory', async function (id: string) {
     formId = id;
-    await driver.get(`http://localhost:${port}/${formId}`);
+    await driver.get(`${process.env.TEST_URL}/${formId}`);
   });
   
   When('I leave the select field empty on the page to trigger the errors', async function () {

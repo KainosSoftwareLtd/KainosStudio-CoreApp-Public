@@ -20,7 +20,7 @@ When('I press the continue button at the bottom of the page', async function () 
 Then('I should be taken to the next page {string} on the {string} form', async function (pageId: string, form: string) {
   formId = form;
   page = pageId;
-  let expectedUrl: string = `http://localhost:${port}/${formId}/${page}`;
+  let expectedUrl: string = `${process.env.TEST_URL}/${formId}/${page}`;
   let actualUrl = await driver.getCurrentUrl();
   assert.equal(actualUrl, expectedUrl);
 });

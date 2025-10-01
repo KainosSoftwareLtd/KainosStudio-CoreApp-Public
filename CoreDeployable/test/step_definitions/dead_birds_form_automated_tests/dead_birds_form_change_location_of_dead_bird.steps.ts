@@ -12,7 +12,7 @@ When(
   async function (pageId: string, id: string) {
     formId = id;
     page = pageId;
-    await driver.get(`http://localhost:${port}/${formId}/${page}`);
+    await driver.get(`${process.env.TEST_URL}/${formId}/${page}`);
   },
 );
 
@@ -24,7 +24,7 @@ Then(
   'I should be taken to the {string} where i can change the location of the dead bird',
   async function (pageId: string) {
     page = pageId;
-    let expectedUrl: string = `http://localhost:${port}/${formId}/${page}`;
+    let expectedUrl: string = `${process.env.TEST_URL}/${formId}/${page}`;
     let actualUrl = await driver.getCurrentUrl();
     assert.equal(actualUrl, expectedUrl);
   },

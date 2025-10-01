@@ -8,7 +8,7 @@ let page: string;
 
 When('I am currently on the {string} of the system but I want to go back', async function (pageId: string) {
     page = pageId;
-    await driver.get(`http://localhost:${port}/${formId}/${page}`);  
+    await driver.get(`${process.env.TEST_URL}/${formId}/${page}`);  
 });
 
 When('I click the back button on the fourth, third and second pages', async function () {
@@ -19,7 +19,7 @@ When('I click the back button on the fourth, third and second pages', async func
 
 Then('I should be brought to the {string}', async function (pageId: string) {
     page = pageId;
-    let expectedUrl: string = `http://localhost:${port}/${formId}/${page}`;
+    let expectedUrl: string = `${process.env.TEST_URL}/${formId}/${page}`;
     let actualUrl = await driver.getCurrentUrl();
     assert.equal(actualUrl, expectedUrl);
   });

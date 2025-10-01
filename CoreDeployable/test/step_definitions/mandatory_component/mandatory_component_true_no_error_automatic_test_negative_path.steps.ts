@@ -8,7 +8,7 @@ let formId: string;
 
 Given('I open the form page {string} that accepts no empty fields', async function (id: string) {
     formId = id;
-    await driver.get(`http://localhost:${port}/${formId}`);
+    await driver.get(`${process.env.TEST_URL}/${formId}`);
   });
   
   When('I leave the evenet name field blank and I press the Save and Continue button at the bottom of the form', async function () {

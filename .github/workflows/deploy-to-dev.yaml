@@ -185,10 +185,10 @@ jobs:
         working-directory: ./CoreDeployable
         env:
           TEST_ENVIRONMENT: dev
-          TEST_BASE_URL: https://dev.core.giab.kainos-labs.com/
+          TEST_URL: ${{ vars.TEST_BASE_URL }}
           TEST_HOME_PAGE_URL: https://www.kainos.com/
           TEST_API_URL: https://s4ucihjr0e.execute-api.eu-west-2.amazonaws.com
-
+          BUCKET_NAME: kainoscore-kfd-files-dev
 
         run: |
           echo "Starting automated test execution against DEV environment..."
