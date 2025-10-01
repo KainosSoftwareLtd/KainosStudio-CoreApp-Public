@@ -156,6 +156,29 @@ jobs:
           echo "SEMANTIC_VERSION=${{ steps.semver.outputs.version }}" >> $GITHUB_ENV
           
           echo "Deployment completed successfully."
+
+      - name: Run automated tests
+        id: test-run
+        working-directory: ./CoreDeployable
+        env:
+          TEST_ENVIRONMENT: dev
+          TEST_BASE_URL: https://dev.core.giab.kainos-labs.com/
+        run: |
+          echo "Starting automated test execution against DEV environment..."
+          echo "Test Environment: $TEST_ENVIRONMENT"
+          echo "Base URL: $TEST_BASE_URL"
+          
+          npm install
+          npm run test
+          
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-dev-${{ steps.semver.outputs.version }}
+          path: |
+            CoreDeployable/test/cucumber-report.html
+          retention-days: 30
             
       - name: Create Git tag
         if: success()
