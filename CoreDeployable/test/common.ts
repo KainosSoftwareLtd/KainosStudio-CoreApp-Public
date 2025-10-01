@@ -28,10 +28,7 @@ BeforeAll({ timeout: 60 * 1000 }, async function () {
 
   const firefoxOptions = new Options();
   firefoxOptions.addArguments('--headless');
-
-  console.log('Starting Firefox browser for testing.');
   driver = new Builder().forBrowser('firefox').setFirefoxOptions(firefoxOptions).build();
-  console.log('Maximizing Firefox browser window.');
   await driver.manage().window().maximize();
   await uploadingKfdTestFiles();
 });
@@ -170,7 +167,8 @@ function updateContentIfNeeded(fileContent: string, fileName: string) {
     }
     case 'auth.json': {
       const issuer = process.env.TEST_AUTH_ISSUER;
-      const callback = process.env.TEST_AUTH_CALLBACK;
+      const callbackUrl = process.env.TEST_AUTH_CALLBACK;
+
       const idpCert = process.env.TEST_AUTH_IDP_CERT;
       const audience = process.env.TEST_AUTH_AUDIENCE;
       const entryPoint = process.env.TEST_AUTH_ENTRY_POINT;
@@ -179,7 +177,7 @@ function updateContentIfNeeded(fileContent: string, fileName: string) {
       try {
         const json = JSON.parse(fileContent);
         json.issuer = issuer;
-        json.callback = callback;
+        json.callbackUrl = callbackUrl;
         json.idpCert = idpCert;
         json.audience = audience;
         json.entryPoint = entryPoint;
