@@ -32,7 +32,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '23'
+          node-version: '22'
 
       - name: Generate semantic version
         id: semver
@@ -156,7 +156,27 @@ jobs:
           echo "SEMANTIC_VERSION=${{ steps.semver.outputs.version }}" >> $GITHUB_ENV
           
           echo "Deployment completed successfully."
-
+      
+      - name: Create Git tag
+        if: success()
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          
+          SEMANTIC_VERSION="${{ steps.semver.outputs.version }}"
+          if [ -z "$SEMANTIC_VERSION" ]; then
+            echo "Using version from environment: $SEMANTIC_VERSION"
+          fi
+          
+          # Check if tag already exists
+          if git rev-parse "v$SEMANTIC_VERSION" >/dev/null 2>&1; then
+            echo "Tag v$SEMANTIC_VERSION already exists. Skipping tag creation."
+          else
+            echo "Creating new tag v$SEMANTIC_VERSION"
+            git tag "v$SEMANTIC_VERSION"
+            git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git "v$SEMANTIC_VERSION"
+          fi
+          
       - name: Run automated tests
         id: test-run
         working-directory: ./CoreDeployable
@@ -179,23 +199,4 @@ jobs:
           path: |
             CoreDeployable/test/cucumber-report.html
           retention-days: 30
-            
-      - name: Create Git tag
-        if: success()
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
           
-          SEMANTIC_VERSION="${{ steps.semver.outputs.version }}"
-          if [ -z "$SEMANTIC_VERSION" ]; then
-            echo "Using version from environment: $SEMANTIC_VERSION"
-          fi
-          
-          # Check if tag already exists
-          if git rev-parse "v$SEMANTIC_VERSION" >/dev/null 2>&1; then
-            echo "Tag v$SEMANTIC_VERSION already exists. Skipping tag creation."
-          else
-            echo "Creating new tag v$SEMANTIC_VERSION"
-            git tag "v$SEMANTIC_VERSION"
-            git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git "v$SEMANTIC_VERSION"
-          fi
