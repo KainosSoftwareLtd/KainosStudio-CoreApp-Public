@@ -39,7 +39,7 @@ describe('Creator', () => {
       } as any;
     };
     mockFileManager = {
-      saveFile: jest.fn().mockResolvedValue({ isSuccesfull: true }),
+      saveFile: jest.fn().mockResolvedValue({ isSuccessful: true }),
     } as any;
 
     mockDataStore = {

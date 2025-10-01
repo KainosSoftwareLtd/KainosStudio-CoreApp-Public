@@ -49,7 +49,7 @@ export class AzureFileService implements IFileService {
       ).toString();
       const url = `${this.blobBaseUrl}/${key}?${sasToken}`;
       return {
-        isSuccesfull: true,
+        isSuccessful: true,
         value: {
           url: url,
           fields: { maxFileSize: maxSize.toString() },
@@ -57,7 +57,7 @@ export class AzureFileService implements IFileService {
         },
       };
     } catch (error) {
-      return { isSuccesfull: false, error: error instanceof Error ? error.message : String(error) };
+      return { isSuccessful: false, error: error instanceof Error ? error.message : String(error) };
     }
   }
 
@@ -79,9 +79,9 @@ export class AzureFileService implements IFileService {
         envConfig.azureStorageAccountForFormFiles,
       ).toString();
       const url = `${this.blobBaseUrl}/${key}?${sasToken}`;
-      return { isSuccesfull: true, value: url };
+      return { isSuccessful: true, value: url };
     } catch (error) {
-      return { isSuccesfull: false, error: error instanceof Error ? error.message : String(error) };
+      return { isSuccessful: false, error: error instanceof Error ? error.message : String(error) };
     }
   }
 

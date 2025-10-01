@@ -156,7 +156,6 @@ jobs:
           echo "SEMANTIC_VERSION=${{ steps.semver.outputs.version }}" >> $GITHUB_ENV
           
           echo "Deployment completed successfully."
-
       
       - name: Create Git tag
         if: success()

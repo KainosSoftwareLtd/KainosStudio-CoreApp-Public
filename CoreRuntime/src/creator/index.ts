@@ -177,7 +177,7 @@ export class Creator {
         fileInput.maxFileSize,
       );
 
-      if (result.isSuccesfull) {
+      if (result.isSuccessful) {
         return res.status(200).json(result.value);
       } else {
         return res.status(500).json({ error: result.error });
@@ -297,7 +297,7 @@ export class Creator {
           if (valueElement.type == 'FileUpload') {
             const key = `${context.data[sessionIdKey]}/${decodeURIComponent(context.data[valueElement.name])}`;
             const result = await this.fileService.getPresignedUrlForDownload(key);
-            if (result.isSuccesfull) {
+            if (result.isSuccessful) {
               requestModel[valueElement.name + '-url'] = result.value;
             } else {
               throw new Error(result.error);
