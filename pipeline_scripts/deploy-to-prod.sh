@@ -7,12 +7,28 @@ log_message() {
 
 if [ -z "$1" ]; then
   log_message "ERROR: Version parameter is required"
-  echo "Usage: $0 <version>"
+  echo "Usage: $0 <version> [--copy-only|--deploy-only]"
   exit 1
 fi
 
 VERSION="$1"
-log_message "Starting artifact copy for version: $VERSION"
+MODE="$2"
+
+case "$MODE" in
+  "--copy-only")
+    log_message "Starting artifact copy for version: $VERSION"
+    ;;
+  "--deploy-only")
+    log_message "Starting deployment for version: $VERSION"
+    ;;
+  "")
+    log_message "Starting full deployment for version: $VERSION"
+    ;;
+  *)
+    log_message "ERROR: Invalid mode. Use --copy-only, --deploy-only, or no flag"
+    exit 1
+    ;;
+esac
 
 PIPELINE_DIR="$GITHUB_WORKSPACE/pipeline_scripts"
 export ENVIRONMENT="prod"
@@ -37,24 +53,34 @@ PROD_BUCKET="$S3-$ENVIRONMENT"
 log_message "STAGING_BUCKET: $STAGING_BUCKET"
 log_message "PROD_BUCKET: $PROD_BUCKET"
 
-log_message "Checking if version $VERSION exists in staging bucket"
-aws s3 ls s3://$STAGING_BUCKET/ | grep -v '/$' | grep "v${VERSION}"
-if [ $? -ne 0 ]; then
-  log_message "ERROR: Version $VERSION not found in staging bucket $STAGING_BUCKET"
-  exit 1
+# Copy artifacts (only if not deploy-only mode)
+if [ "$MODE" != "--deploy-only" ]; then
+  log_message "Checking if version $VERSION exists in staging bucket"
+  aws s3 ls s3://$STAGING_BUCKET/ | grep -v '/$' | grep "v${VERSION}"
+  if [ $? -ne 0 ]; then
+    log_message "ERROR: Version $VERSION not found in staging bucket $STAGING_BUCKET"
+    exit 1
+  fi
+  log_message "Version $VERSION found in staging bucket"
+
+  log_message "Copying versioned artifacts from staging to prod"
+  artifacts_copied=0
+  aws s3 ls s3://$STAGING_BUCKET/ | grep -v '/$' | grep "v${VERSION}" | awk '{print $4}' | while read FILENAME; do
+    log_message "Copying $FILENAME from staging to prod"
+    aws s3 cp s3://$STAGING_BUCKET/$FILENAME s3://$PROD_BUCKET/$FILENAME
+    artifacts_copied=$((artifacts_copied + 1))
+  done
+
+  log_message "$artifacts_copied artifacts copied successfully"
 fi
-log_message "Version $VERSION found in staging bucket"
 
-log_message "Copying versioned artifacts from staging to prod"
-artifacts_copied=0
-aws s3 ls s3://$STAGING_BUCKET/ | grep -v '/$' | grep "v${VERSION}" | awk '{print $4}' | while read FILENAME; do
-  log_message "Copying $FILENAME from staging to prod"
-  aws s3 cp s3://$STAGING_BUCKET/$FILENAME s3://$PROD_BUCKET/$FILENAME
-  artifacts_copied=$((artifacts_copied + 1))
-done
+# Exit if copy-only mode
+if [ "$MODE" = "--copy-only" ]; then
+  log_message "Copy completed. Exiting (copy-only mode)"
+  exit 0
+fi
 
-log_message "$artifacts_copied artifacts copied successfully"
-
+# Deploy Lambda functions
 export SEMANTIC_VERSION="$VERSION"
 
 

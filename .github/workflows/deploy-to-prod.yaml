@@ -28,12 +28,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Configure AWS credentials for Prod
-        uses: aws-actions/configure-aws-credentials@v4.2.1
-        with:
-          role-to-assume: ${{ env.PROD_DEPLOYMENT_ROLE }}
-          aws-region: ${{ env.AWS_REGION }}
-
       - name: Install Required Tools
         run: |
           npm install -g typescript
@@ -55,10 +49,28 @@ jobs:
           chmod +x ./pipeline_scripts/functions.sh
           ls -la ./pipeline_scripts/
 
-      - name: Copy Artifacts and Deploy to Prod
+      - name: Configure AWS credentials for Staging (to copy artifacts)
+        uses: aws-actions/configure-aws-credentials@v4.2.1
+        with:
+          role-to-assume: ${{ env.NON_PROD_DEPLOYMENT_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: staging-copy
+
+      - name: Copy Artifacts from Staging
         run: |
-          echo "Starting prod deployment for version ${{ github.event.inputs.version }}"
-          ./pipeline_scripts/deploy-to-prod.sh "${{ github.event.inputs.version }}"
+          echo "Copying artifacts from staging for version ${{ github.event.inputs.version }}"
+          ./pipeline_scripts/deploy-to-prod.sh "${{ github.event.inputs.version }}" --copy-only
+
+      - name: Configure AWS credentials for Prod (for deployment)
+        uses: aws-actions/configure-aws-credentials@v4.2.1
+        with:
+          role-to-assume: ${{ env.PROD_DEPLOYMENT_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Deploy to Prod
+        run: |
+          echo "Deploying to prod version ${{ github.event.inputs.version }}"
+          ./pipeline_scripts/deploy-to-prod.sh "${{ github.event.inputs.version }}" --deploy-only
 
   deploy-static-files:
     name: Deploy Static Files to Prod
