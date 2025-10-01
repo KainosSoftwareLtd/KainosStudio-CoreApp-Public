@@ -19,18 +19,16 @@ dotenv.config();
 let server: http.Server;
 
 BeforeAll(async function () {
+  if (process.env.TEST_ENVIRONMENT === 'local') {
   process.env.USE_LOCAL_SERVICES = 'false';
-
   const app = createLocalApp();
-
+  server = app.listen(port);
+  }
   const firefoxOptions = new Options();
   firefoxOptions.addArguments('--headless');
 
   driver = new Builder().forBrowser('firefox').setFirefoxOptions(firefoxOptions).build();
   await driver.manage().window().maximize();
-
-  server = app.listen(port);
-
   await uploadingKfdTestFiles();
 });
 
