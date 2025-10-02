@@ -60,13 +60,13 @@ artifacts_downloaded=0
 
 # Use nonprod profile for staging bucket access
 export AWS_PROFILE=nonprod
-aws s3 ls s3://$STAGING_BUCKET/ | grep -v '/$' | grep "v${VERSION}" | awk '{print $4}' | while read FILENAME; do
+while read FILENAME; do
   log_message "Downloading $FILENAME from staging to local runner"
   aws s3 cp s3://$STAGING_BUCKET/$FILENAME "$TEMP_DIR/$FILENAME"
   artifacts_downloaded=$((artifacts_downloaded + 1))
-done
+done < <(aws s3 ls s3://$STAGING_BUCKET/ | grep -v '/$' | grep "v${VERSION}" | awk '{print $4}')
 
-log_message "Downloaded artifacts to local runner"
+log_message "Downloaded $artifacts_downloaded artifacts to local runner"
 
 log_message "Uploading artifacts from local runner to prod bucket (using prod profile)"
 artifacts_uploaded=0
