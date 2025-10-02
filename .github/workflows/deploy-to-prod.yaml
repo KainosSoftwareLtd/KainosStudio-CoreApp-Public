@@ -56,21 +56,16 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           role-session-name: staging-copy
 
-      - name: Copy Artifacts from Staging
-        run: |
-          echo "Copying artifacts from staging for version ${{ github.event.inputs.version }}"
-          ./pipeline_scripts/deploy-to-prod.sh "${{ github.event.inputs.version }}" --copy-only
-
       - name: Configure AWS credentials for Prod (for deployment)
         uses: aws-actions/configure-aws-credentials@v4.2.1
         with:
           role-to-assume: ${{ env.PROD_DEPLOYMENT_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Deploy to Prod
+      - name: Copy Artifacts and Deploy to Prod
         run: |
-          echo "Deploying to prod version ${{ github.event.inputs.version }}"
-          ./pipeline_scripts/deploy-to-prod.sh "${{ github.event.inputs.version }}" --deploy-only
+          echo "Starting prod deployment for version ${{ github.event.inputs.version }}"
+          ./pipeline_scripts/deploy-to-prod.sh "${{ github.event.inputs.version }}"
 
   deploy-static-files:
     name: Deploy Static Files to Prod
