@@ -28,18 +28,43 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Configure AWS credentials for Prod
-        uses: aws-actions/configure-aws-credentials@v4.2.1
-        with:
-          role-to-assume: ${{ env.PROD_DEPLOYMENT_ROLE }}
-          aws-region: ${{ env.AWS_REGION }}
-
       - name: Install Required Tools
         run: |
           npm install -g typescript
           echo "NODE.JS version: $(node -v)"
           echo "NPM version: $(npm -v)"
           echo "AWS CLI version: $(aws --version)"
+
+      # First, authenticate to non-prod to access staging artifacts
+      - name: Configure AWS credentials for Non-Prod (Staging)
+        uses: aws-actions/configure-aws-credentials@v4.2.1
+        with:
+          role-to-assume: ${{ env.NON_PROD_DEPLOYMENT_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: staging-access
+
+      - name: Setup Non-Prod AWS Profile
+        run: |
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile nonprod
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile nonprod
+          aws configure set aws_session_token $AWS_SESSION_TOKEN --profile nonprod
+          aws configure set region ${{ env.AWS_REGION }} --profile nonprod
+          echo "Non-Prod profile configured"
+
+      # Then, authenticate to prod for deployment
+      - name: Configure AWS credentials for Prod
+        uses: aws-actions/configure-aws-credentials@v4.2.1
+        with:
+          role-to-assume: ${{ env.PROD_DEPLOYMENT_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Prod AWS Profile
+        run: |
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile prod
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile prod
+          aws configure set aws_session_token $AWS_SESSION_TOKEN --profile prod
+          aws configure set region ${{ env.AWS_REGION }} --profile prod
+          echo "Prod profile configured"
 
       - name: Prepare Scripts
         run: |
@@ -54,6 +79,15 @@ jobs:
           chmod +x ./pipeline_scripts/update-lambda-functions.sh
           chmod +x ./pipeline_scripts/functions.sh
           ls -la ./pipeline_scripts/
+
+      - name: Verify AWS Profiles
+        run: |
+          echo "Available AWS profiles:"
+          aws configure list-profiles
+          echo "Testing nonprod profile access:"
+          aws sts get-caller-identity --profile nonprod
+          echo "Testing prod profile access:"
+          aws sts get-caller-identity --profile prod
 
       - name: Copy Artifacts and Deploy to Prod
         run: |

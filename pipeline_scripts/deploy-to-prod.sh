@@ -29,7 +29,9 @@ if [ ! -f "./functions.sh" ]; then
 fi
 source ./functions.sh
 
-log_message "Getting bucket names from SSM parameters"
+log_message "Getting bucket names from SSM parameters (using prod profile)"
+# Get S3 bucket base name using prod profile since SSM parameters are in prod account
+export AWS_PROFILE=prod
 s3_bucket_zip_files
 STAGING_BUCKET="$S3-staging"
 PROD_BUCKET="$S3-$ENVIRONMENT"
@@ -37,7 +39,10 @@ PROD_BUCKET="$S3-$ENVIRONMENT"
 log_message "STAGING_BUCKET: $STAGING_BUCKET"
 log_message "PROD_BUCKET: $PROD_BUCKET"
 
-log_message "Checking if version $VERSION exists in staging bucket"
+log_message "Checking if version $VERSION exists in staging bucket (using nonprod profile)"
+
+# Switch to nonprod profile for staging bucket access
+export AWS_PROFILE=nonprod
 aws s3 ls s3://$STAGING_BUCKET/ | grep -v '/$' | grep "v${VERSION}"
 if [ $? -ne 0 ]; then
   log_message "ERROR: Version $VERSION not found in staging bucket $STAGING_BUCKET"
@@ -45,15 +50,42 @@ if [ $? -ne 0 ]; then
 fi
 log_message "Version $VERSION found in staging bucket"
 
-log_message "Copying versioned artifacts from staging to prod"
-artifacts_copied=0
+# Create temporary directory for artifacts
+TEMP_DIR="/tmp/artifacts_v${VERSION}"
+mkdir -p "$TEMP_DIR"
+log_message "Created temporary directory: $TEMP_DIR"
+
+log_message "Downloading versioned artifacts from staging to local runner (using nonprod profile)"
+artifacts_downloaded=0
+
+# Use nonprod profile for staging bucket access
+export AWS_PROFILE=nonprod
 aws s3 ls s3://$STAGING_BUCKET/ | grep -v '/$' | grep "v${VERSION}" | awk '{print $4}' | while read FILENAME; do
-  log_message "Copying $FILENAME from staging to prod"
-  aws s3 cp s3://$STAGING_BUCKET/$FILENAME s3://$PROD_BUCKET/$FILENAME
-  artifacts_copied=$((artifacts_copied + 1))
+  log_message "Downloading $FILENAME from staging to local runner"
+  aws s3 cp s3://$STAGING_BUCKET/$FILENAME "$TEMP_DIR/$FILENAME"
+  artifacts_downloaded=$((artifacts_downloaded + 1))
 done
 
-log_message "$artifacts_copied artifacts copied successfully"
+log_message "Downloaded artifacts to local runner"
+
+log_message "Uploading artifacts from local runner to prod bucket (using prod profile)"
+artifacts_uploaded=0
+# Switched to prod profile for prod bucket access
+export AWS_PROFILE=prod
+for FILENAME in "$TEMP_DIR"/*; do
+  if [ -f "$FILENAME" ]; then
+    BASENAME=$(basename "$FILENAME")
+    log_message "Uploading $BASENAME from runner to prod bucket"
+    aws s3 cp "$FILENAME" s3://$PROD_BUCKET/$BASENAME
+    artifacts_uploaded=$((artifacts_uploaded + 1))
+  fi
+done
+
+log_message "$artifacts_uploaded artifacts uploaded successfully to prod"
+
+# Clean up temporary directory
+rm -rf "$TEMP_DIR"
+log_message "Cleaned up temporary directory"
 
 export SEMANTIC_VERSION="$VERSION"
 
@@ -61,7 +93,9 @@ export SEMANTIC_VERSION="$VERSION"
 log_message "Running update-lambda-functions.sh with version $SEMANTIC_VERSION"
 ./update-lambda-functions.sh "$SEMANTIC_VERSION"
 
-log_message "Verifying Lambda deployments in $ENVIRONMENT environment"
+log_message "Verifying Lambda deployments in $ENVIRONMENT environment (using prod profile)"
+
+export AWS_PROFILE=prod
 
 CORE_LAMBDA=$(aws ssm get-parameter \
   --name /lambda/kccorename \
