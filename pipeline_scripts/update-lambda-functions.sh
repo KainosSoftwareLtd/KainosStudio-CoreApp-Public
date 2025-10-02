@@ -2,9 +2,6 @@
 set -e
 PIPELINE_DIR="$GITHUB_WORKSPACE/pipeline_scripts"
 
-# ======== Set AWS Profile =========
-export AWS_PROFILE=prod
-
 # =================================
 cd $PIPELINE_DIR
 source ./functions.sh
