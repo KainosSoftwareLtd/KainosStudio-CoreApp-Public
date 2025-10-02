@@ -105,35 +105,56 @@ jobs:
           
           # Extract commits since last release
           git fetch --tags
+          
+          # Get the last tag (could be production or staging)
           PREV_TAG=$(git describe --tags --abbrev=0 --match "v*" 2>/dev/null || echo "none")
           
-          if [ "$PREV_TAG" == "none" ]; then
-            COMMITS=$(git log --pretty=format:"- %s (%h)" -10)
+          echo "Previous tag: $PREV_TAG"
+          
+          if [ "$PREV_TAG" == "none" ] || [ -z "$PREV_TAG" ]; then
+            echo "No previous release found, getting last 15 commits"
+            COMMITS=$(git log --pretty=format:"- **%s** (%h) by %an" -15)
           else
-            COMMITS=$(git log --pretty=format:"- %s (%h)" ${PREV_TAG}..HEAD)
+            echo "Getting commits since $PREV_TAG"
+            COMMITS=$(git log --pretty=format:"- **%s** (%h) by %an" ${PREV_TAG}..HEAD)
           fi
+          
+          # Count commits
+          COMMIT_COUNT=$(echo "$COMMITS" | wc -l)
           
           # Create release notes file
           cat > release-notes.md << EOF
-          # Release v${{ needs.deploy.outputs.version }}
+          # 🚧 Staging Release v${{ needs.deploy.outputs.version }}
           
-          ## What's Changed
+          > ⚠️ **This is a pre-release for staging environment**
+          
+          ## 📋 What's Changed
+          
           ${COMMITS}
           
-          ## Deployment Information
-          - Deployed to: Staging
-          - Deployment time: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
-          - Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          **Total commits in this release:** $COMMIT_COUNT
+          
+          ## 🚧 Deployment Information
+          - **Environment:** Staging
+          - **Deployment time:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          - **Deployed by:** ${{ github.actor }}
+          - **Workflow run:** [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          
+          ## 🔗 Links
+          - [Compare changes](https://github.com/${{ github.repository }}/compare/${PREV_TAG}...v${{ needs.deploy.outputs.version }})
+          - [Full changelog](https://github.com/${{ github.repository }}/commits/v${{ needs.deploy.outputs.version }})
           EOF
           
+          echo "Generated release notes:"
           cat release-notes.md
       
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2.2.2
         with:
-          name: "v${{ needs.deploy.outputs.version }} (Staging)"
+          name: "🚧 v${{ needs.deploy.outputs.version }} (Staging)"
           tag_name: "v${{ needs.deploy.outputs.version }}"
           body_path: release-notes.md
           draft: false
           prerelease: true
+          make_latest: false
           token: ${{ secrets.GITHUB_TOKEN }}
