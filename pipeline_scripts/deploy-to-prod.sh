@@ -30,8 +30,11 @@ fi
 source ./functions.sh
 
 log_message "Getting bucket names from SSM parameters (using prod profile)"
-# Get S3 bucket base name using prod profile since SSM parameters are in prod account
-export AWS_PROFILE=prod
+# Set default AWS profile to prod - all AWS commands will use prod unless explicitly overridden
+export AWS_DEFAULT_PROFILE=prod
+NONPROD_PROFILE="nonprod"
+
+# Get S3 bucket base name using default prod profile since SSM parameters are in prod account
 s3_bucket_zip_files
 STAGING_BUCKET="$S3-staging"
 PROD_BUCKET="$S3-$ENVIRONMENT"
@@ -41,9 +44,8 @@ log_message "PROD_BUCKET: $PROD_BUCKET"
 
 log_message "Checking if version $VERSION exists in staging bucket (using nonprod profile)"
 
-# Switch to nonprod profile for staging bucket access
-export AWS_PROFILE=nonprod
-aws s3 ls s3://$STAGING_BUCKET/ | grep -v '/$' | grep "v${VERSION}"
+# Use nonprod profile for staging bucket access
+aws s3 ls s3://$STAGING_BUCKET/ --profile "$NONPROD_PROFILE" | grep -v '/$' | grep "v${VERSION}"
 if [ $? -ne 0 ]; then
   log_message "ERROR: Version $VERSION not found in staging bucket $STAGING_BUCKET"
   exit 1
@@ -59,19 +61,17 @@ log_message "Downloading versioned artifacts from staging to local runner (using
 artifacts_downloaded=0
 
 # Use nonprod profile for staging bucket access
-export AWS_PROFILE=nonprod
 while read FILENAME; do
   log_message "Downloading $FILENAME from staging to local runner"
-  aws s3 cp s3://$STAGING_BUCKET/$FILENAME "$TEMP_DIR/$FILENAME"
+  aws s3 cp s3://$STAGING_BUCKET/$FILENAME "$TEMP_DIR/$FILENAME" --profile "$NONPROD_PROFILE"
   artifacts_downloaded=$((artifacts_downloaded + 1))
-done < <(aws s3 ls s3://$STAGING_BUCKET/ | grep -v '/$' | grep "v${VERSION}" | awk '{print $4}')
+done < <(aws s3 ls s3://$STAGING_BUCKET/ --profile "$NONPROD_PROFILE" | grep -v '/$' | grep "v${VERSION}" | awk '{print $4}')
 
 log_message "Downloaded $artifacts_downloaded artifacts to local runner"
 
 log_message "Uploading artifacts from local runner to prod bucket (using prod profile)"
 artifacts_uploaded=0
-# Switched to prod profile for prod bucket access
-export AWS_PROFILE=prod
+# Use default prod profile for prod bucket access (no --profile flag needed)
 for FILENAME in "$TEMP_DIR"/*; do
   if [ -f "$FILENAME" ]; then
     BASENAME=$(basename "$FILENAME")
@@ -89,14 +89,12 @@ log_message "Cleaned up temporary directory"
 
 export SEMANTIC_VERSION="$VERSION"
 
-
 log_message "Running update-lambda-functions.sh with version $SEMANTIC_VERSION"
 ./update-lambda-functions.sh "$SEMANTIC_VERSION"
 
 log_message "Verifying Lambda deployments in $ENVIRONMENT environment (using prod profile)"
 
-export AWS_PROFILE=prod
-
+# Use default prod profile (no --profile flags needed)
 CORE_LAMBDA=$(aws ssm get-parameter \
   --name /lambda/kccorename \
   --query Parameter.Value \
