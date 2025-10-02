@@ -203,37 +203,56 @@ jobs:
         run: |
           echo "Generating release notes for v${{ github.event.inputs.version }}"
           
-          # Extract commits since last release
+          # Extract commits since last production release (not pre-release)
           git fetch --tags
-          PREV_TAG=$(git describe --tags --abbrev=0 --match "v*" 2>/dev/null || echo "none")
           
-          if [ "$PREV_TAG" == "none" ]; then
-            COMMITS=$(git log --pretty=format:"- %s (%h)" -10)
+          # Get the last production release tag (excluding pre-releases)
+          PREV_TAG=$(git tag -l "v*" --sort=-version:refname | grep -v "staging\|alpha\|beta\|rc" | head -2 | tail -1 2>/dev/null || echo "none")
+          
+          echo "Previous production tag: $PREV_TAG"
+          
+          if [ "$PREV_TAG" == "none" ] || [ -z "$PREV_TAG" ]; then
+            echo "No previous production release found, getting last 20 commits"
+            COMMITS=$(git log --pretty=format:"- **%s** (%h) by %an" -20)
           else
-            COMMITS=$(git log --pretty=format:"- %s (%h)" ${PREV_TAG}..HEAD)
+            echo "Getting commits since $PREV_TAG"
+            COMMITS=$(git log --pretty=format:"- **%s** (%h) by %an" ${PREV_TAG}..HEAD)
           fi
+          
+          # Count commits
+          COMMIT_COUNT=$(echo "$COMMITS" | wc -l)
           
           # Create release notes file
           cat > release-notes.md << EOF
-          # Release v${{ github.event.inputs.version }}
+          # 🚀 Production Release v${{ github.event.inputs.version }}
           
-          ## What's Changed
+          ## 📋 What's Changed
+          
           ${COMMITS}
           
-          ## Deployment Information
-          - Deployed to: Prod
-          - Deployment time: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
-          - Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          **Total commits in this release:** $COMMIT_COUNT
+          
+          ## 🚀 Deployment Information
+          - **Environment:** Production
+          - **Deployment time:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          - **Deployed by:** ${{ github.actor }}
+          - **Workflow run:** [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          
+          ## 🔗 Links
+          - [Compare changes](https://github.com/${{ github.repository }}/compare/${PREV_TAG}...v${{ github.event.inputs.version }})
+          - [Full changelog](https://github.com/${{ github.repository }}/commits/v${{ github.event.inputs.version }})
           EOF
           
+          echo "Generated release notes:"
           cat release-notes.md
       
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2.2.2
         with:
-          name: "v${{ github.event.inputs.version }} (Prod)"
+          name: "🚀 v${{ github.event.inputs.version }} (Production)"
           tag_name: "v${{ github.event.inputs.version }}"
           body_path: release-notes.md
           draft: false
-          prerelease: true
+          prerelease: false
+          make_latest: true
           token: ${{ secrets.GITHUB_TOKEN }}
