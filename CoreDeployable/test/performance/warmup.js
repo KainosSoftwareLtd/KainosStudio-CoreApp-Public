@@ -1,7 +1,7 @@
 import { LambdaClient, PutProvisionedConcurrencyConfigCommand, DeleteProvisionedConcurrencyConfigCommand, GetProvisionedConcurrencyConfigCommand } from '@aws-sdk/client-lambda';
 
 const FUNCTION_NAME = process.env.LAMBDA_FUNCTION_NAME || 'kainoscore-app-dev';
-const PROVISIONED_CONCURRENCY = parseInt(process.env.PROVISIONED_CONCURRENCY || '5');
+const PROVISIONED_CONCURRENCY = parseInt(process.env.PROVISIONED_CONCURRENCY || '10');
 const AWS_REGION = process.env.AWS_REGION || 'eu-west-2';
 const WARMUP_DURATION_MS = parseInt(process.env.WARMUP_DURATION_MS || '30000');
 const LAMBDA_QUALIFIER = 'CoreLambda';
