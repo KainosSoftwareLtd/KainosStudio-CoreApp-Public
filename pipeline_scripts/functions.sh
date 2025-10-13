@@ -108,8 +108,9 @@ function get_current_lambda_alias {
                         --name $ALIAS_NAME \
                         --query 'FunctionVersion' \
                         --output text 2>/dev/null)
+    AWS_EXIT_CODE=$?
     
-    if [ $? -eq 0 ] && [ "$CURRENT_VERSION" != "None" ]; then
+    if [ $AWS_EXIT_CODE -eq 0 ] && [ "$CURRENT_VERSION" != "None" ]; then
         echo "Current alias $ALIAS_NAME points to version: $CURRENT_VERSION"
         export CURRENT_ALIAS_VERSION=$CURRENT_VERSION
     else

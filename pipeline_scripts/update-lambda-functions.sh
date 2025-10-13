@@ -35,7 +35,6 @@ if [ -n "$NEW_LAMBDA_VERSION" ]; then
     echo
     echo "Updating Core alias to point to new version $NEW_LAMBDA_VERSION"
     
-    echo "Updating Core alias..."
     update_lambda_alias
     
     echo "Core Lambda deployment completed successfully!"
