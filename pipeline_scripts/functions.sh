@@ -56,127 +56,65 @@ function update_lambda {
 
 
 
-function update_core_lambda_alias {
+function update_lambda_alias {
+    if [ -z "$LAMBDA_NAME" ]; then
+        echo "Error: LAMBDA_NAME is not set"
+        return 1
+    fi
+    
+    if [ -z "$ALIAS_NAME" ]; then
+        echo "Error: ALIAS_NAME is not set"
+        return 1
+    fi
+    
     if [ -z "$NEW_LAMBDA_VERSION" ]; then
         echo "Error: NEW_LAMBDA_VERSION is not set"
         return 1
     fi
     
-    if [ -z "$CORE_ALIAS_NAME" ]; then
-        echo "Error: CORE_ALIAS_NAME is not set"
-        return 1
-    fi
-    
-    if [ -z "$LAMBDA_NAME" ]; then
-        echo "Error: LAMBDA_NAME is not set"
-        return 1
-    fi
-    
     # Check if alias exists
-    aws lambda get-alias --function-name $LAMBDA_NAME --name $CORE_ALIAS_NAME > /dev/null 2>&1
+    aws lambda get-alias --function-name $LAMBDA_NAME --name $ALIAS_NAME > /dev/null 2>&1
     if [ 0 -eq $? ]; then
-        echo "Updating existing Core alias $CORE_ALIAS_NAME to point to version $NEW_LAMBDA_VERSION"
+        echo "Updating existing alias $ALIAS_NAME to point to version $NEW_LAMBDA_VERSION"
         aws lambda update-alias \
             --function-name $LAMBDA_NAME \
-            --name $CORE_ALIAS_NAME \
+            --name $ALIAS_NAME \
             --function-version $NEW_LAMBDA_VERSION \
             --output text
     else
-        echo "Creating new Core alias $CORE_ALIAS_NAME pointing to version $NEW_LAMBDA_VERSION"
+        echo "Creating new alias $ALIAS_NAME pointing to version $NEW_LAMBDA_VERSION"
         aws lambda create-alias \
             --function-name $LAMBDA_NAME \
-            --name $CORE_ALIAS_NAME \
+            --name $ALIAS_NAME \
             --function-version $NEW_LAMBDA_VERSION \
             --output text
     fi
 }
 
-function update_kfd_lambda_alias {
-    if [ -z "$NEW_LAMBDA_VERSION" ]; then
-        echo "Error: NEW_LAMBDA_VERSION is not set"
-        return 1
-    fi
-    
-    if [ -z "$KFD_ALIAS_NAME" ]; then
-        echo "Error: KFD_ALIAS_NAME is not set"
-        return 1
-    fi
-    
+function get_current_lambda_alias {
     if [ -z "$LAMBDA_NAME" ]; then
         echo "Error: LAMBDA_NAME is not set"
         return 1
     fi
     
-    # Check if alias exists
-    aws lambda get-alias --function-name $LAMBDA_NAME --name $KFD_ALIAS_NAME > /dev/null 2>&1
-    if [ 0 -eq $? ]; then
-        echo "Updating existing KFD alias $KFD_ALIAS_NAME to point to version $NEW_LAMBDA_VERSION"
-        aws lambda update-alias \
-            --function-name $LAMBDA_NAME \
-            --name $KFD_ALIAS_NAME \
-            --function-version $NEW_LAMBDA_VERSION \
-            --output text
-    else
-        echo "Creating new KFD alias $KFD_ALIAS_NAME pointing to version $NEW_LAMBDA_VERSION"
-        aws lambda create-alias \
-            --function-name $LAMBDA_NAME \
-            --name $KFD_ALIAS_NAME \
-            --function-version $NEW_LAMBDA_VERSION \
-            --output text
-    fi
-}
-
-function get_current_core_lambda_alias {
-    if [ -z "$CORE_ALIAS_NAME" ]; then
-        echo "Error: CORE_ALIAS_NAME is not set"
-        return 1
-    fi
-    
-    if [ -z "$LAMBDA_NAME" ]; then
-        echo "Error: LAMBDA_NAME is not set"
+    if [ -z "$ALIAS_NAME" ]; then
+        echo "Error: ALIAS_NAME is not set"
         return 1
     fi
     
     # Check if alias exists and get current version
-    CURRENT_CORE_VERSION=$(aws lambda get-alias \
+    CURRENT_VERSION=$(aws lambda get-alias \
                         --function-name $LAMBDA_NAME \
-                        --name $CORE_ALIAS_NAME \
+                        --name $ALIAS_NAME \
                         --query 'FunctionVersion' \
                         --output text 2>/dev/null)
     
-    if [ $? -eq 0 ] && [ "$CURRENT_CORE_VERSION" != "None" ]; then
-        echo "Current Core alias $CORE_ALIAS_NAME points to version: $CURRENT_CORE_VERSION"
-        export CURRENT_CORE_ALIAS_VERSION=$CURRENT_CORE_VERSION
+    if [ $? -eq 0 ] && [ "$CURRENT_VERSION" != "None" ]; then
+        echo "Current alias $ALIAS_NAME points to version: $CURRENT_VERSION"
+        export CURRENT_ALIAS_VERSION=$CURRENT_VERSION
     else
-        echo "Core alias $CORE_ALIAS_NAME does not exist or could not be retrieved"
-        export CURRENT_CORE_ALIAS_VERSION=""
-    fi
-}
-
-function get_current_kfd_lambda_alias {
-    if [ -z "$KFD_ALIAS_NAME" ]; then
-        echo "Error: KFD_ALIAS_NAME is not set"
-        return 1
-    fi
-    
-    if [ -z "$LAMBDA_NAME" ]; then
-        echo "Error: LAMBDA_NAME is not set"
-        return 1
-    fi
-    
-    # Check if alias exists and get current version
-    CURRENT_KFD_VERSION=$(aws lambda get-alias \
-                        --function-name $LAMBDA_NAME \
-                        --name $KFD_ALIAS_NAME \
-                        --query 'FunctionVersion' \
-                        --output text 2>/dev/null)
-    
-    if [ $? -eq 0 ] && [ "$CURRENT_KFD_VERSION" != "None" ]; then
-        echo "Current KFD alias $KFD_ALIAS_NAME points to version: $CURRENT_KFD_VERSION"
-        export CURRENT_KFD_ALIAS_VERSION=$CURRENT_KFD_VERSION
-    else
-        echo "KFD alias $KFD_ALIAS_NAME does not exist or could not be retrieved"
-        export CURRENT_KFD_ALIAS_VERSION=""
+        echo "Alias $ALIAS_NAME does not exist or could not be retrieved"
+        export CURRENT_ALIAS_VERSION=""
     fi
 }
 
