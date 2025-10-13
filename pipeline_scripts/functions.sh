@@ -38,24 +38,86 @@ function update_lambda {
   if [ 0 -eq $? ]; then
     echo "Lambda $LAMBDA_NAME exists"
     echo
-    aws lambda update-function-code \
+    # Update function code and publish a new version
+    NEW_LAMBDA_VERSION=$(aws lambda update-function-code \
         --function-name $LAMBDA_NAME \
         --s3-key $LAMBDA_ZIP_FILE \
         --s3-bucket $S3_ZIP_FILES \
-        --output text
+        --publish \
+        --query 'Version' \
+        --output text)
+    
+    echo "New Lambda version created: $NEW_LAMBDA_VERSION"
+    export NEW_LAMBDA_VERSION
   else
     echo "Lambda $LAMBDA_NAME does not exist"
   fi
 }
 
-function get_lambda_alias_version {
-    version=$(aws lambda get-alias \
+
+
+function update_lambda_alias {
+    if [ -z "$LAMBDA_NAME" ]; then
+        echo "Error: LAMBDA_NAME is not set"
+        return 1
+    fi
+    
+    if [ -z "$ALIAS_NAME" ]; then
+        echo "Error: ALIAS_NAME is not set"
+        return 1
+    fi
+    
+    if [ -z "$NEW_LAMBDA_VERSION" ]; then
+        echo "Error: NEW_LAMBDA_VERSION is not set"
+        return 1
+    fi
+    
+    # Check if alias exists
+    aws lambda get-alias --function-name $LAMBDA_NAME --name $ALIAS_NAME > /dev/null 2>&1
+    if [ 0 -eq $? ]; then
+        echo "Updating existing alias $ALIAS_NAME to point to version $NEW_LAMBDA_VERSION"
+        aws lambda update-alias \
+            --function-name $LAMBDA_NAME \
+            --name $ALIAS_NAME \
+            --function-version $NEW_LAMBDA_VERSION \
+            --output text
+    else
+        echo "Creating new alias $ALIAS_NAME pointing to version $NEW_LAMBDA_VERSION"
+        aws lambda create-alias \
+            --function-name $LAMBDA_NAME \
+            --name $ALIAS_NAME \
+            --function-version $NEW_LAMBDA_VERSION \
+            --output text
+    fi
+}
+
+function get_current_lambda_alias {
+    if [ -z "$LAMBDA_NAME" ]; then
+        echo "Error: LAMBDA_NAME is not set"
+        return 1
+    fi
+    
+    if [ -z "$ALIAS_NAME" ]; then
+        echo "Error: ALIAS_NAME is not set"
+        return 1
+    fi
+    
+    # Check if alias exists and get current version
+    CURRENT_VERSION=$(aws lambda get-alias \
                         --function-name $LAMBDA_NAME \
                         --name $ALIAS_NAME \
                         --query 'FunctionVersion' \
-                        --output text)
+                        --output text 2>/dev/null)
+    AWS_EXIT_CODE=$?
+    
+    if [ $AWS_EXIT_CODE -eq 0 ] && [ "$CURRENT_VERSION" != "None" ]; then
+        echo "Current alias $ALIAS_NAME points to version: $CURRENT_VERSION"
+        export CURRENT_ALIAS_VERSION=$CURRENT_VERSION
+    else
+        echo "Alias $ALIAS_NAME does not exist or could not be retrieved"
+        export CURRENT_ALIAS_VERSION=""
+    fi
 }
-
 
 function lambda_name {
     NAME=`aws ssm get-parameter \
