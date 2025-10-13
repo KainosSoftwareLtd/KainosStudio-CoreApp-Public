@@ -3,7 +3,7 @@ name: Deploy Kainoscore to Dev
 on:
   push:
     branches:
-      - main
+      - KFP-824
 
 
 env:
