@@ -103,10 +103,19 @@ export const expressConfiguration = async (app: express.Express) => {
     }),
     function (req, res) {
       // Handle RelayState from either body or query parameters, with fallback to session
-      const relayState = req.body?.RelayState || req.query?.RelayState || req.session?.returnTo;
+      const bodyRelayState = req.body?.RelayState;
+      const queryRelayState = req.query?.RelayState;
+      const sessionReturnTo = req.session?.returnTo;
+
+      // Debug logging for all individual values
+      logger.debug(`SAML callback debug - Body RelayState: ${bodyRelayState}`);
+      logger.debug(`SAML callback debug - Query RelayState: ${queryRelayState}`);
+      logger.debug(`SAML callback debug - Session returnTo: ${sessionReturnTo}`);
+
+      const relayState = bodyRelayState || queryRelayState || sessionReturnTo;
       const redirectUrl = relayState ? decodeURIComponent(relayState) : '/';
 
-      logger.debug(`SAML callback - RelayState: ${relayState}, Redirect to: ${redirectUrl}`);
+      logger.debug(`SAML callback - Final RelayState: ${relayState}, Redirect to: ${redirectUrl}`);
       logger.debug(`Request body:`, req.body);
       logger.debug(`Request query:`, req.query);
       logger.debug(`Session returnTo:`, req.session?.returnTo);

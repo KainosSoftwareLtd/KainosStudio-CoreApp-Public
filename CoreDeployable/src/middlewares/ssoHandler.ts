@@ -7,11 +7,32 @@ const strategy = new MultiSamlStrategy(
   {
     passReqToCallback: true,
     getSamlOptions(request, done) {
-      if (!request.session.returnTo) {
-        return done(new Error('returnTo is empty'));
+      // Debug session information
+      logger.debug(`Session ID: ${request.sessionID || 'undefined'}`);
+      logger.debug(`Session exists: ${!!request.session}`);
+      logger.debug(`Session returnTo: ${request.session?.returnTo || 'undefined'}`);
+      logger.debug(`RelayState query param: ${request.query?.RelayState || 'undefined'}`);
+      
+      // Try to get returnTo from session first, then fallback to RelayState from query params
+      let returnToPath = request.session?.returnTo;
+      
+      if (!returnToPath) {
+        // Fallback to RelayState from query parameters for Azure Functions compatibility
+        const relayState = request.query?.RelayState as string;
+        if (relayState) {
+          returnToPath = decodeURIComponent(relayState);
+          logger.debug(`Using RelayState as returnTo: ${returnToPath}`);
+        }
+      } else {
+        logger.debug(`Using session returnTo: ${returnToPath}`);
       }
 
-      const serviceName = decodeURI(request.session.returnTo.split('/')[1]);
+      if (!returnToPath) {
+        logger.error('Both session.returnTo and RelayState are empty');
+        return done(new Error('returnTo is empty and RelayState is not available'));
+      }
+
+      const serviceName = decodeURI(returnToPath.split('/')[1]);
 
       logger.debug(`Getting saml options for: ${serviceName}`);
       const authService = new AuthConfigurationService();
