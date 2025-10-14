@@ -8,15 +8,15 @@ import envConfig from './config/envConfig.js';
 import express from 'express';
 import { expressConfiguration } from './config/expressConfiguration.js';
 
-export function createCloudApp(): express.Express {
+export async function createCloudApp(): Promise<express.Express> {
   initializeCloudServices(envConfig.cloudProvider);
   const { fileService, storeService, serviceRetriever } = getCloudServices();
 
   const creatorInstance = new creator.Creator(serviceRetriever.getService, rendererFunc, fileService, storeService, []);
-  return createApp(creatorInstance);
+  return await createApp(creatorInstance);
 }
 
-export function createLocalApp(): express.Express {
+export async function createLocalApp(): Promise<express.Express> {
   initializeCloudServices(envConfig.cloudProvider);
   const { fileService, storeService, serviceRetriever } = getCloudServices();
   const retriever = envConfig.useLocalServices ? new LocalServiceRetriever() : serviceRetriever;
@@ -30,9 +30,9 @@ export function createLocalApp(): express.Express {
     staticPaths,
   );
 
-  return createApp(creatorInstance);
+  return await createApp(creatorInstance);
 }
 
-function createApp(creatorInstance: creator.Creator): express.Express {
-  return creatorInstance.express(expressConfiguration, ensureLoggedInMiddleware);
+async function  createApp(creatorInstance: creator.Creator): Promise<express.Express> {
+  return await creatorInstance.express(expressConfiguration, ensureLoggedInMiddleware);
 }

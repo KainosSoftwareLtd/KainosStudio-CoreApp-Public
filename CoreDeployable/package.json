@@ -53,6 +53,7 @@
     "@codegenie/serverless-express": "^4.16.0",
     "@node-saml/passport-saml": "^5.1.0",
     "body-parser": "^2.2.0",
+    "connect-redis": "^9.0.0",
     "cookie-parser": "^1.4.7",
     "core-fcads": "file:core-fcads-1.0.0.tgz",
     "core-gcds": "file:core-gcds-1.0.0.tgz",
@@ -68,6 +69,7 @@
     "helmet": "^8.1.0",
     "jsdom": "^27.0.0",
     "nocache": "^4.0.0",
+    "redis": "^5.8.3",
     "winston": "^3.13.1"
   },
   "devDependencies": {
@@ -105,6 +107,7 @@
     "@codegenie/serverless-express",
     "@node-saml/passport-saml",
     "body-parser",
+    "connect-redis",
     "cookie-parser",
     "crypto-js",
     "core-fcads",
@@ -120,6 +123,7 @@
     "helmet",
     "jsdom",
     "nocache",
+    "redis",
     "winston"
   ]
 }

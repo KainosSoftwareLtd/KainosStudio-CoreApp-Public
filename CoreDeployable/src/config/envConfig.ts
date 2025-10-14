@@ -83,6 +83,18 @@ const envConfig = {
     }
     return provider;
   },
+  get redisConnectionString(): string | undefined {
+    return process.env.REDIS_CONNECTION_STRING;
+  },
+  get redisTimeout(): number {
+    return process.env.REDIS_TIMEOUT ? parseInt(process.env.REDIS_TIMEOUT, 10) : 5000;
+  },
+  get redisConnectionTimeout(): number {
+    return process.env.REDIS_CONNECTION_TIMEOUT ? parseInt(process.env.REDIS_CONNECTION_TIMEOUT, 10) : 5000;
+  },
+  get skipAuthIssuerCheck(): boolean {
+    return process.env.SKIP_AUTH_ISSUER_CHECK === 'true';
+  },
 };
 
 export default envConfig;

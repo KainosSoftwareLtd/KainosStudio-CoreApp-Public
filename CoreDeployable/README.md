@@ -18,12 +18,12 @@ Set up the environment by adding a `.env` file to the root folder (CoreDeployabl
 
 | Variable | Description |
 |----------|-------------|
-| `COOKIE_SECRET` | Secret key for encrypting session data |
 | `SESSION_SECRET` | Secret key for encrypting auth session data |
 | `AUTH_CONFIG_FILE_NAME` | Name for auth configuration file for each form |
 | `ALLOWED_ORIGIN` | Used for API endpoint CORS configuration |
 | `CLOUD_PROVIDER` | Cloud provider to use (must be 'aws' or 'azure') |
 | `FORM_SESSION_TABLE_NAME` | Table name for storing user's form data |
+| `REDIS_CONNECTION_STRING` | Used to store authentication session, url in format: `redis[s]://[[username][:password]@][host][:port][/db-number]` |
 
 ##### AWS-specific Required Variables (when CLOUD_PROVIDER='aws')
 
@@ -53,6 +53,9 @@ Set up the environment by adding a `.env` file to the root folder (CoreDeployabl
 | `LOG_LEVEL` | Log verbosity | info |
 | `MAX_ALLOWED_FILE_SIZE_TO_UPLOAD` | Maximum file upload size in MB | 100 |
 | `USE_LOCAL_DYNAMODB` | Use local DynamoDB instance | false |
+| `REDIS_TIMEOUT` | Timeout for Redis command execution (in milliseconds) | 5000 |
+| `REDIS_CONNECTION_TIMEOUT` | Timeout for Redis connection establishment (in milliseconds) | 5000 |
+| `SKIP_AUTH_ISSUER_CHECK` | Skip issuer validation for authentication sessions. Can be enabled when using a single SAML configuration | false | 
 
 ##### Available Log Levels
 - trace
@@ -66,7 +69,6 @@ Set up the environment by adding a `.env` file to the root folder (CoreDeployabl
 
 ##### AWS Configuration Example
 ```
-COOKIE_SECRET='your-secure-cookie-secret'
 SESSION_SECRET='your-secure-session-secret'
 CLOUD_PROVIDER='aws'
 BUCKET_NAME='your-kfd-files-bucket'
@@ -80,11 +82,11 @@ ALLOWED_ORIGIN='http://localhost:3000/'
 MAX_ALLOWED_FILE_SIZE_TO_UPLOAD='10'
 USE_LOCAL_DYNAMODB='false'
 FORM_SESSION_TABLE_NAME='Core_FormSessions_dev'
+REDIS_CONNECTION_STRING='rediss://:apiKey@instance:6380'
 ```
 
 ##### Azure Configuration Example
 ```
-COOKIE_SECRET='your-secure-cookie-secret'
 SESSION_SECRET='your-secure-session-secret'
 CLOUD_PROVIDER='azure'
 AZURE_STORAGE_ACCOUNT='your-storage-account'
@@ -100,6 +102,7 @@ LOG_LEVEL='debug'
 ALLOWED_ORIGIN='http://localhost:3000/'
 MAX_ALLOWED_FILE_SIZE_TO_UPLOAD='10'
 FORM_SESSION_TABLE_NAME='FormSessions'
+REDIS_CONNECTION_STRING='rediss://:apiKey@instance:6380'
 ```
 
 > **Note:** Never commit your `.env` file to version control. It has been added to `.gitignore` for your protection.

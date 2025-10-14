@@ -1,4 +1,5 @@
 import { AuthConfigurationService } from '../services/AuthConfigurationService.js';
+import envConfig from '../config/envConfig.js';
 import express from 'express';
 import { logger } from 'core-runtime';
 
@@ -28,24 +29,26 @@ async function ensureLoggedInMiddleware(req: express.Request, res: express.Respo
         logger.debug(`User is not logged in, redirecting to login`);
         return redirectToLoginWithReturnPath(path);
       } else {
-        logger.debug(`User is authenticated, checking provider`);
-        const config = await authService.getConfiguration(serviceName);
-        logger.debug(`Checking if the user is signed in to the expected provider`);
+        if (!envConfig.skipAuthIssuerCheck) {
+          logger.debug(`User is authenticated, checking provider`);
+          const config = await authService.getConfiguration(serviceName);
+          logger.debug(`Checking if the user is signed in to the expected provider`);
 
-        if (!config || typeof config !== 'object' || !('issuer' in config)) {
-          logger.error(`Invalid configuration or missing issuer for service: ${serviceName}`);
-          return redirectToLoginWithReturnPath(path);
-        }
+          if (!config || typeof config !== 'object' || !('issuer' in config)) {
+            logger.error(`Invalid configuration or missing issuer for service: ${serviceName}`);
+            return redirectToLoginWithReturnPath(path);
+          }
 
-        const issuerInConfig = (config as { issuer: string }).issuer;
-        const issuerInCookie = req.session?.passport?.user?.issuer;
+          const issuerInConfig = (config as { issuer: string }).issuer;
+          const issuerInCookie = req.session?.passport?.user?.issuer;
 
-        logger.debug(`Issuer in config: ${issuerInConfig}`);
-        logger.debug(`Issuer in cookie: ${issuerInCookie}`);
+          logger.debug(`Issuer in config: ${issuerInConfig}`);
+          logger.debug(`Issuer in cookie: ${issuerInCookie}`);
 
-        if (issuerInConfig != issuerInCookie) {
-          logger.debug(`Non matching issuers - redirecting to login`);
-          return redirectToLoginWithReturnPath(path);
+          if (issuerInConfig != issuerInCookie) {
+            logger.debug(`Non matching issuers - redirecting to login`);
+            return redirectToLoginWithReturnPath(path);
+          }
         }
 
         logger.debug(`Authentication successful for ${serviceName}`);
@@ -62,7 +65,10 @@ async function ensureLoggedInMiddleware(req: express.Request, res: express.Respo
 
   function redirectToLoginWithReturnPath(returnToPath: string) {
     if (req.session) {
+      logger.debug(`Set returnPath ${returnToPath} to session`);
       req.session.returnTo = returnToPath;
+    } else {
+      logger.debug('Request session is not set');
     }
 
     // RelayState is SAML mechanism for preserving and conveying state information.

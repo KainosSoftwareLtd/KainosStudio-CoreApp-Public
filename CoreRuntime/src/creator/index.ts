@@ -67,12 +67,12 @@ export class Creator {
     return service;
   };
 
-  public express(
-    preConfigCB?: (app: express.Express) => void,
+  public async express(
+    preConfigCB?: (app: express.Express) => Promise<void>,
     authMiddleware?: (req: express.Request, res: express.Response, next: express.NextFunction) => Promise<void>,
-  ): express.Express {
+  ): Promise<express.Express> {
     if (preConfigCB) {
-      preConfigCB(this.app);
+      await preConfigCB(this.app);
     }
 
     if (!authMiddleware) {

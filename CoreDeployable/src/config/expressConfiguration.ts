@@ -1,5 +1,7 @@
+import { RedisStore } from 'connect-redis';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import { createClient } from 'redis';
 import envConfig from './envConfig.js';
 import express from 'express';
 import { getCloudServices } from '../container/CloudServicesRegistry.js';
@@ -18,7 +20,7 @@ declare module 'express-session' {
   }
 }
 
-export const expressConfiguration = (app: express.Express) => {
+export const expressConfiguration = async (app: express.Express) => {
   const storageUrl = getCloudServices().fileService.getStorageUrl();
 
   app.use(
@@ -52,12 +54,37 @@ export const expressConfiguration = (app: express.Express) => {
   app.use(bodyParser.json({ type: 'application/json' }));
   app.use(cookieParser());
   app.use(bodyParser.urlencoded({ extended: true }));
-  
+
+  let store: session.Store | undefined = undefined;
+  if (envConfig.redisConnectionString) {
+    const redisClient = createClient({
+      url: envConfig.redisConnectionString,
+      socket: {
+        tls: true,
+        timeout: envConfig.redisTimeout,
+        connectTimeout: envConfig.redisConnectionTimeout,
+        reconnectStrategy: 500,
+      },
+    });
+
+    await redisClient.connect();
+
+    store = new RedisStore({
+      client: redisClient,
+      prefix: 'CoreApp:',
+    });
+  } else {
+    logger.error(
+      'REDIS_CONNECTION_STRING is not configured. For production deployments, Redis should be set up to ensure session persistence.',
+    );
+  }
+
   app.use(
     session({
       secret: envConfig.sessionSecret,
       resave: false,
       saveUninitialized: false,
+      store: store,
     }),
   );
 
@@ -78,17 +105,17 @@ export const expressConfiguration = (app: express.Express) => {
       // Handle RelayState from either body or query parameters, with fallback to session
       const relayState = req.body?.RelayState || req.query?.RelayState || req.session?.returnTo;
       const redirectUrl = relayState ? decodeURIComponent(relayState) : '/';
-      
+
       logger.debug(`SAML callback - RelayState: ${relayState}, Redirect to: ${redirectUrl}`);
       logger.debug(`Request body:`, req.body);
       logger.debug(`Request query:`, req.query);
       logger.debug(`Session returnTo:`, req.session?.returnTo);
-      
+
       // Clear the returnTo from session after using it
       if (req.session?.returnTo) {
         delete req.session.returnTo;
       }
-      
+
       res.redirect(redirectUrl);
     },
   );
