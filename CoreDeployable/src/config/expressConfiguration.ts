@@ -74,8 +74,8 @@ export const expressConfiguration = async (app: express.Express) => {
       prefix: 'CoreApp:',
     });
   } else {
-    logger.error(
-      'REDIS_CONNECTION_STRING is not configured. For production deployments, Redis should be set up to ensure session persistence.',
+    logger.warn(
+      'REDIS_CONNECTION_STRING is not configured. Using in-memory session store. This is not suitable for production.',
     );
   }
 

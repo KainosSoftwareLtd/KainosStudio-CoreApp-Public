@@ -33,6 +33,6 @@ export async function createLocalApp(): Promise<express.Express> {
   return await createApp(creatorInstance);
 }
 
-async function  createApp(creatorInstance: creator.Creator): Promise<express.Express> {
+async function createApp(creatorInstance: creator.Creator): Promise<express.Express> {
   return await creatorInstance.express(expressConfiguration, ensureLoggedInMiddleware);
 }
