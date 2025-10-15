@@ -12,10 +12,6 @@ interface JwtRequest extends Request {
   jwtUser?: SamlUser;
 }
 
-const isReservedServiceName = (serviceName: string): boolean => {
-  return reservedResourceNames.includes(serviceName);
-};
-
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const startTime = Date.now();
   const jwtReq = req as JwtRequest;
@@ -25,7 +21,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     const path = req.originalUrl || req.url;
     const serviceName = req.params.form;
 
-    if (isReservedServiceName(serviceName)) {
+    if (reservedResourceNames.includes(serviceName)) {
       return next();
     }
 

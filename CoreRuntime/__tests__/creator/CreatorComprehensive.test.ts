@@ -90,7 +90,7 @@ describe('Creator - Comprehensive Tests', () => {
       cookies: {},
       body: {},
       originalUrl: '/test-form/test-page',
-      user: undefined,
+      jwtUser: undefined,
     };
 
     // Setup mock response
