@@ -41,56 +41,50 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         if (payload) {
           jwtReq.jwtUser = payload.user;
 
-          logger.info(
-            `AuthMiddleware - JWT verified for user: ${payload.user.nameID || payload.user.email || 'unknown'}`,
-          );
+          logger.info(`AuthMiddleware - JWT verified for user: ${payload.user.id || payload.user.email || 'unknown'}`);
           logger.debug(`AuthMiddleware - Token details:`, {
+            user: payload.user,
             issuer: payload.issuer,
             tokenAge: Math.floor(Date.now() / 1000) - payload.iat,
             timeToExpiry: payload.exp - Math.floor(Date.now() / 1000),
           });
+
+          if (!envConfig.skipAuthIssuerCheck) {
+            logger.debug(`AuthMiddleware - Validating SAML issuer`);
+            const config = await authService.getConfiguration(serviceName);
+
+            if (!config || typeof config !== 'object' || !('issuer' in config)) {
+              logger.error(`AuthMiddleware - Invalid config for service: ${serviceName}`);
+              return redirectToLogin(res, path, serviceName);
+            }
+
+            const issuerInConfig = (config as { issuer: string }).issuer;
+            const issuerInJwt = payload.issuer;
+
+            logger.info(`AuthMiddleware - Issuer validation:`, {
+              serviceName,
+              configIssuer: issuerInConfig,
+              jwtIssuer: issuerInJwt,
+              isMatch: issuerInConfig === issuerInJwt,
+            });
+
+            if (issuerInConfig !== issuerInJwt) {
+              logger.warn(`AuthMiddleware - Issuer mismatch for service: ${serviceName}`);
+              return redirectToLogin(res, path, serviceName);
+            }
+
+            logger.info(`AuthMiddleware - Issuer validation passed`);
+            logger.info(`AuthMiddleware - User authenticated: ${payload.user.id || payload.user.email || 'unknown'}`);
+          } else {
+            logger.info(`AuthMiddleware - Skiping SAML issuer validation`);
+          }
         } else {
           logger.warn(`AuthMiddleware - JWT verification failed`);
+          logger.warn(`AuthMiddleware - User not authenticated, redirecting for service: ${serviceName}`);
+          return redirectToLogin(res, path, serviceName);
         }
       } else {
         logger.info(`AuthMiddleware - No JWT token found`);
-      }
-
-      if (!jwtReq.jwtUser) {
-        logger.warn(`AuthMiddleware - User not authenticated, redirecting for service: ${serviceName}`);
-        return redirectToLogin(res, path, serviceName);
-      }
-
-      const jwtUser = jwtReq.jwtUser!;
-      logger.info(`AuthMiddleware - User authenticated: ${jwtUser.nameID || jwtUser.email || 'unknown'}`);
-
-      if (!envConfig.skipAuthIssuerCheck) {
-        logger.debug(`AuthMiddleware - Validating SAML issuer`);
-        const config = await authService.getConfiguration(serviceName);
-
-        if (!config || typeof config !== 'object' || !('issuer' in config)) {
-          logger.error(`AuthMiddleware - Invalid config for service: ${serviceName}`);
-          return redirectToLogin(res, path, serviceName);
-        }
-
-        const issuerInConfig = (config as { issuer: string }).issuer;
-        const issuerInJwt = jwtUser.issuer;
-
-        logger.info(`AuthMiddleware - Issuer validation:`, {
-          serviceName,
-          configIssuer: issuerInConfig,
-          jwtIssuer: issuerInJwt,
-          isMatch: issuerInConfig === issuerInJwt,
-        });
-
-        if (issuerInConfig !== issuerInJwt) {
-          logger.warn(`AuthMiddleware - Issuer mismatch for service: ${serviceName}`);
-          return redirectToLogin(res, path, serviceName);
-        }
-
-        logger.info(`AuthMiddleware - Issuer validation passed`);
-      } else {
-        logger.info(`AuthMiddleware - Skiping SAML issuer validation`);
       }
 
       logger.info(`AuthMiddleware - Authentication successful for service: ${serviceName}`);

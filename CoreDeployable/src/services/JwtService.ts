@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 
+import { Profile } from '@node-saml/passport-saml';
 import { SamlUser } from 'core-runtime/lib/SamlUser.js';
 import envConfig from '../config/envConfig.js';
 import jwt from 'jsonwebtoken';
@@ -16,20 +17,22 @@ export class JwtService {
   private static readonly JWT_SECRET = envConfig.sessionSecret;
   private static readonly JWT_EXPIRY = '24h';
 
-  static createToken(user: SamlUser): string {
+  static createToken(profile: Profile): string {
     try {
-      logger.debug(`JWT Token Creation - User data`, user);
+      logger.debug(`JWT Token Creation - User data`, profile);
 
       const payload: Omit<JwtPayload, 'iat' | 'exp'> = {
-        user,
-        issuer: user.issuer || 'unknown',
+        user: {
+          id: profile.nameID,
+          email: profile.email || '',
+        },
+        issuer: profile.issuer || 'unknown',
       };
 
       logger.debug(`JWT Token Creation - Payload`, payload);
 
       const token = jwt.sign(payload, this.JWT_SECRET, {
         expiresIn: this.JWT_EXPIRY,
-        algorithm: 'HS256',
       });
 
       logger.info(`JWT Token Created`);
@@ -40,9 +43,9 @@ export class JwtService {
       logger.error('JWT Token Creation Failed:', {
         error: error instanceof Error ? error.message : error,
         stack: error instanceof Error ? error.stack : undefined,
-        userProvided: !!user,
-        userNameID: user?.nameID,
-        userEmail: user?.email,
+        userProvided: !!profile,
+        userId: profile?.nameID,
+        userEmail: profile?.email,
       });
       throw new Error('Failed to create authentication token');
     }
@@ -62,7 +65,7 @@ export class JwtService {
         iat: new Date(decoded.iat * 1000).toISOString(),
         exp: new Date(decoded.exp * 1000).toISOString(),
         timeUntilExpiry: decoded.exp - Math.floor(Date.now() / 1000),
-        userNameID: decoded.user?.nameID,
+        userId: decoded.user?.id,
         userEmail: decoded.user?.email,
       });
 
