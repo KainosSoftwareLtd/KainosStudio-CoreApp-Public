@@ -1,82 +1,129 @@
+import { NextFunction, Request, Response } from 'express';
+
 import { AuthConfigurationService } from '../services/AuthConfigurationService.js';
+import { JwtService } from '../services/JwtService.js';
+import { SamlUser } from 'core-runtime/lib/SamlUser.js';
 import envConfig from '../config/envConfig.js';
-import express from 'express';
 import { logger } from 'core-runtime';
 
-const reservedResourceNames = ['assets', 'public', 'favicon.ico', '.well-known'];
+const reservedResourceNames = ['assets', 'public', 'favicon.ico', '.well-known', 'login'];
 
-async function ensureLoggedInMiddleware(req: express.Request, res: express.Response, next: express.NextFunction) {
+interface JwtRequest extends Request {
+  jwtUser?: SamlUser;
+}
+
+const isReservedServiceName = (serviceName: string): boolean => {
+  return reservedResourceNames.includes(serviceName);
+};
+
+export const authMiddleware = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  const startTime = Date.now();
+  const jwtReq = req as JwtRequest;
+  jwtReq.jwtUser = undefined;
+
   try {
     const path = req.originalUrl || req.url;
     const serviceName = req.params.form;
 
-    logger.debug(`Auth middleware - path: ${path}, serviceName: ${serviceName}`);
-    logger.debug(`Auth middleware - isAuthenticated: ${req.isAuthenticated ? req.isAuthenticated() : 'undefined'}`);
-
-    if (reservedResourceNames.includes(serviceName)) {
-      logger.debug(`Skipping auth for reserved resource: ${serviceName}`);
+    if (isReservedServiceName(serviceName)) {
       return next();
     }
 
-    logger.debug(`Checking access to endpoint: ${path}`);
+    logger.info(`AuthMiddleware - Starting for path: ${req.method} ${path}, service: ${serviceName}`);
+    logger.debug(`AuthMiddleware - Checking if service ${serviceName} requires authentication`);
     const authService = new AuthConfigurationService();
-
     const hasConfig = await authService.hasConfiguration(serviceName);
-    logger.debug(`Service ${serviceName} has auth config: ${hasConfig}`);
 
     if (hasConfig) {
-      if (!req.isAuthenticated || !req.isAuthenticated()) {
-        logger.debug(`User is not logged in, redirecting to login`);
-        return redirectToLoginWithReturnPath(path);
+      logger.info(`AuthMiddleware - Service ${serviceName} has auth config: ${hasConfig}`);
+
+      const token = JwtService.extractTokenFromRequest(jwtReq);
+      if (token) {
+        logger.info(`AuthMiddleware - JWT token found, verifying`);
+
+        const payload = JwtService.verifyToken(token);
+        if (payload) {
+          jwtReq.jwtUser = payload.user;
+
+          logger.info(
+            `AuthMiddleware - JWT verified for user: ${payload.user.nameID || payload.user.email || 'unknown'}`,
+          );
+          logger.debug(`AuthMiddleware - Token details:`, {
+            issuer: payload.issuer,
+            tokenAge: Math.floor(Date.now() / 1000) - payload.iat,
+            timeToExpiry: payload.exp - Math.floor(Date.now() / 1000),
+          });
+        } else {
+          logger.warn(`AuthMiddleware - JWT verification failed`);
+        }
       } else {
-        if (!envConfig.skipAuthIssuerCheck) {
-          logger.debug(`User is authenticated, checking provider`);
-          const config = await authService.getConfiguration(serviceName);
-          logger.debug(`Checking if the user is signed in to the expected provider`);
+        logger.info(`AuthMiddleware - No JWT token found`);
+      }
 
-          if (!config || typeof config !== 'object' || !('issuer' in config)) {
-            logger.error(`Invalid configuration or missing issuer for service: ${serviceName}`);
-            return redirectToLoginWithReturnPath(path);
-          }
+      if (!jwtReq.jwtUser) {
+        logger.warn(`AuthMiddleware - User not authenticated, redirecting for service: ${serviceName}`);
+        return redirectToLogin(res, path, serviceName);
+      }
 
-          const issuerInConfig = (config as { issuer: string }).issuer;
-          const issuerInCookie = req.session?.passport?.user?.issuer;
+      const jwtUser = jwtReq.jwtUser!;
+      logger.info(`AuthMiddleware - User authenticated: ${jwtUser.nameID || jwtUser.email || 'unknown'}`);
 
-          logger.debug(`Issuer in config: ${issuerInConfig}`);
-          logger.debug(`Issuer in cookie: ${issuerInCookie}`);
+      if (!envConfig.skipAuthIssuerCheck) {
+        logger.debug(`AuthMiddleware - Validating SAML issuer`);
+        const config = await authService.getConfiguration(serviceName);
 
-          if (issuerInConfig != issuerInCookie) {
-            logger.debug(`Non matching issuers - redirecting to login`);
-            return redirectToLoginWithReturnPath(path);
-          }
+        if (!config || typeof config !== 'object' || !('issuer' in config)) {
+          logger.error(`AuthMiddleware - Invalid config for service: ${serviceName}`);
+          return redirectToLogin(res, path, serviceName);
         }
 
-        logger.debug(`Authentication successful for ${serviceName}`);
+        const issuerInConfig = (config as { issuer: string }).issuer;
+        const issuerInJwt = jwtUser.issuer;
+
+        logger.info(`AuthMiddleware - Issuer validation:`, {
+          serviceName,
+          configIssuer: issuerInConfig,
+          jwtIssuer: issuerInJwt,
+          isMatch: issuerInConfig === issuerInJwt,
+        });
+
+        if (issuerInConfig !== issuerInJwt) {
+          logger.warn(`AuthMiddleware - Issuer mismatch for service: ${serviceName}`);
+          return redirectToLogin(res, path, serviceName);
+        }
+
+        logger.info(`AuthMiddleware - Issuer validation passed`);
+      } else {
+        logger.info(`AuthMiddleware - Skiping SAML issuer validation`);
       }
+
+      logger.info(`AuthMiddleware - Authentication successful for service: ${serviceName}`);
     } else {
-      logger.debug(`No auth config for service: ${serviceName}, proceeding without auth`);
+      logger.info(`AuthMiddleware - No auth required for service: ${serviceName}`);
     }
+
+    const duration = Date.now() - startTime;
+    logger.debug(`AuthMiddleware - Completed in ${duration}ms`);
+    next();
+  } catch (error) {
+    const duration = Date.now() - startTime;
+    logger.error(`Auth Error - Duration: ${duration}ms:`, {
+      error: error instanceof Error ? error.message : error,
+      stack: error instanceof Error ? error.stack : undefined,
+      path: req.path,
+      method: req.method,
+      serviceName: req.params.form,
+    });
 
     next();
-  } catch (err) {
-    logger.error(`Auth middleware error: ${err}`);
-    next(err);
   }
+};
 
-  function redirectToLoginWithReturnPath(returnToPath: string) {
-    if (req.session) {
-      logger.debug(`Set returnPath ${returnToPath} to session`);
-      req.session.returnTo = returnToPath;
-    } else {
-      logger.debug('Request session is not set');
-    }
+function redirectToLogin(res: Response, returnToPath: string, serviceName: string): void {
+  logger.info(`AuthMiddleware - Redirecting to login for service: ${serviceName}`);
 
-    // RelayState is SAML mechanism for preserving and conveying state information.
-    const redirectUrl = `/login?RelayState=${encodeURIComponent(returnToPath)}`;
-    logger.debug(`Redirect to login: ${redirectUrl}`);
+  const redirectUrl = `/login?RelayState=${encodeURIComponent(returnToPath)}`;
+  logger.info(`AuthMiddleware - Redirect URL: ${redirectUrl}`);
 
-    return res.redirect(redirectUrl);
-  }
+  res.redirect(redirectUrl);
 }
-
-export default ensureLoggedInMiddleware;

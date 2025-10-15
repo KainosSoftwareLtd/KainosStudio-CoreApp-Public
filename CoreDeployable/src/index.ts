@@ -2,21 +2,21 @@ import { getCloudServices, initializeCloudServices } from './container/CloudServ
 import { getStaticPaths, rendererFunc } from './utils/designSystemUtils.js';
 
 import { LocalServiceRetriever } from './services/local/LocalServiceRetriever.js';
+import { authMiddleware } from './middlewares/authMiddleware.js';
 import { creator } from 'core-runtime';
-import ensureLoggedInMiddleware from './middlewares/authMiddleware.js';
 import envConfig from './config/envConfig.js';
 import express from 'express';
 import { expressConfiguration } from './config/expressConfiguration.js';
 
-export async function createCloudApp(): Promise<express.Express> {
+export function createCloudApp(): express.Express {
   initializeCloudServices(envConfig.cloudProvider);
   const { fileService, storeService, serviceRetriever } = getCloudServices();
 
   const creatorInstance = new creator.Creator(serviceRetriever.getService, rendererFunc, fileService, storeService, []);
-  return await createApp(creatorInstance);
+  return createApp(creatorInstance);
 }
 
-export async function createLocalApp(): Promise<express.Express> {
+export function createLocalApp(): express.Express {
   initializeCloudServices(envConfig.cloudProvider);
   const { fileService, storeService, serviceRetriever } = getCloudServices();
   const retriever = envConfig.useLocalServices ? new LocalServiceRetriever() : serviceRetriever;
@@ -30,9 +30,9 @@ export async function createLocalApp(): Promise<express.Express> {
     staticPaths,
   );
 
-  return await createApp(creatorInstance);
+  return createApp(creatorInstance);
 }
 
-async function createApp(creatorInstance: creator.Creator): Promise<express.Express> {
-  return await creatorInstance.express(expressConfiguration, ensureLoggedInMiddleware);
+function createApp(creatorInstance: creator.Creator): express.Express {
+  return creatorInstance.express(expressConfiguration, authMiddleware);
 }

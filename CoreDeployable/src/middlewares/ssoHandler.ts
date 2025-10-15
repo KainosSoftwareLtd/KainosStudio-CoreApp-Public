@@ -7,34 +7,20 @@ const strategy = new MultiSamlStrategy(
   {
     passReqToCallback: true,
     getSamlOptions(request, done) {
-      // Debug session information
-      logger.debug(`Session ID: ${request.sessionID || 'undefined'}`);
-      logger.debug(`Session exists: ${!!request.session}`);
-      logger.debug(`Session returnTo: ${request.session?.returnTo || 'undefined'}`);
-      logger.debug(`RelayState query param: ${request.query?.RelayState || 'undefined'}`);
-      
-      // Try to get returnTo from session first, then fallback to RelayState from query params
-      let returnToPath = request.session?.returnTo;
-      
-      if (!returnToPath) {
-        // Fallback to RelayState from query parameters for Azure Functions compatibility
-        const relayState = request.query?.RelayState as string;
-        if (relayState) {
-          returnToPath = decodeURIComponent(relayState);
-          logger.debug(`Using RelayState as returnTo: ${returnToPath}`);
-        }
-      } else {
-        logger.debug(`Using session returnTo: ${returnToPath}`);
+      logger.info(`MultiSamlStrategy - Processing SAML options - Method: ${request.method} - URL: ${request.url}`);
+      logger.debug(`MultiSamlStrategy - RelayState query param: ${request.query?.RelayState || 'undefined'}`);
+      logger.debug(`MultiSamlStrategy - RelayState body param: ${request.body?.RelayState || 'undefined'}`);
+
+      const relayState = (request.query?.RelayState || request.body?.RelayState) as string;
+      if (!relayState) {
+        logger.error('MultiSamlStrategy - RelayState parameter is required for SAML authentication');
+        return done(new Error('RelayState parameter is missing'));
       }
 
-      if (!returnToPath) {
-        logger.error('Both session.returnTo and RelayState are empty');
-        return done(new Error('returnTo is empty and RelayState is not available'));
-      }
+      const relayStatePath = decodeURIComponent(relayState);
+      const serviceName = decodeURI(relayStatePath.split('/')[1]);
 
-      const serviceName = decodeURI(returnToPath.split('/')[1]);
-
-      logger.debug(`Getting saml options for: ${serviceName}`);
+      logger.debug(`MultiSamlStrategy - Getting saml options for: ${serviceName}`);
       const authService = new AuthConfigurationService();
       return authService.getConfiguration(serviceName).then((config) => done(null, config));
     },
@@ -48,10 +34,12 @@ const strategy = new MultiSamlStrategy(
 );
 
 passport.serializeUser((user, done) => {
+  logger.debug('Passport serializeUser called with user:', user);
   done(null, user);
 });
 
 passport.deserializeUser((user, done) => {
+  logger.debug('Passport deserializeUser called with user:', user);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   done(null, user as any);
 });

@@ -25,7 +25,7 @@ import jmespath from 'jmespath';
 import { logger } from '../index.js';
 import path from 'path';
 
-const reservedResourceNames = ['assets', 'public', 'favicon.ico', '.well-known'];
+const reservedResourceNames = ['assets', 'public', 'favicon.ico', '.well-known', 'login'];
 
 export class Creator {
   private serviceRetriever: (serviceId: string) => Promise<Service | undefined>;
@@ -67,12 +67,12 @@ export class Creator {
     return service;
   };
 
-  public async express(
-    preConfigCB?: (app: express.Express) => Promise<void>,
+  public express(
+    preConfigCB?: (app: express.Express) => void,
     authMiddleware?: (req: express.Request, res: express.Response, next: express.NextFunction) => Promise<void>,
-  ): Promise<express.Express> {
+  ): express.Express {
     if (preConfigCB) {
-      await preConfigCB(this.app);
+      preConfigCB(this.app);
     }
 
     if (!authMiddleware) {
