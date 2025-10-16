@@ -55,7 +55,7 @@ export class ContextBuilder {
 
       let userId: string | undefined;
       if (req.jwtUser) {
-        userId = req.jwtUser.nameID;
+        userId = req.jwtUser.id;
         logger.debug(`Logged user used for enriching data: ${userId}`);
       }
 

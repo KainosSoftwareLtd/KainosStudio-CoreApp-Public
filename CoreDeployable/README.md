@@ -52,7 +52,7 @@ Set up the environment by adding a `.env` file to the root folder (CoreDeployabl
 | `LOG_LEVEL` | Log verbosity | info |
 | `MAX_ALLOWED_FILE_SIZE_TO_UPLOAD` | Maximum file upload size in MB | 100 |
 | `USE_LOCAL_DYNAMODB` | Use local DynamoDB instance | false |
-| `SKIP_AUTH_ISSUER_CHECK` | Skip issuer validation for authentication sessions. Can be enabled when using a single SAML configuration | false | 
+| `SKIP_AUTH_ISSUER_CHECK` | Skip issuer validation for authentication sessions. Can be enabled when using a single SAML configuration | false |
 
 ##### Available Log Levels
 - trace

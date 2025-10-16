@@ -76,7 +76,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
             logger.info(`AuthMiddleware - Issuer validation passed`);
             logger.info(`AuthMiddleware - User authenticated: ${payload.user.id || payload.user.email || 'unknown'}`);
           } else {
-            logger.info(`AuthMiddleware - Skiping SAML issuer validation`);
+            logger.info(`AuthMiddleware - Skipping SAML issuer validation`);
           }
         } else {
           logger.warn(`AuthMiddleware - JWT verification failed`);
