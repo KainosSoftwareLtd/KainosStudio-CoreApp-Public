@@ -85,6 +85,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         }
       } else {
         logger.info(`AuthMiddleware - No JWT token found`);
+        return redirectToLogin(res, path, serviceName);
       }
 
       logger.info(`AuthMiddleware - Authentication successful for service: ${serviceName}`);

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 
 import { Profile } from '@node-saml/passport-saml';
+import { SAML_CLAIM_TYPES } from '../constants/samlClaims.js';
 import { SamlUser } from 'core-runtime/lib/SamlUser.js';
 import envConfig from '../config/envConfig.js';
 import jwt from 'jsonwebtoken';
@@ -24,7 +25,8 @@ export class JwtService {
       const payload: Omit<JwtPayload, 'iat' | 'exp'> = {
         user: {
           id: profile.nameID,
-          email: profile.email || '',
+          name: profile[SAML_CLAIM_TYPES.NAME]?.toString(),
+          email: profile[SAML_CLAIM_TYPES.EMAIL_ADDRESS]?.toString(),
         },
         issuer: profile.issuer || 'unknown',
       };
@@ -66,6 +68,7 @@ export class JwtService {
         exp: new Date(decoded.exp * 1000).toISOString(),
         timeUntilExpiry: decoded.exp - Math.floor(Date.now() / 1000),
         userId: decoded.user?.id,
+        userName: decoded.user?.name,
         userEmail: decoded.user?.email,
       });
 
