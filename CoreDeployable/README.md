@@ -18,7 +18,7 @@ Set up the environment by adding a `.env` file to the root folder (CoreDeployabl
 
 | Variable | Description |
 |----------|-------------|
-| `SESSION_SECRET` | Secret key for encrypting auth session data |
+| `SESSION_SECRET` | Secret used for JWT token signing |
 | `AUTH_CONFIG_FILE_NAME` | Name for auth configuration file for each form |
 | `ALLOWED_ORIGIN` | Used for API endpoint CORS configuration |
 | `CLOUD_PROVIDER` | Cloud provider to use (must be 'aws' or 'azure') |

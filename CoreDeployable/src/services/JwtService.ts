@@ -36,7 +36,7 @@ export class JwtService {
       });
 
       logger.info(`JWT Token Created`);
-      logger.debug(`JWT Token Preview`, token);
+      logger.debug(`JWT Token Preview: ${token.slice(0, 6)}...${token.slice(-6)} (length: ${token.length})`);
 
       return token;
     } catch (error) {
@@ -96,7 +96,7 @@ export class JwtService {
       if (req.cookies['auth-token']) {
         const cookieToken = req.cookies['auth-token'];
         logger.info(`JWT Token Extraction - JWT Token Found`);
-        logger.debug(`JWT Token Extraction - JWT Token From Cookie`, cookieToken);
+        logger.debug(`JWT Token Extraction - JWT Token From Cookie: ${cookieToken.slice(0, 6)}...${cookieToken.slice(-6)} (length: ${cookieToken.length})`);
         return cookieToken;
       }
       logger.warn(`JWT Token Not Found - No auth-token cookie`);
