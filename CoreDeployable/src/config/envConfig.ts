@@ -83,6 +83,9 @@ const envConfig = {
     }
     return provider;
   },
+  get skipAuthIssuerCheck(): boolean {
+    return process.env.SKIP_AUTH_ISSUER_CHECK === 'true';
+  },
 };
 
 export default envConfig;

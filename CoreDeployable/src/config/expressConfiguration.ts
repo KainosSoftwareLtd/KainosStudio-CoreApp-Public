@@ -1,6 +1,8 @@
+import { AuthenticateOptions } from 'passport';
+import { JwtService } from '../services/JwtService.js';
+import { Profile } from '@node-saml/passport-saml';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import envConfig from './envConfig.js';
 import express from 'express';
 import { getCloudServices } from '../container/CloudServicesRegistry.js';
 import helmet from 'helmet';
@@ -8,15 +10,12 @@ import { logger } from 'core-runtime';
 import nocache from 'nocache';
 import passport from '../middlewares/ssoHandler.js';
 import { permissionsPolicy } from '../middlewares/permissionsPolicy.js';
-import session from 'express-session';
 
-declare module 'express-session' {
-  interface SessionData {
-    returnTo: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    passport: any;
-  }
-}
+const authenticateOptions: AuthenticateOptions = {
+  session: false,
+  failureRedirect: '/',
+  failureFlash: true,
+};
 
 export const expressConfiguration = (app: express.Express) => {
   const storageUrl = getCloudServices().fileService.getStorageUrl();
@@ -52,43 +51,64 @@ export const expressConfiguration = (app: express.Express) => {
   app.use(bodyParser.json({ type: 'application/json' }));
   app.use(cookieParser());
   app.use(bodyParser.urlencoded({ extended: true }));
-  
-  app.use(
-    session({
-      secret: envConfig.sessionSecret,
-      resave: false,
-      saveUninitialized: false,
-    }),
+
+  app.get(
+    '/login',
+    (req, _res, next) => {
+      logger.debug(`SAML Login - Starting authentication flow`);
+      logger.debug(`SAML Login - RelayState: ${req.query?.RelayState || 'none'}`);
+      next();
+    },
+    passport.authenticate('saml', authenticateOptions),
+    function (_req, res) {
+      res.redirect('/');
+    },
   );
-
-  app.use(passport.initialize());
-  app.use(passport.session());
-
-  app.get('/login', passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }), function (_req, res) {
-    res.redirect('/');
-  });
 
   app.post(
     '/login/callback',
-    passport.authenticate('saml', {
-      failureRedirect: '/',
-      failureFlash: true,
-    }),
+    (req, _res, next) => {
+      logger.debug(`SAML Callback - Starting processing`);
+      logger.debug(`SAML Callback - RelayState: ${req.body?.RelayState || 'none'}`);
+      next();
+    },
+    passport.authenticate('saml', authenticateOptions),
     function (req, res) {
-      // Handle RelayState from either body or query parameters, with fallback to session
-      const relayState = req.body?.RelayState || req.query?.RelayState || req.session?.returnTo;
-      const redirectUrl = relayState ? decodeURIComponent(relayState) : '/';
-      
-      logger.debug(`SAML callback - RelayState: ${relayState}, Redirect to: ${redirectUrl}`);
-      logger.debug(`Request body:`, req.body);
-      logger.debug(`Request query:`, req.query);
-      logger.debug(`Session returnTo:`, req.session?.returnTo);
-      
-      // Clear the returnTo from session after using it
-      if (req.session?.returnTo) {
-        delete req.session.returnTo;
+      logger.info(`SAML Auth Success - Processing user data`);
+      logger.debug(`SAML Auth Success - User object:`, {
+        hasUser: !!req.user,
+        userType: typeof req.user,
+        userKeys: req.user ? Object.keys(req.user) : [],
+      });
+
+      if (req.user) {
+        const user = req.user as Profile;
+
+        try {
+          logger.info(`SAML Callback - Creating JWT for user`);
+
+          const token = JwtService.createToken(user);
+          JwtService.setTokenCookie(res, token);
+          logger.info(`SAML Callback - JWT token created and cookie set successfully`);
+        } catch (error) {
+          logger.error(`SAML Callback - JWT creation failed:`, {
+            error: error instanceof Error ? error.message : error,
+            stack: error instanceof Error ? error.stack : undefined,
+            user: user?.nameID || user?.email || 'unknown',
+          });
+          throw new Error(
+            `SAML authentication failed: JWT token creation failed - ${error instanceof Error ? error.message : 'Unknown error'}`,
+          );
+        }
+      } else {
+        logger.error(`SAML Callback - No user object received from SAML authentication`);
+        throw new Error('SAML authentication failed: No user object received from SAML provider');
       }
-      
+
+      const relayState = req.body?.RelayState;
+      const redirectUrl = relayState ? decodeURIComponent(relayState) : '/';
+
+      logger.info(`SAML Callback - Final redirect: ${redirectUrl}`);
       res.redirect(redirectUrl);
     },
   );

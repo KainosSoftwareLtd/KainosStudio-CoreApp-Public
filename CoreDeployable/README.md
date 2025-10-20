@@ -18,8 +18,7 @@ Set up the environment by adding a `.env` file to the root folder (CoreDeployabl
 
 | Variable | Description |
 |----------|-------------|
-| `COOKIE_SECRET` | Secret key for encrypting session data |
-| `SESSION_SECRET` | Secret key for encrypting auth session data |
+| `SESSION_SECRET` | Secret used for JWT token signing |
 | `AUTH_CONFIG_FILE_NAME` | Name for auth configuration file for each form |
 | `ALLOWED_ORIGIN` | Used for API endpoint CORS configuration |
 | `CLOUD_PROVIDER` | Cloud provider to use (must be 'aws' or 'azure') |
@@ -53,6 +52,7 @@ Set up the environment by adding a `.env` file to the root folder (CoreDeployabl
 | `LOG_LEVEL` | Log verbosity | info |
 | `MAX_ALLOWED_FILE_SIZE_TO_UPLOAD` | Maximum file upload size in MB | 100 |
 | `USE_LOCAL_DYNAMODB` | Use local DynamoDB instance | false |
+| `SKIP_AUTH_ISSUER_CHECK` | Skip issuer validation for authentication sessions. Can be enabled when using a single SAML configuration | false |
 
 ##### Available Log Levels
 - trace
@@ -66,7 +66,6 @@ Set up the environment by adding a `.env` file to the root folder (CoreDeployabl
 
 ##### AWS Configuration Example
 ```
-COOKIE_SECRET='your-secure-cookie-secret'
 SESSION_SECRET='your-secure-session-secret'
 CLOUD_PROVIDER='aws'
 BUCKET_NAME='your-kfd-files-bucket'
@@ -84,7 +83,6 @@ FORM_SESSION_TABLE_NAME='Core_FormSessions_dev'
 
 ##### Azure Configuration Example
 ```
-COOKIE_SECRET='your-secure-cookie-secret'
 SESSION_SECRET='your-secure-session-secret'
 CLOUD_PROVIDER='azure'
 AZURE_STORAGE_ACCOUNT='your-storage-account'

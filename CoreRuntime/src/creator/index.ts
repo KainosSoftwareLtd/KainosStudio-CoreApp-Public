@@ -25,7 +25,7 @@ import jmespath from 'jmespath';
 import { logger } from '../index.js';
 import path from 'path';
 
-const reservedResourceNames = ['assets', 'public', 'favicon.ico', '.well-known'];
+const reservedResourceNames = ['assets', 'public', 'favicon.ico', '.well-known', 'login'];
 
 export class Creator {
   private serviceRetriever: (serviceId: string) => Promise<Service | undefined>;

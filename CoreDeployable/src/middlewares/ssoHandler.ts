@@ -7,13 +7,20 @@ const strategy = new MultiSamlStrategy(
   {
     passReqToCallback: true,
     getSamlOptions(request, done) {
-      if (!request.session.returnTo) {
-        return done(new Error('returnTo is empty'));
+      logger.info(`MultiSamlStrategy - Processing SAML options - Method: ${request.method} - URL: ${request.url}`);
+      logger.debug(`MultiSamlStrategy - RelayState query param: ${request.query?.RelayState || 'undefined'}`);
+      logger.debug(`MultiSamlStrategy - RelayState body param: ${request.body?.RelayState || 'undefined'}`);
+
+      const relayState = (request.query?.RelayState || request.body?.RelayState) as string;
+      if (!relayState) {
+        logger.error('MultiSamlStrategy - RelayState parameter is required for SAML authentication');
+        return done(new Error('RelayState parameter is missing'));
       }
 
-      const serviceName = decodeURI(request.session.returnTo.split('/')[1]);
+      const relayStatePath = decodeURIComponent(relayState);
+      const serviceName = decodeURI(relayStatePath.split('/')[1]);
 
-      logger.debug(`Getting saml options for: ${serviceName}`);
+      logger.debug(`MultiSamlStrategy - Getting saml options for: ${serviceName}`);
       const authService = new AuthConfigurationService();
       return authService.getConfiguration(serviceName).then((config) => done(null, config));
     },
@@ -27,10 +34,12 @@ const strategy = new MultiSamlStrategy(
 );
 
 passport.serializeUser((user, done) => {
+  logger.debug('Passport serializeUser called with user:', user);
   done(null, user);
 });
 
 passport.deserializeUser((user, done) => {
+  logger.debug('Passport deserializeUser called with user:', user);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   done(null, user as any);
 });

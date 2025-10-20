@@ -2,8 +2,8 @@ import { getCloudServices, initializeCloudServices } from './container/CloudServ
 import { getStaticPaths, rendererFunc } from './utils/designSystemUtils.js';
 
 import { LocalServiceRetriever } from './services/local/LocalServiceRetriever.js';
+import { authMiddleware } from './middlewares/authMiddleware.js';
 import { creator } from 'core-runtime';
-import ensureLoggedInMiddleware from './middlewares/authMiddleware.js';
 import envConfig from './config/envConfig.js';
 import express from 'express';
 import { expressConfiguration } from './config/expressConfiguration.js';
@@ -34,5 +34,5 @@ export function createLocalApp(): express.Express {
 }
 
 function createApp(creatorInstance: creator.Creator): express.Express {
-  return creatorInstance.express(expressConfiguration, ensureLoggedInMiddleware);
+  return creatorInstance.express(expressConfiguration, authMiddleware);
 }

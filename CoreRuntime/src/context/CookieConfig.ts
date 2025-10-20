@@ -32,7 +32,7 @@ export function loadCookieData(
   if (req.cookies && dataCookieConfig.name && dataCookieConfig.name in req.cookies) {
     let encryptedReference: string = req.cookies[dataCookieConfig.name];
 
-    logger.debug(`Original cookie value: ${encryptedReference}`);
+    logger.debug(`Original session cookie value: ${encryptedReference}`);
 
     encryptedReference = decodeUrlEncodedCookie(encryptedReference);
 
