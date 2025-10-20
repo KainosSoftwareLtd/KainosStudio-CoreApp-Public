@@ -24,8 +24,25 @@ echo
 print_lambda_values
 
 echo
+echo "Getting current Core alias version for $LAMBDA_NAME"
+get_current_lambda_alias
+
+echo
 echo "Update Lambda $LAMBDA_NAME"
 update_lambda
+
+if [ -n "$NEW_LAMBDA_VERSION" ]; then
+    echo
+    echo "Updating Core alias to point to new version $NEW_LAMBDA_VERSION"
+    
+    update_lambda_alias
+    
+    echo "Core Lambda deployment completed successfully!"
+    echo "Previous Core alias version: $CURRENT_ALIAS_VERSION"
+    echo "New Core alias version: $NEW_LAMBDA_VERSION"
+else
+    echo "Warning: No new version was created, Core alias was not updated"
+fi
 
 # ============== Kainos Core KFD API ============
 
@@ -35,10 +52,28 @@ lambda_name
 lambda_zipfile
 
 LAMBDA_NAME="$NAME-$ENVIRONMENT"
+ALIAS_NAME="KFDAPILambda"
+
 
 echo
 print_lambda_values
 
 echo
+echo "Getting current KFD alias version for $LAMBDA_NAME"
+get_current_lambda_alias
+
+echo
 echo "Update Lambda $LAMBDA_NAME"
 update_lambda
+
+if [ -n "$NEW_LAMBDA_VERSION" ]; then
+    echo
+    echo "Updating KFD API alias to point to new version $NEW_LAMBDA_VERSION"
+    update_lambda_alias
+    
+    echo "KFD API Lambda deployment completed successfully!"
+    echo "Previous KFD API alias version: $CURRENT_ALIAS_VERSION"
+    echo "New KFD API alias version: $NEW_LAMBDA_VERSION"
+else
+    echo "Warning: No new version was created, KFD API alias was not updated"
+fi
