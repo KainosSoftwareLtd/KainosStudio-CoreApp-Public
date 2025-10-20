@@ -7,6 +7,8 @@ import envConfig from '../config/envConfig.js';
 import jwt from 'jsonwebtoken';
 import { logger } from 'core-runtime';
 
+const JWT_EXPIRY = '24h';
+
 export interface JwtPayload {
   user: SamlUser;
   issuer: string;
@@ -31,7 +33,7 @@ export class JwtService {
       logger.debug(`JWT Token Creation - Payload`, payload);
 
       const token = jwt.sign(payload, envConfig.sessionSecret, {
-        expiresIn: '24h',
+        expiresIn: JWT_EXPIRY,
       });
 
       logger.info(`JWT Token Created`);
