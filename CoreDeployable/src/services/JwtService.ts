@@ -15,9 +15,6 @@ export interface JwtPayload {
 }
 
 export class JwtService {
-  private static readonly JWT_SECRET = envConfig.sessionSecret;
-  private static readonly JWT_EXPIRY = '24h';
-
   static createToken(profile: Profile): string {
     try {
       logger.debug(`JWT Token Creation - User data`, profile);
@@ -33,8 +30,8 @@ export class JwtService {
 
       logger.debug(`JWT Token Creation - Payload`, payload);
 
-      const token = jwt.sign(payload, this.JWT_SECRET, {
-        expiresIn: this.JWT_EXPIRY,
+      const token = jwt.sign(payload, envConfig.sessionSecret, {
+        expiresIn: '24h',
       });
 
       logger.info(`JWT Token Created`);
@@ -57,7 +54,7 @@ export class JwtService {
     try {
       logger.debug(`JWT Verification - Starting for token`);
 
-      const decoded = jwt.verify(token, this.JWT_SECRET, {
+      const decoded = jwt.verify(token, envConfig.sessionSecret, {
         algorithms: ['HS256'],
       }) as JwtPayload;
 
@@ -99,7 +96,9 @@ export class JwtService {
       if (req.cookies['auth-token']) {
         const cookieToken = req.cookies['auth-token'];
         logger.info(`JWT Token Extraction - JWT Token Found`);
-        logger.debug(`JWT Token Extraction - JWT Token From Cookie: ${cookieToken.slice(0, 6)}...${cookieToken.slice(-6)} (length: ${cookieToken.length})`);
+        logger.debug(
+          `JWT Token Extraction - JWT Token From Cookie: ${cookieToken.slice(0, 6)}...${cookieToken.slice(-6)} (length: ${cookieToken.length})`,
+        );
         return cookieToken;
       }
       logger.warn(`JWT Token Not Found - No auth-token cookie`);
