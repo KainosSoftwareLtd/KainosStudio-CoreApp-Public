@@ -14,6 +14,9 @@ permissions:
   contents: read
   security-events: write
   actions: read
+  # Required for commenting on pull requests
+  pull-requests: write
+  issues: write
 
 jobs:
   analyze:
@@ -113,48 +116,51 @@ jobs:
         category: "/language:${{matrix.language}}"
         upload: true
         
-    - name: Upload SARIF results as artifact
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: codeql-sarif-results-${{ matrix.language }}
-        path: /home/runner/work/_temp/codeql_*/**/*.sarif
-        retention-days: 30
-
+        
     - name: Add PR Comment with Security Findings
       if: github.event_name == 'pull_request' && always()
       uses: actions/github-script@v7
+      continue-on-error: true
       with:
         script: |
-          const fs = require('fs');
-          const path = require('path');
-          
-          // This is a simplified example - in practice, you'd parse the SARIF file
-          const comment = `## 🔒 CodeQL Security Analysis Results
-          
-          CodeQL analysis has been completed for this pull request.
-          
-          **Language:** ${{ matrix.language }}
-          **Status:** ${{ job.status }}
-          
-          📊 **View detailed results:** Check the [Security tab](https://github.com/${{ github.repository }}/security/code-scanning) for complete findings.
-          
-          💡 **Next steps:**
-          - Review any security findings in the Security tab
-          - Address high/critical severity issues before merging
-          - Consider the recommendations for code quality improvements
-          
-          ---
-          *This comment was generated automatically by CodeQL Analysis*`;
-          
-          // Only comment on PRs, not on the main branch
-          if (context.payload.pull_request) {
-            github.rest.issues.createComment({
+          try {
+            // Check if this is a pull request
+            if (!context.payload.pull_request) {
+              console.log('Not a pull request, skipping comment creation');
+              return;
+            }
+
+            const comment = `## 🔒 CodeQL Security Analysis Results
+            
+            CodeQL analysis has been completed for this pull request.
+            
+            **Language:** ${{ matrix.language }}
+            **Status:** ${{ job.status }}
+            
+            📊 **View detailed results:** Check the [Security tab](https://github.com/${{ github.repository }}/security/code-scanning) for complete findings.
+            
+            💡 **Next steps:**
+            - Review any security findings in the Security tab
+            - Address high/critical severity issues before merging
+            - Consider the recommendations for code quality improvements
+            
+            ---
+            *This comment was generated automatically by CodeQL Analysis*`;
+            
+            // Create the comment
+            await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: comment
             });
+            
+            console.log('Successfully posted CodeQL analysis comment on PR');
+            
+          } catch (error) {
+            console.log('Failed to post PR comment:', error.message);
+            console.log('This is non-critical - CodeQL results are still available in the Security tab');
+            // Don't fail the workflow if comment posting fails
           }
 
   codeql-summary:
