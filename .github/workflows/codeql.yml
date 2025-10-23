@@ -67,7 +67,7 @@ jobs:
           if [ -f "$dir/package.json" ]; then
             echo "Installing dependencies in $dir..."
             cd "$dir"
-            npm ci --only=production 2>/dev/null || npm install --only=production 2>/dev/null || echo "No package-lock.json found, skipping npm ci for $dir"
+            npm ci --omit=dev 2>/dev/null || npm install --omit=dev 2>/dev/null || echo "No package-lock.json found, skipping npm ci for $dir"
             cd ..
           fi
         done
@@ -76,7 +76,9 @@ jobs:
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
-        queries: +security-extended,security-and-quality
+        queries: |
+          - security-extended
+          - security-and-quality
         config: |
           name: "CodeQL Config"
           disable-default-queries: false
