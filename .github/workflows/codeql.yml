@@ -1,0 +1,211 @@
+name: "CodeQL Security Analysis"
+
+on:
+  push:
+    branches: 
+      - main
+  pull_request:
+    branches: 
+      - main
+  schedule:
+    - cron: '0 6 * * 1'
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+  # Required for commenting on pull requests
+  pull-requests: write
+  issues: write
+
+jobs:
+  analyze:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'javascript' ]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 2
+
+    - name: Checkout PR head
+      if: ${{ github.event_name == 'pull_request' }}
+      run: git checkout HEAD^2
+
+    - name: Setup Node.js
+      if: ${{ matrix.language == 'javascript' }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+        cache-dependency-path: |
+          CoreDeployable/package-lock.json
+          CoreRuntime/package-lock.json
+          CoreFCADS/package-lock.json
+          CoreGCDS/package-lock.json
+          CoreGovUK/package-lock.json
+          CoreKfdApi/package-lock.json
+          CoreNhsUK/package-lock.json
+          CoreOUDS/package-lock.json
+          CoreWDS/package-lock.json
+          utils/package-lock.json
+
+    - name: Install dependencies
+      if: ${{ matrix.language == 'javascript' }}
+      run: |
+        echo "Installing dependencies for CodeQL analysis..."
+        
+        # Install dependencies for each module that has a package.json
+        for dir in CoreDeployable CoreRuntime CoreFCADS CoreGCDS CoreGovUK CoreKfdApi CoreNhsUK CoreOUDS CoreWDS utils; do
+          if [ -f "$dir/package.json" ]; then
+            echo "Installing dependencies in $dir..."
+            cd "$dir"
+            npm ci --omit=dev 2>/dev/null || npm install --omit=dev 2>/dev/null || echo "No package-lock.json found, skipping npm ci for $dir"
+            cd ..
+          fi
+        done
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+        queries: security-extended,security-and-quality
+        config: |
+          name: "CodeQL Config"
+          disable-default-queries: false
+          query-filters:
+            - exclude:
+                id: js/unused-local-variable
+            - exclude:
+                id: js/debugger-statement
+          paths-ignore:
+            - "node_modules"
+            - "**/*.min.js"
+            - "**/*.bundle.js" 
+            - "**/dist/**"
+            - "**/build/**"
+            - "**/coverage/**"
+            - "**/*.test.js"
+            - "**/*.test.ts"
+            - "**/*.spec.js"
+            - "**/*.spec.ts"
+          paths:
+            - "CoreDeployable/src"
+            - "CoreRuntime/src"
+            - "CoreFCADS/src"
+            - "CoreGCDS/src"
+            - "CoreGovUK/src"
+            - "CoreKfdApi/src"
+            - "CoreNhsUK/src"
+            - "CoreOUDS/src"
+            - "CoreWDS/src"
+            - "utils"
+            - "pipeline_scripts"
+
+    
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:${{matrix.language}}"
+        upload: true
+        
+        
+    - name: Add PR Comment with Security Findings
+      if: github.event_name == 'pull_request' && always()
+      uses: actions/github-script@v7
+      continue-on-error: true
+      with:
+        script: |
+          try {
+            // Check if this is a pull request
+            if (!context.payload.pull_request) {
+              console.log('Not a pull request, skipping comment creation');
+              return;
+            }
+
+            const comment = `## 🔒 CodeQL Security Analysis Results
+            
+            CodeQL analysis has been completed for this pull request.
+            
+            **Language:** ${{ matrix.language }}
+            **Status:** ${{ job.status }}
+            
+            📊 **View detailed results:** Check the [Security tab](https://github.com/${{ github.repository }}/security/code-scanning) for complete findings.
+            
+            💡 **Next steps:**
+            - Review any security findings in the Security tab
+            - Address high/critical severity issues before merging
+            - Consider the recommendations for code quality improvements
+            
+            ---
+            *This comment was generated automatically by CodeQL Analysis*`;
+            
+            // Create the comment
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+            
+            console.log('Successfully posted CodeQL analysis comment on PR');
+            
+          } catch (error) {
+            console.log('Failed to post PR comment:', error.message);
+            console.log('This is non-critical - CodeQL results are still available in the Security tab');
+            // Don't fail the workflow if comment posting fails
+          }
+
+  codeql-summary:
+    name: CodeQL Analysis Summary
+    if: always()
+    needs: analyze
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check Analysis Results
+      run: |
+        echo "CodeQL Analysis Summary:"
+        echo "======================="
+        
+        # Check if any analysis jobs failed
+        if [[ "${{ needs.analyze.result }}" == "failure" ]]; then
+          echo "❌ CodeQL analysis failed"
+          echo "Please check the analysis logs for details"
+          exit 1
+        elif [[ "${{ needs.analyze.result }}" == "success" ]]; then
+          echo "✅ CodeQL analysis completed successfully"
+          echo "Check the Security tab for detailed results: https://github.com/${{ github.repository }}/security/code-scanning"
+        else
+          echo "⚠️  CodeQL analysis completed with status: ${{ needs.analyze.result }}"
+        fi
+        
+        echo ""
+        echo "📊 Security findings and recommendations are available in:"
+        echo "   - GitHub Security tab"
+        echo "   - Pull request annotations (if applicable)"
+        echo "   - SARIF artifacts (for detailed analysis)"
+
+    - name: Security Recommendations
+      if: always()
+      run: |
+        echo ""
+        echo "🛡️  Security Best Practices Reminder:"
+        echo "====================================="
+        echo "1. Review all high and critical severity findings"
+        echo "2. Consider security implications of new code changes"
+        echo "3. Keep dependencies up to date"
+        echo "4. Follow secure coding practices"
+        echo "5. Enable branch protection rules requiring CodeQL checks"
+        echo ""
+        echo "📚 Resources:"
+        echo "   - CodeQL Documentation: https://codeql.github.com/docs/"
+        echo "   - Security Advisories: https://github.com/advisories"
+        echo "   - GitHub Security Features: https://docs.github.com/en/code-security"
