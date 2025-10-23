@@ -1,7 +1,7 @@
 import { Action, FileUploadElement, ValueElement } from '../service/Element.js';
 import { RenderControl, Renderer } from '../rendering/index.js';
 import { allowedOrigin, checkOrigin } from './CheckOriginMiddleware.js';
-import { apiKeyHeaderKeyName, langKey, referenceNumberFieldName, sessionIdKey } from '../consts.js';
+import { apiKeyHeaderKeyName, langKey, referenceNumberFieldName, sessionIdKey, userKey } from '../consts.js';
 import { getErrorPageService, getNotFoundService } from '../service/DefinedKfdServices.js';
 
 import { ConditionalNextPage } from '../service/Page.js';
@@ -303,6 +303,10 @@ export class Creator {
               throw new Error(result.error);
             }
           }
+        }
+
+        if (req.jwtUser) {
+          requestModel[userKey] = req.jwtUser;
         }
 
         logger.info('External API endpoint: ' + JSON.stringify(endpoint));

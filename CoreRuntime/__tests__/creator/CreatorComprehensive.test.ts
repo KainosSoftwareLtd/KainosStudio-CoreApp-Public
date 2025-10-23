@@ -646,6 +646,86 @@ describe('Creator - Comprehensive Tests', () => {
       expect(mockRes.redirect).toHaveBeenCalled();
     });
 
+    it('should include user data in API request when jwtUser present', async () => {
+      const mockService = {
+        name: 'test-service',
+        firstPage: 'start',
+        pages: [],
+        apiServiceDefinition: {
+          paths: {
+            '/api/submit': {
+              post: {
+                operationId: 'submit-operation',
+              },
+            },
+          },
+        },
+        apiMappings: {
+          'submit-operation': {
+            request: {},
+            response: 'data.referenceNumber',
+          },
+        },
+        cookieSecret: 'secret',
+        cookieBanner: null,
+        footer: null,
+        hash: 'hash',
+      };
+      mockServiceRetriever.mockResolvedValue(mockService);
+
+      const mockContext = {
+        isValid: () => true,
+        page: {
+          valid: true,
+          invalid: false,
+          allElements: [
+            {
+              type: 'SubmitButton',
+              action: {
+                value: 'submit',
+                operation: 'submit-operation',
+              },
+            },
+          ],
+        },
+        data: {
+          action: 'submit',
+          '_SESSION-ID_': 'test-session-id',
+        },
+        service: mockService,
+        allElements: [],
+        getDataForCookie: jest.fn().mockReturnValue('cookie-data'),
+        getDataCookieConfig: jest.fn().mockReturnValue({
+          name: 'test-cookie',
+          cookieOptions: {},
+        }),
+      };
+
+      jest.spyOn(creator['contextBuilder'], 'build').mockResolvedValue(mockContext as any);
+      jest.spyOn(creator['enricher'], 'enrichPage').mockImplementation();
+      jest.spyOn(creator['enricher'], 'enrichSummaryElements').mockImplementation();
+      jest.spyOn(creator['enricher'], 'enrichErrorElements').mockImplementation();
+      jest.spyOn(creator['validator'], 'validatePage').mockImplementation();
+
+      const mockRequestModel: any = { base: 'value' };
+      jest.spyOn(creator['objectBuilder'], 'create').mockResolvedValue(mockRequestModel);
+      jest.spyOn(creator['formSessionService'], 'removeSession').mockResolvedValue();
+
+      (global.fetch as jest.Mock).mockResolvedValue({
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        json: () => Promise.resolve({ data: { referenceNumber: 'REF123456' } }),
+      });
+
+      (mockReq as any).jwtUser = { id: 'user-1', name: 'admin', email: 'admin@example.com' };
+
+      await creator['pagePostHandler'](mockReq as any, mockRes as any, mockNext);
+
+      // userKey is '_user_' in consts.ts
+      expect(mockRequestModel['_user_']).toEqual({ id: 'user-1', name: 'admin', email: 'admin@example.com' });
+    });
+
     it('should handle form submission with validation errors', async () => {
       const mockService = {
         name: 'test-service',
