@@ -29,31 +29,31 @@
     "ext": "ts, json, js"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.850.0",
-    "@azure/functions": "^4.7.2-preview",
-    "@azure/identity": "^4.10.2",
-    "@azure/storage-blob": "^12.28.0",
-    "@codegenie/serverless-express": "^4.16.0",
+    "@aws-sdk/client-s3": "^3.934.0",
+    "@azure/functions": "^4.9.0",
+    "@azure/identity": "^4.13.0",
+    "@azure/storage-blob": "^12.29.1",
+    "@codegenie/serverless-express": "^4.17.0",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
     "nocache": "^4.0.0",
-    "winston": "^3.17.0",
-    "zod": "^4.0.10"
+    "winston": "^3.18.3",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
-    "@types/express": "^5.0.3",
-    "@types/express-serve-static-core": "^5.0.7",
+    "@types/express": "^5.0.5",
+    "@types/express-serve-static-core": "^5.1.0",
     "cross-env": "^7.0.3",
-    "dotenv": "^17.2.1",
-    "eslint": "^9.30.1",
+    "dotenv": "^17.2.3",
+    "eslint": "^9.39.1",
     "esm": "^3.2.25",
-    "nodemon": "^3.1.10",
+    "nodemon": "^3.1.11",
     "prettier": "^3.6.2",
     "ts-node": "^10.9.2",
-    "tsx": "^4.20.3",
-    "typescript": "^5.8.3",
-    "typescript-eslint": "^8.38.0"
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.47.0"
   },
   "bundleDependencies": [
     "@aws-sdk/client-s3",
