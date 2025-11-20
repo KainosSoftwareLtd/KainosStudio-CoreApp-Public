@@ -26,9 +26,13 @@ jobs:
         run: |
           npm install -g semantic-release @semantic-release/git @semantic-release/changelog @semantic-release/exec conventional-changelog-conventionalcommits
 
+          # Get current branch name
+          CURRENT_BRANCH="${GITHUB_REF#refs/heads/}"
+          echo "Testing on branch: $CURRENT_BRANCH"
+
           cat <<EOF > .releaserc.json
           {
-            "branches": ["main"],
+            "branches": ["main", "$CURRENT_BRANCH"],
             "plugins": [
               ["@semantic-release/commit-analyzer", {
                 "preset": "conventionalcommits",
