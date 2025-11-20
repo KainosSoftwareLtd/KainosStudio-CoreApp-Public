@@ -1,0 +1,58 @@
+#!/bin/sh
+#
+# Conventional Commits validator
+# This hook validates that commit messages follow the Conventional Commits format
+#
+
+commit_msg_file=$1
+commit_msg=$(cat "$commit_msg_file")
+
+# Conventional commit pattern
+conventional_pattern='^(feat|fix|docs|chore|refactor|test|perf|ci|build|style|revert)(\(.+\))?!?: .{1,}'
+
+# Check if commit message follows conventional commits format
+if ! echo "$commit_msg" | grep -qE "$conventional_pattern"; then
+    echo ""
+    echo "❌ ERROR: Commit message does not follow Conventional Commits format!"
+    echo ""
+    echo "Your commit message:"
+    echo "  $commit_msg"
+    echo ""
+    echo "Required format: <type>[optional scope]: <description>"
+    echo ""
+    echo "Allowed types:"
+    echo "  feat:     A new feature (minor version bump)"
+    echo "  fix:      A bug fix (patch version bump)"
+    echo "  docs:     Documentation only changes (patch version bump)"
+    echo "  chore:    Changes that don't modify src or test files (patch version bump)"
+    echo "  refactor: A code change that neither fixes a bug nor adds a feature (patch version bump)"
+    echo "  test:     Adding missing tests or correcting existing tests (patch version bump)"
+    echo "  perf:     A code change that improves performance (patch version bump)"
+    echo "  ci:       Changes to CI configuration files and scripts (patch version bump)"
+    echo "  build:    Changes that affect the build system or dependencies (patch version bump)"
+    echo "  style:    Changes that don't affect code meaning (white-space, formatting) (patch version bump)"
+    echo "  revert:   Reverts a previous commit (patch version bump)"
+    echo ""
+    echo "Examples:"
+    echo "  feat: add user authentication"
+    echo "  fix: resolve memory leak in data processing"
+    echo "  docs: update API documentation"
+    echo "  chore: update dependencies"
+    echo "  feat(auth): add OAuth2 support"
+    echo "  fix(api)!: change response format (breaking change)"
+    echo ""
+    echo "For breaking changes, add '!' after the type/scope or include 'BREAKING CHANGE:' in the footer"
+    echo ""
+    exit 1
+fi
+
+# Optional: Check minimum description length
+description=$(echo "$commit_msg" | head -n 1 | sed -E 's/^[^:]+: //')
+if [ ${#description} -lt 10 ]; then
+    echo ""
+    echo "⚠️  WARNING: Commit description is very short (less than 10 characters)"
+    echo "Consider providing a more descriptive commit message"
+    echo ""
+fi
+
+echo "✅ Commit message follows Conventional Commits format"
