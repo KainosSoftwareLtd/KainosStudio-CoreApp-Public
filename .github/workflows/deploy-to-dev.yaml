@@ -64,38 +64,40 @@ jobs:
           echo "Running semantic-release dry-run to calculate next version..."
           semantic-release --dry-run
 
-          if [ -z "$SEMANTIC_VERSION" ]; then
-            echo "No version bump from semantic-release, calculating manual increment..."
-            # Get latest tag, default to v1.0.0 if none exists
-            LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.9.0")
+          # Check if semantic-release set a version
+          if [ -n "$SEMANTIC_VERSION" ]; then
+            echo "Semantic-release determined version: $SEMANTIC_VERSION"
+          else
+            echo "No version determined by semantic-release. Checking for conventional commits..."
+            
+            # Get the latest tag
+            LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.0.0")
             echo "Latest tag: $LATEST_TAG"
             
-            # Extract version components
-            VERSION=${LATEST_TAG#v}
-            IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+            # Get all commits since the last tag
+            COMMITS_SINCE_TAG=$(git log ${LATEST_TAG}..HEAD --pretty=%B)
             
-            # Determine increment based on commit messages since last tag
-            COMMIT_MSG=$(git log -1 --pretty=%B)
-            if echo "$COMMIT_MSG" | grep -q "^BREAKING CHANGE:" || echo "$COMMIT_MSG" | grep -q "^[a-zA-Z]\+!:"; then
-              # Major version bump for breaking changes
-              echo "Breaking change detected, bumping major version"
-              MAJOR=$((MAJOR + 1))
-              MINOR=0
-              PATCH=0
-            elif echo "$COMMIT_MSG" | grep -q "^feat"; then
-              # Minor version bump for features
-              echo "Feature detected, bumping minor version"
-              MINOR=$((MINOR + 1))
-              PATCH=0
+            # Check if any commit follows conventional commit format
+            if echo "$COMMITS_SINCE_TAG" | grep -qE "^(feat|fix|docs|chore|refactor|test|perf|ci|build|style)(\(.+\))?:"; then
+              echo "ERROR: Conventional commits found but semantic-release did not generate a version."
+              echo "This should not happen. Please check the semantic-release configuration."
+              exit 1
             else
-              # Patch version bump for everything else
-              echo "Fix/chore detected, bumping patch version"
-              PATCH=$((PATCH + 1))
+              echo "ERROR: No conventional commits found since $LATEST_TAG"
+              echo "Please use conventional commit format:"
+              echo "  feat: for new features (minor version bump)"
+              echo "  fix: for bug fixes (patch version bump)"
+              echo "  docs: for documentation changes (patch version bump)"
+              echo "  chore: for maintenance tasks (patch version bump)"
+              echo "  refactor: for code refactoring (patch version bump)"
+              echo "  test: for test updates (patch version bump)"
+              echo ""
+              echo "Example: 'feat: add new authentication feature'"
+              echo ""
+              echo "Recent commits:"
+              echo "$COMMITS_SINCE_TAG"
+              exit 1
             fi
-            
-            SEMANTIC_VERSION="$MAJOR.$MINOR.$PATCH"
-            echo "Calculated version: $SEMANTIC_VERSION"
-            echo "SEMANTIC_VERSION=$SEMANTIC_VERSION" >> $GITHUB_ENV
           fi
 
           echo "Final semantic version: $SEMANTIC_VERSION"
