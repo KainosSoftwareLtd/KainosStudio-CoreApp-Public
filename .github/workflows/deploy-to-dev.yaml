@@ -53,20 +53,24 @@ jobs:
                   {"type": "test", "release": "patch"}
                 ]
               }],
-              "@semantic-release/release-notes-generator",
-              ["@semantic-release/exec", {
-                "successCmd": "echo \\"SEMANTIC_VERSION=\${nextRelease.version}\\" >> \\$GITHUB_ENV"
-              }]
+              "@semantic-release/release-notes-generator"
             ]
           }
           EOF
 
           echo "Running semantic-release dry-run to calculate next version..."
-          semantic-release --dry-run
-
-          # Check if semantic-release set a version
+          
+          # Capture semantic-release output and parse the version
+          SEMANTIC_OUTPUT=$(semantic-release --dry-run 2>&1)
+          echo "$SEMANTIC_OUTPUT"
+          
+          # Extract version from semantic-release output
+          SEMANTIC_VERSION=$(echo "$SEMANTIC_OUTPUT" | grep -oP "The next release version is \K[0-9]+\.[0-9]+\.[0-9]+" || echo "")
+          
+          # Check if semantic-release determined a version
           if [ -n "$SEMANTIC_VERSION" ]; then
             echo "Semantic-release determined version: $SEMANTIC_VERSION"
+            echo "SEMANTIC_VERSION=$SEMANTIC_VERSION" >> $GITHUB_ENV
           else
             echo "No version determined by semantic-release. Checking for conventional commits..."
             
@@ -80,10 +84,14 @@ jobs:
             # Check if any commit follows conventional commit format
             if echo "$COMMITS_SINCE_TAG" | grep -qE "^(feat|fix|docs|chore|refactor|test|perf|ci|build|style)(\(.+\))?:"; then
               echo "ERROR: Conventional commits found but semantic-release did not generate a version."
-              echo "This should not happen. Please check the semantic-release configuration."
+              echo "This indicates an issue with semantic-release configuration or commit format."
+              echo ""
+              echo "Recent commits:"
+              echo "$COMMITS_SINCE_TAG"
               exit 1
             else
               echo "ERROR: No conventional commits found since $LATEST_TAG"
+              echo ""
               echo "Please use conventional commit format:"
               echo "  feat: for new features (minor version bump)"
               echo "  fix: for bug fixes (patch version bump)"
