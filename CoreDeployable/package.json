@@ -52,7 +52,7 @@
     "@azure/storage-blob": "^12.29.1",
     "@codegenie/serverless-express": "^4.17.0",
     "@node-saml/passport-saml": "^5.1.0",
-    "body-parser": "^2.2.0",
+    "body-parser": "^2.2.1",
     "cookie-parser": "^1.4.7",
     "core-fcads": "file:core-fcads-1.0.0.tgz",
     "core-gcds": "file:core-gcds-1.0.0.tgz",
