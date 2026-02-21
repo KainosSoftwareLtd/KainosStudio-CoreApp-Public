@@ -29,8 +29,8 @@
     "ext": "ts, json, js"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.948.0",
-    "@azure/functions": "^4.10.0",
+    "@aws-sdk/client-s3": "^3.995.0",
+    "@azure/functions": "^4.11.2",
     "@azure/identity": "^4.13.0",
     "@azure/storage-blob": "^12.29.1",
     "@codegenie/serverless-express": "^4.17.1",
