@@ -4,6 +4,7 @@
   "productName": "example.com",
   "apiEndpoint": "https://example-endpoint.com/dev/submit-form/service",
   "homePageUrl": "https://example.com",
+  "dataRetrievalUrl": "http://localhost:3003/retrieve",
   "cookieSecret": "0123456789-abc",
   "googleAnalyticsMeasurementId": "TEST_ID",
   "footer": {},
@@ -93,6 +94,31 @@
                       "hint": null
                     },
                     {
+                      "type": "DatePickerField",
+                      "name": "applicantDateOfBirth",
+                      "displayText": "Date of birth",
+                      "hint": "For example, 27 3 1990",
+                      "validation": null
+                    },
+                    {
+                      "type": "AddressField",
+                      "name": "applicantAddress",
+                      "displayText": "Home address",
+                      "validation": null
+                    },
+                    {
+                      "type": "RadioField",
+                      "name": "vehicleCategory",
+                      "displayText": "Vehicle category",
+                      "hint": "Select the broad category of your vehicle. Your answer will be used to filter the options on the next page.",
+                      "validation": { "required": true },
+                      "options": [
+                        { "text": "Bus & Coach", "value": "bus-coach" },
+                        { "text": "Minibus", "value": "minibus" },
+                        { "text": "Taxi & Private Hire", "value": "taxi-private-hire" }
+                      ]
+                    },
+                    {
                       "type": "SubmitButton",
                       "displayText": "Submit"
                     }
@@ -178,6 +204,14 @@
                       "validation": null,
                       "classes": null,
                       "hint": null
+                    },
+                    {
+                      "type": "RadioField",
+                      "name": "vehicleSubcategory",
+                      "displayText": "Vehicle type",
+                      "hint": "Options are dynamically populated based on your vehicle category selection on the previous page.",
+                      "validation": { "required": true },
+                      "options": []
                     },
                     {
                       "type": "CheckboxField",

@@ -57,6 +57,7 @@ describe('DataRetrievalService', () => {
         body: JSON.stringify({
           userId: mockUserId,
           fields: ['firstName', 'lastName'],
+          sessionData: { firstName: '', existingField: 'existing' },
         }),
       });
       expect(mockData).toEqual({
@@ -86,6 +87,7 @@ describe('DataRetrievalService', () => {
         },
         body: JSON.stringify({
           fields: ['email'],
+          sessionData: { email: '' },
         }),
       });
     });
@@ -344,6 +346,7 @@ describe('DataRetrievalService', () => {
             'address-county',
             'address-postcode',
           ],
+          sessionData: { firstName: 'John', 'birthDate-day': '', 'address-line1': '' },
         }),
       });
 

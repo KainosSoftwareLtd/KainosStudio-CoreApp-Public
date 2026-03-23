@@ -1,12 +1,31 @@
-import { ValueElement } from '../service/Element.js';
+import { FixedOptionValueElement, ValueElement } from '../service/Element.js';
 import { logger } from '../index.js';
 
 export interface DataRetrievalRequest {
   userId?: string;
   fields: string[];
+  /** Current form session data — enables session-aware conditional logic in the data retrieval API. */
+  sessionData?: Record<string, string>;
 }
 
-export interface DataRetrievalResponse extends Record<string, unknown> {
+/** Option item for a multi-value field returned by the data retrieval API. */
+export interface FieldOption {
+  text: string;
+  value?: string;
+  valueText?: string;
+  hint?: string;
+}
+
+/**
+ * Structured response from the data retrieval API.
+ * Also accepts the legacy flat shape (Record<string, unknown>) for backward compatibility.
+ */
+export interface DataRetrievalResponse {
+  /** Scalar values keyed by field name. */
+  values?: Record<string, string>;
+  /** Option lists for multi-value fields, keyed by field name. */
+  options?: Record<string, FieldOption[]>;
+  /** Legacy flat shape — field name mapped directly to its value. */
   [key: string]: unknown;
 }
 
@@ -31,10 +50,27 @@ export class DataRetrievalService {
       const requestData: DataRetrievalRequest = {
         ...(userId && { userId }),
         fields: propertiesToFill,
+        sessionData: data as Record<string, string>,
       };
       const responseData = await this.makeRequest(externalUrl, requestData);
 
-      Object.assign(data, responseData);
+      // Structured response: apply scalar values and dynamic options separately
+      if (responseData.values && typeof responseData.values === 'object') {
+        Object.assign(data, responseData.values);
+
+        if (responseData.options && typeof responseData.options === 'object') {
+          for (const element of allElements) {
+            const dynamicOptions = responseData.options[element.name];
+            if (dynamicOptions && 'options' in element) {
+              (element as unknown as FixedOptionValueElement).options = dynamicOptions;
+            }
+          }
+        }
+      } else {
+        // Legacy flat response — merge directly into data for backward compatibility
+        Object.assign(data, responseData);
+      }
+
       logger.info(`Successfully enriched data`);
     } catch (error) {
       logger.error('Failed to retrieve data from external API:', error);
@@ -89,7 +125,15 @@ export class DataRetrievalService {
         if (!data[countyProperty]) propertiesToFill.push(countyProperty);
         if (!data[postcodeProperty]) propertiesToFill.push(postcodeProperty);
       } else {
-        if (!data[element.name]) {
+        const hasNoValue = !data[element.name];
+        // Always fetch a field whose options list is empty — it needs dynamic options
+        // from the API even when a scalar value already exists in session.
+        const hasEmptyOptions =
+          'options' in element &&
+          Array.isArray((element as unknown as { options: unknown[] }).options) &&
+          (element as unknown as { options: unknown[] }).options.length === 0;
+
+        if (hasNoValue || hasEmptyOptions) {
           propertiesToFill.push(element.name);
         }
       }

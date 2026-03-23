@@ -134,6 +134,53 @@ For example:
 - A file named `form.json` will be accessible at `http://localhost:3000/form/`
 - The port may differ based on your environment configuration
 
+---
+
+## Data Retrieval
+
+Form pages can be pre-populated with data from an external API before they render. This is useful for displaying existing records, filling reference data, and driving dynamic option lists (dropdowns, radio buttons, checkboxes) based on earlier answers.
+
+### Enabling data retrieval for a form
+
+Add `dataRetrievalUrl` to the form's JSON definition:
+
+```json
+{
+  "name": "My Form",
+  "firstPage": "PageOne",
+  "dataRetrievalUrl": "https://your-data-retrieval-api/retrieve",
+  ...
+}
+```
+
+When set, the runtime will POST to this URL on every page load, sending the names of any empty fields alongside the current session data. The API response is merged back into the page before it renders.
+
+### Fields with dynamic options
+
+For `RadioField`, `SelectListField`, and `CheckboxField` elements that need their options populated at runtime, define them in the form JSON with an empty `options` array:
+
+```json
+{
+  "type": "RadioField",
+  "name": "myField",
+  "displayText": "My Field",
+  "options": []
+}
+```
+
+The data retrieval API can return an `options` array for the field in its response, which will be applied to the element before rendering.
+
+### Running the mock data retrieval API locally
+
+For local development and demos, use the **CoreMockDataApi** — a pre-built mock that returns hardcoded values and session-aware option lists without needing a real back-end.
+
+Set `dataRetrievalUrl` in your form JSON to:
+```
+http://localhost:3003/retrieve
+```
+
+Then start the mock API in a separate terminal — see the [CoreMockDataApi README](../CoreMockDataApi/README.md) for installation and usage instructions.
+
 ## Local Development with DynamoDB
 
 For local development, you can use a containerized DynamoDB instance:
