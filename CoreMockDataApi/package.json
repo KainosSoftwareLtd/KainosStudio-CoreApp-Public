@@ -1,0 +1,51 @@
+{
+  "name": "kainos-studio-core-mock-data-api",
+  "version": "1.0.0",
+  "description": "Mock Data Retrieval API — returns hardcoded values and option lists for form demo purposes",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "type": "module",
+  "files": [
+    "/lib",
+    "host.json"
+  ],
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "build": "tsc && node ../utils/recursiveCopy.js --originFolderPath ./src/function.json --targetFolderPath ./lib/function.json",
+    "start": "cross-env-shell NODE_OPTIONS= node '--import tsx' ./src/local.ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "eslint ./src/*.ts"
+  },
+  "nodemonConfig": {
+    "ignore": [".git"],
+    "watch": ["src"],
+    "exec": "npm start",
+    "ext": "ts, json, js"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.10.0",
+    "@codegenie/serverless-express": "^4.17.1",
+    "express": "^5.2.1",
+    "helmet": "^8.1.0",
+    "nocache": "^4.0.0",
+    "winston": "^3.19.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.30.1",
+    "@types/express": "^5.0.6",
+    "@types/express-serve-static-core": "^5.1.0",
+    "cross-env": "^7.0.3",
+    "dotenv": "^17.2.3",
+    "eslint": "^9.39.2",
+    "nodemon": "^3.1.11",
+    "prettier": "^3.7.4",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.49.0"
+  },
+  "bundleDependencies": [
+    "@azure/functions"
+  ]
+}
