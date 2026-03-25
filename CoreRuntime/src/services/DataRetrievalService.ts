@@ -55,10 +55,12 @@ export class DataRetrievalService {
       const responseData = await this.makeRequest(externalUrl, requestData);
 
       // Structured response: apply scalar values and dynamic options separately
-      if (responseData.values && typeof responseData.values === 'object') {
-        Object.assign(data, responseData.values);
-
-        if (responseData.options && typeof responseData.options === 'object') {
+      if ((responseData.values && typeof responseData.values === 'object')
+        || (responseData.options && typeof responseData.values === 'object')) {
+        if (responseData.values) {
+          Object.assign(data, responseData.values);
+        }
+        if (responseData.options) {
           for (const element of allElements) {
             const dynamicOptions = responseData.options[element.name];
             if (dynamicOptions && 'options' in element) {
@@ -66,7 +68,8 @@ export class DataRetrievalService {
             }
           }
         }
-      } else {
+      }
+      else {
         // Legacy flat response — merge directly into data for backward compatibility
         Object.assign(data, responseData);
       }
